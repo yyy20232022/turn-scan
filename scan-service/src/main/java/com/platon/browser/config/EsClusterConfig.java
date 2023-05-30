@@ -81,7 +81,7 @@ public class EsClusterConfig {
     public RestHighLevelClient client() {
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         List<HttpHost> hostList = new ArrayList<>();
-        hosts.forEach(host -> hostList.add(new HttpHost(host, port, schema)));
+        hosts.forEach(host -> hostList.add(HttpHost.create(host)));
         RestClientBuilder builder = RestClient.builder(hostList.toArray(new HttpHost[0]));
         // 异步httpclient连接延时配置
         builder.setRequestConfigCallback(requestConfigBuilder -> {

@@ -6,9 +6,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.9.191:3306/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
-    username: ENC(bpshgjWOgn2d+oGmSTBPNA==)
-    password: ENC(bpshgjWOgn2d+oGmSTBPNA==)
+    url: jdbc:mysql://192.168.31.114:12012/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: qiliu
+    password: qiliu123456
     druid:
       # 连接池的配置信息
       # 初始化大小，最小，最大
@@ -65,11 +65,11 @@ spring:
 
   #Redis键配置
   redis:
-    password: ENC(D4K/Kxv2c2MT7FaaT+ZHQswHs8KvRm6N)
+    password: "ffca@sn!u934"
     database: 0
     cluster:
       max-redirects: 3
-      nodes: 192.168.9.191:7001,192.168.9.191:7002,192.168.9.191:7003,192.168.9.191:7004,192.168.9.191:7005,192.168.9.191:7006
+      nodes: 192.168.31.115:6381,192.168.31.115:6382,192.168.31.115:6383,192.168.31.115:6384,192.168.31.115:6385,192.168.31.115:6386
     key:
       #最多存储多少条数据
       max-item: 500000
@@ -90,11 +90,11 @@ spring:
   #ES索引配置
   elasticsearch:
     high-level-client:
-      hosts: 192.168.120.103,192.168.120.104,192.168.120.105
-      port: 9200
+      hosts: 192.168.31.105:19200,192.168.31.105:29200,192.168.31.105:39200
+      port: 19200
       schema: http
-      username: ENC(VME69JEYLfmUXi3KuDQTWA==)
-      password: ENC(A6E/VrNrulxXUK7GSjlmiN7NqxZV5P6o)
+      username:
+      password:
     index:
       blockIndexName: ${platon.es-namespace}_block
       transactionIndexName: ${platon.es-namespace}_transaction
@@ -147,16 +147,16 @@ logging:
 #PlatOn相关配置
 platon:
   # 地址HRP前缀
-  addressPrefix: lat
+  addressPrefix: AA
   # 金额显示单位
-  valueUnit: LAT
+  valueUnit: AA
   # 交易输入参数并行解码线程数
   txLogDecodeThreadNum: 200
   # Web3j访问地址
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 192.168.9.139:7789
+    addresses: 192.168.31.117:7790
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)
@@ -228,15 +228,15 @@ xxl:
   job:
     admin:
       #调度中心部署跟地址
-      addresses: http://10.0.0.34:8060/xxl-job-admin
+      addresses: http://192.168.31.110:18080/xxl-job-admin
     #调度中心通讯TOKEN
-    accessToken: ENC(IZf5O7X2oiVstkwHNZUxEhPzDKInPh0TexHqj7b4YY39c10DzZaDqqQYWoSw8l2q)
+    accessToken:
     #调度中心日志文件保存天数
     logretentiondays: 90
     executor:
       #执行器AppName
       appname: platon-scan-agent
-      ip: 192.168.21.114
+      ip: 192.168.31.239
       #执行器端口号
       port: 9999
       #执行器运行日志文件存储磁盘路径

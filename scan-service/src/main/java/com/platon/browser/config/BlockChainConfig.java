@@ -406,7 +406,7 @@ public class BlockChainConfig {
         //【通用】PlatOn基金会账户地址
         setPlatOnFundAccount(dec.getInnerAcc().getBubbleFundAccount());
         //【通用】PlatOn基金会账户初始余额
-        setPlatOnFundInitAmount(new BigDecimal(dec.getInnerAcc().getBubbleFundAccount()));
+        setPlatOnFundInitAmount(new BigDecimal(dec.getInnerAcc().getBubbleFundBalance()));
         //【通用】社区开发者激励基金账户地址
         setCommunityFundAccount(dec.getInnerAcc().getCdfAccount());
         //【通用】社区开发者激励基金账户初始余额
