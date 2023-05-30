@@ -1,0 +1,249 @@
+#1.1.4配置已经迁移到apollo，以下为完整的配置模板，不想使用apollo，可使用以下配置即可
+spring:
+  application:
+    name: scan-agent
+  #数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.9.191:3306/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: ENC(bpshgjWOgn2d+oGmSTBPNA==)
+    password: ENC(bpshgjWOgn2d+oGmSTBPNA==)
+    druid:
+      # 连接池的配置信息
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat
+      filter:
+        config: true
+        # 开启druiddatasource的状态监控
+        stat:
+          enabled: true
+          db-type: mysql
+          # 开启慢sql监控，超过2s 就认为是慢sql，记录到日志中
+          log-slow-sql: true
+          slow-sql-millis: 500
+          merge-sql: true
+      # 配置DruidStatFilter
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
+      # 配置DruidStatViewServlet
+      stat-view-servlet:
+        # 是否启用StatViewServlet（监控页面）默认值为false（考虑到安全问题默认并未启动，如需启用建议设置密码或白名单以保障安全）
+        enabled: true
+        url-pattern: /druid/*
+        # IP白名单(没有配置或者为空，则允许所有访问)
+        # allow: 127.0.0.1,192.168.46.120
+        # IP黑名单 (存在共同时，deny优先于allow)
+        # deny: 192.168.46.121
+        #  禁用HTML页面上的“Reset All”功能
+        reset-enable: false
+        # 登录名
+        login-username: admin
+        # 登录密码
+        login-password: 123456
+        allow: ""
+        deny: ""
+
+  #Redis键配置
+  redis:
+    password: ENC(D4K/Kxv2c2MT7FaaT+ZHQswHs8KvRm6N)
+    database: 0
+    cluster:
+      max-redirects: 3
+      nodes: 192.168.9.191:7001,192.168.9.191:7002,192.168.9.191:7003,192.168.9.191:7004,192.168.9.191:7005,192.168.9.191:7006
+    key:
+      #最多存储多少条数据
+      max-item: 500000
+      #区块列表
+      blocks: ${platon.redis-namespace}:blocks
+      #交易列表
+      transactions: ${platon.redis-namespace}:transactions
+      #统计信息
+      networkStat: ${platon.redis-namespace}:networkStat
+      #内部转账交易
+      transferTx: ${platon.redis-namespace}:transferTx
+      #erc20交易
+      erc20Tx: ${platon.redis-namespace}:erc20Tx
+      #erc721交易
+      erc721Tx: ${platon.redis-namespace}:erc721Tx
+      #erc1155交易
+      erc1155Tx: ${platon.redis-namespace}:erc1155Tx
+  #ES索引配置
+  elasticsearch:
+    high-level-client:
+      hosts: 192.168.120.103,192.168.120.104,192.168.120.105
+      port: 9200
+      schema: http
+      username: ENC(VME69JEYLfmUXi3KuDQTWA==)
+      password: ENC(A6E/VrNrulxXUK7GSjlmiN7NqxZV5P6o)
+    index:
+      blockIndexName: ${platon.es-namespace}_block
+      transactionIndexName: ${platon.es-namespace}_transaction
+      delegationIndexName: ${platon.es-namespace}_delegation
+      nodeOptIndexName: ${platon.es-namespace}_nodeopt
+      delegationRewardIndexName: ${platon.es-namespace}_delegation_reward
+      transferTxIndexName: ${platon.es-namespace}_transfer_tx
+      erc20TxIndexName: ${platon.es-namespace}_erc20_tx
+      erc721TxIndexName: ${platon.es-namespace}_erc721_tx
+      erc1155TxIndexName: ${platon.es-namespace}_erc1155_tx
+# MyBatis配置（注意：一定要对应mapper映射xml文件的所在路径）
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml,classpath*:custommapper/*.xml
+  # 实体类别名配置（注意：对应实体类的路径）
+  type-aliases-package: com.platon.browser.dao.entity
+profile: platon
+# 内存环形缓冲区大小，必须是2的指数倍
+disruptor:
+  queue:
+    # 区块事件环形缓冲区大小
+    blockBufferSize: 1024
+    # 采集事件环形缓冲区大小
+    collectionBufferSize: 1024
+    # 数据补充环形缓冲区大小
+    complementBufferSize: 1024
+    # gas price估算消息环形缓冲区大小
+    gasEstimateBufferSize: 1024
+    # 数据持久化环形缓冲区大小
+    persistenceBufferSize: 1024
+    #每次处理多少个
+    persistenceBatchSize: 10
+#日志配置
+logging:
+  #日志级别
+  level:
+    org.springframework: info
+    org.springframework.retry: info
+    com.platon.browser: info
+    com.platon.browser.bootstrap: info
+    com.platon.browser.collection: info
+    com.platon.browser.collection.queue.handler: info
+    com.platon.browser.common: info
+    com.platon.browser.complement: info
+    com.platon.browser.complement.handler: info
+    com.platon.browser.complement.converter: info
+    com.platon.browser.persistence: info
+    com.platon.browser.persistence.handler: info
+    com.platon.browser.persistence.queue.handler: info
+    com.platon.browser.task: info
+#PlatOn相关配置
+platon:
+  # 地址HRP前缀
+  addressPrefix: lat
+  # 金额显示单位
+  valueUnit: LAT
+  # 交易输入参数并行解码线程数
+  txLogDecodeThreadNum: 200
+  # Web3j访问地址
+  web3j:
+    #HTTP或WS
+    protocol: WS
+    addresses: 192.168.9.139:7789
+  # 质押节点统计年化率最多取多少个连续周期
+  maxSettlePeriodCount4AnnualizedRateStat: 4
+  #PlatON初始总发行量(LAT)
+  initIssueAmount: 10000000000
+  #每年固定增发比例
+  addIssueRate: 0.025
+  #每年增发分配给激励池的比例
+  incentiveRateFromIssue: 0.8
+  #每个共识轮中回退多少个块是选举下一轮验证人的时机
+  electionBackwardBlockCount: 20
+  #10年内计算士基金会向激励池填充额度: <第几年-补贴金额(LAT)>
+  foundationSubsidies: {
+    '1':62215742.00000000,
+    '2':55965742.00000000,
+    '3':49559492.00000000,
+    '4':42993086.00000000,
+    '5':36262520.00000000,
+    '6':29363689.00000000,
+    '7':22292388.00000000,
+    '8':15044304.00000000,
+    '9':7615018.00000000
+  }
+  # 初始内置节点默认质押金额(LAT)
+  defaultStakingLockedAmount: 150000
+  #区块最大Gas限制
+  maxBlockGasLimit: 201600000
+  #提案url参数模板
+  proposalUrlTemplate: https://github.com/PlatONnetwork/PIPs/blob/master/PIPs/PIP-%s.md
+  #提案pip_num参数模板
+  proposalPipNumTemplate: PIP-%s
+  #keysBase网址
+  keyBase: https://keybase.io/
+  #keyBase api
+  keyBaseApi: _/api/1.0/user/lookup.json?key_suffix=
+  #链id
+  chainId: 100
+  #同步时的索引查询分页参数配置
+  paging:
+    erc20-transaction:
+      pageSize: 2000
+      pageCount: 250
+  #Redis命名空间
+  redis-namespace: browser:${profile}
+  #Es索引命名空间
+  es-namespace: browser_${profile}
+  #0出块等待的循环访问时间(秒)
+  zeroBlockNumber:
+    wait-time: 60
+# v0.15.0.0版本新增功能涉及的配置
+v0150:
+  #锁仓最小释放金额参数生效版本
+  restrictingMinimumReleaseActiveVersion: 3584
+  #调账生效版本
+  adjustmentActiveVersion: 3840
+  #调账提案ID
+  adjustmentPipId: 14
+  #调账日志输出文件
+  adjustLogFilePath: ./logs/staking-delegate-adjust.log
+task:
+  #地址统计任务批次大小
+  addressBatchSize: 1000
+  #agent与实际链上区块号相差多少个块号时触发调整操作
+  gapForAdjust: 20
+  #未追上链,批量入ES和Redis的缓存大小
+  esRedisNotCatchupBatchSize: 10
+  #已追上链,批量入ES和Redis的缓存大小
+  esRedisCatchupBatchSize: 1
+xxl:
+  job:
+    admin:
+      #调度中心部署跟地址
+      addresses: http://10.0.0.34:8060/xxl-job-admin
+    #调度中心通讯TOKEN
+    accessToken: ENC(IZf5O7X2oiVstkwHNZUxEhPzDKInPh0TexHqj7b4YY39c10DzZaDqqQYWoSw8l2q)
+    #调度中心日志文件保存天数
+    logretentiondays: 90
+    executor:
+      #执行器AppName
+      appname: platon-scan-agent
+      ip: 192.168.21.114
+      #执行器端口号
+      port: 9999
+      #执行器运行日志文件存储磁盘路径
+      logpath: ./logs/jobhandler
+      #执行器日志文件保存天数
+      logretentiondays: 90
+apollo:
+  bootstrap:
+    # 是否开启 Apollo
+    enabled: false
