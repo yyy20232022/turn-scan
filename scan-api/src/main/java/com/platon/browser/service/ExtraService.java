@@ -6,7 +6,7 @@ import com.platon.browser.dao.mapper.ConfigMapper;
 import com.platon.browser.response.extra.ConfigDetail;
 import com.platon.browser.response.extra.ModuleConfig;
 import com.platon.browser.response.extra.QueryConfigResp;
-import com.platon.utils.Convert;
+import com.bubble.utils.Convert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

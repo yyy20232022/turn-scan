@@ -1,7 +1,7 @@
 package com.platon.browser.client;
 
-import com.platon.protocol.Web3j;
-import com.platon.protocol.Web3jService;
+import com.bubble.protocol.Web3j;
+import com.bubble.protocol.Web3jService;
 import lombok.Builder;
 import lombok.experimental.Accessors;
 

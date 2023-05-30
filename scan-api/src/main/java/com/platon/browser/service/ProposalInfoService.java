@@ -1,7 +1,7 @@
 package com.platon.browser.service;
 
 import com.platon.browser.utils.NetworkParams;
-import com.platon.utils.Convert;
+import com.bubble.utils.Convert;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.platon.browser.bean.CustomProposal;

@@ -1,6 +1,6 @@
 package com.platon.browser.bean;
 
-import com.platon.utils.Numeric;
+import com.bubble.utils.Numeric;
 
 import java.math.BigInteger;
 

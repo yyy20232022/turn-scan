@@ -46,7 +46,7 @@ import com.platon.browser.service.elasticsearch.bean.ESResult;
 import com.platon.browser.service.elasticsearch.query.ESQueryBuilderConstructor;
 import com.platon.browser.service.elasticsearch.query.ESQueryBuilders;
 import com.platon.browser.utils.*;
-import com.platon.utils.Convert;
+import com.bubble.utils.Convert;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;

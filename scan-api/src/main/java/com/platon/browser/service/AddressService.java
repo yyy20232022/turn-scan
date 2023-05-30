@@ -33,7 +33,7 @@ import com.bubble.contracts.dpos.RestrictingPlanContract;
 import com.bubble.contracts.dpos.dto.CallResponse;
 import com.bubble.contracts.dpos.dto.resp.RestrictingItem;
 import com.bubble.contracts.dpos.dto.resp.Reward;
-import com.platon.protocol.core.DefaultBlockParameterName;
+import com.bubble.protocol.core.DefaultBlockParameterName;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -292,7 +292,7 @@ public class AddressService {
         }
         /** 特殊账户余额直接查询链  */
         if (resp.getBalance().compareTo(BigDecimal.valueOf(10000000000L)) > 0) {
-            BigInteger balance = platonClient.getWeb3jWrapper().getWeb3j().platonGetBalance(req.getAddress(), DefaultBlockParameterName.LATEST).send().getBalance();
+            BigInteger balance = platonClient.getWeb3jWrapper().getWeb3j().bubbleGetBalance(req.getAddress(), DefaultBlockParameterName.LATEST).send().getBalance();
             resp.setBalance(new BigDecimal(balance));
         }
         /**

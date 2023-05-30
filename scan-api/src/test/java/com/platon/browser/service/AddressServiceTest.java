@@ -20,10 +20,10 @@ import com.bubble.contracts.dpos.RewardContract;
 import com.bubble.contracts.dpos.dto.CallResponse;
 import com.bubble.contracts.dpos.dto.resp.RestrictingItem;
 import com.bubble.contracts.dpos.dto.resp.Reward;
-import com.platon.protocol.Web3j;
-import com.platon.protocol.core.RemoteCall;
-import com.platon.protocol.core.Request;
-import com.platon.protocol.core.methods.response.PlatonGetBalance;
+import com.bubble.protocol.Web3j;
+import com.bubble.protocol.core.RemoteCall;
+import com.bubble.protocol.core.Request;
+import com.bubble.protocol.core.methods.response.BubbleGetBalance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -120,12 +120,12 @@ public class AddressServiceTest extends ApiTestMockBase {
         when(platonClient.getWeb3jWrapper()).thenReturn(web3jWrapper);
         Web3j web3j = mock(Web3j.class);
         when(web3jWrapper.getWeb3j()).thenReturn(web3j);
-        Request<?, PlatonGetBalance> rq = mock(Request.class);
-        doReturn(rq).when(web3j).platonGetBalance(any(), any());
-        PlatonGetBalance platonGetBalance = mock(PlatonGetBalance.class);
+        Request<?, BubbleGetBalance> rq = mock(Request.class);
+        doReturn(rq).when(web3j).bubbleGetBalance(any(), any());
+        BubbleGetBalance platonGetBalance = mock(BubbleGetBalance.class);
         when(rq.send()).thenReturn(platonGetBalance);
 
-        when(platonClient.getWeb3jWrapper().getWeb3j().platonGetBalance(any(), any()).send().getBalance()).thenReturn(BigInteger.ONE);
+        when(platonClient.getWeb3jWrapper().getWeb3j().bubbleGetBalance(any(), any()).send().getBalance()).thenReturn(BigInteger.ONE);
 
         RewardContract rewardContract = mock(RewardContract.class);
         when(platonClient.getRewardContract()).thenReturn(rewardContract);

@@ -10,7 +10,7 @@ import com.platon.browser.dao.entity.InternalAddress;
 import com.platon.browser.dao.entity.InternalAddressExample;
 import com.platon.browser.dao.mapper.InternalAddressMapper;
 import com.platon.browser.enums.InternalAddressType;
-import com.platon.protocol.Web3j;
+import com.bubble.protocol.Web3j;
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;

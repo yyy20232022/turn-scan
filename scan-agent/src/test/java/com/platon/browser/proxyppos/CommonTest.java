@@ -1,22 +1,22 @@
 package com.platon.browser.proxyppos;
 
-import com.platon.abi.wasm.WasmFunctionEncoder;
-import com.platon.abi.wasm.datatypes.WasmFunction;
+import com.bubble.abi.wasm.WasmFunctionEncoder;
+import com.bubble.abi.wasm.datatypes.WasmFunction;
 import com.bubble.contracts.dpos.RewardContract;
 import com.bubble.contracts.dpos.dto.resp.Reward;
-import com.platon.protocol.core.DefaultBlockParameterName;
-import com.platon.protocol.core.methods.request.Transaction;
-import com.platon.protocol.core.methods.response.PlatonEstimateGas;
-import com.platon.protocol.core.methods.response.TransactionReceipt;
-import com.platon.rlp.solidity.RlpDecoder;
-import com.platon.rlp.solidity.RlpList;
-import com.platon.rlp.solidity.RlpString;
-import com.platon.rlp.solidity.RlpType;
-import com.platon.tx.RawTransactionManager;
-import com.platon.tx.TransactionManager;
-import com.platon.tx.Transfer;
-import com.platon.utils.Convert;
-import com.platon.utils.Numeric;
+import com.bubble.protocol.core.DefaultBlockParameterName;
+import com.bubble.protocol.core.methods.request.Transaction;
+import com.bubble.protocol.core.methods.response.BubbleEstimateGas;
+import com.bubble.protocol.core.methods.response.TransactionReceipt;
+import com.bubble.rlp.solidity.RlpDecoder;
+import com.bubble.rlp.solidity.RlpList;
+import com.bubble.rlp.solidity.RlpString;
+import com.bubble.rlp.solidity.RlpType;
+import com.bubble.tx.RawTransactionManager;
+import com.bubble.tx.TransactionManager;
+import com.bubble.tx.Transfer;
+import com.bubble.utils.Convert;
+import com.bubble.utils.Numeric;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
@@ -38,19 +38,19 @@ public class CommonTest extends TestBase {
 
         TransactionManager transactionManager = new RawTransactionManager(defaultWeb3j, defaultCredentials);
         new Transfer(defaultWeb3j,transactionManager).sendFunds(proxyStakingContractAddress,new BigDecimal("50000000"), Convert.Unit.KPVON,GAS_PRICE,GAS_LIMIT).send();
-        System.out.println("balance="+ defaultWeb3j.platonGetBalance(proxyStakingContractAddress, DefaultBlockParameterName.LATEST).send().getBalance());
+        System.out.println("balance="+ defaultWeb3j.bubbleGetBalance(proxyStakingContractAddress, DefaultBlockParameterName.LATEST).send().getBalance());
 
         new Transfer(defaultWeb3j,transactionManager).sendFunds(proxyDelegateContractAddress,new BigDecimal("50000000"), Convert.Unit.KPVON,GAS_PRICE,GAS_LIMIT).send();
-        System.out.println("balance="+ defaultWeb3j.platonGetBalance(proxyDelegateContractAddress, DefaultBlockParameterName.LATEST).send().getBalance());
+        System.out.println("balance="+ defaultWeb3j.bubbleGetBalance(proxyDelegateContractAddress, DefaultBlockParameterName.LATEST).send().getBalance());
 
         String address = delegateCredentials.getAddress();
         new Transfer(defaultWeb3j,transactionManager).sendFunds(address,new BigDecimal("50000000"), Convert.Unit.KPVON,GAS_PRICE,GAS_LIMIT).send();
-        System.out.println("balance="+ defaultWeb3j.platonGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance());
+        System.out.println("balance="+ defaultWeb3j.bubbleGetBalance(address, DefaultBlockParameterName.LATEST).send().getBalance());
     }
 
     @Test
     public void blockNumber() throws Exception {
-        BigInteger blockNumber = defaultWeb3j.platonBlockNumber().send().getBlockNumber();
+        BigInteger blockNumber = defaultWeb3j.bubbleBlockNumber().send().getBlockNumber();
         System.out.println("Current Block Number:"+blockNumber);
     }
 
@@ -94,7 +94,7 @@ public class CommonTest extends TestBase {
     @Test
     public void decodeUnDelegateReceiptLog() throws IOException {
 
-        TransactionReceipt receipt = defaultWeb3j.platonGetTransactionReceipt("0xe101b5758e0c3e132ab6616412395f54a4534609341a4c6723356520088d2be2")
+        TransactionReceipt receipt = defaultWeb3j.bubbleGetTransactionReceipt("0xe101b5758e0c3e132ab6616412395f54a4534609341a4c6723356520088d2be2")
                 .send().getTransactionReceipt().get();
         System.out.println(JSON.toJSONString(receipt.getLogs(),true));
 //        String data0 = "0xc3308180";

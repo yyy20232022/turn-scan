@@ -2,7 +2,7 @@ package com.platon.browser.client;
 
 import com.alibaba.fastjson.JSON;
 import com.platon.browser.exception.ConfigLoadingException;
-import com.platon.protocol.core.methods.response.bean.EconomicConfig;
+import com.bubble.protocol.core.methods.response.bean.EconomicConfig;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

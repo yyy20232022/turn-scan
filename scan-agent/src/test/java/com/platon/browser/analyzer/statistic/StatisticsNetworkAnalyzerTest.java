@@ -14,7 +14,7 @@ import com.platon.browser.dao.custommapper.StatisticBusinessMapper;
 import com.platon.browser.config.BlockChainConfig;
 import com.platon.browser.dao.entity.NetworkStat;
 import com.platon.browser.elasticsearch.dto.Block;
-import com.platon.protocol.Web3j;
+import com.bubble.protocol.Web3j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

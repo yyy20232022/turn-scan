@@ -1,6 +1,6 @@
 package com.platon.browser.analyzer.epoch;
 
-import com.platon.protocol.Web3j;
+import com.bubble.protocol.Web3j;
 import com.platon.browser.AgentTestBase;
 import com.platon.browser.bean.HistoryLowRateSlash;
 import com.platon.browser.client.PlatOnClient;

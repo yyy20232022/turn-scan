@@ -6,14 +6,14 @@ import com.platon.browser.client.Web3jWrapper;
 import com.platon.browser.exception.BusinessException;
 import com.platon.browser.v0152.bean.ErcContractId;
 import com.platon.browser.v0152.contract.ErcContract;
-import com.platon.protocol.Web3j;
-import com.platon.protocol.core.DefaultBlockParameterName;
-import com.platon.protocol.core.RemoteCall;
-import com.platon.protocol.core.Request;
-import com.platon.protocol.core.Response;
-import com.platon.protocol.core.methods.request.Transaction;
-import com.platon.tx.exceptions.PlatonCallException;
-import com.platon.tx.exceptions.PlatonCallTimeoutException;
+import com.bubble.protocol.Web3j;
+import com.bubble.protocol.core.DefaultBlockParameterName;
+import com.bubble.protocol.core.RemoteCall;
+import com.bubble.protocol.core.Request;
+import com.bubble.protocol.core.Response;
+import com.bubble.protocol.core.methods.request.Transaction;
+import com.bubble.tx.exceptions.BubbleCallException;
+import com.bubble.tx.exceptions.BubbleCallTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class ErcDetectServiceTest extends AgentTestBase {
     public void detectInputData() throws IOException {
         when(platOnClient.getWeb3jWrapper()).thenReturn(web3jWrapper);
         when(web3jWrapper.getWeb3j()).thenReturn(web3j);
-        when(platOnClient.getWeb3jWrapper().getWeb3j().platonCall(any(Transaction.class), any(DefaultBlockParameterName.class))).thenReturn(request);
+        when(platOnClient.getWeb3jWrapper().getWeb3j().bubbleCall(any(Transaction.class), any(DefaultBlockParameterName.class))).thenReturn(request);
         // 测试超时异常
         //when(request.send()).thenThrow(new PlatonCallTimeoutException(1, "超时", response));
         // 测试业务异常
@@ -76,7 +76,7 @@ public class ErcDetectServiceTest extends AgentTestBase {
     public void getContractId() throws Exception {
         when(platOnClient.getWeb3jWrapper()).thenReturn(web3jWrapper);
         when(web3jWrapper.getWeb3j()).thenReturn(web3j);
-        when(platOnClient.getWeb3jWrapper().getWeb3j().platonCall(any(Transaction.class), any(DefaultBlockParameterName.class))).thenReturn(request);
+        when(platOnClient.getWeb3jWrapper().getWeb3j().bubbleCall(any(Transaction.class), any(DefaultBlockParameterName.class))).thenReturn(request);
         // 测试超时异常
         //when(request.send()).thenThrow(new PlatonCallTimeoutException(1, "超时", response));
         // 测试业务异常

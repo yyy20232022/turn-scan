@@ -3,10 +3,10 @@ package com.platon.browser.client;
 import com.platon.browser.enums.Web3jProtocolEnum;
 import com.platon.browser.exception.ConfigLoadingException;
 import com.bubble.contracts.dpos.*;
-import com.platon.protocol.Web3j;
-import com.platon.protocol.Web3jService;
-import com.platon.protocol.http.HttpService;
-import com.platon.protocol.websocket.WebSocketService;
+import com.bubble.protocol.Web3j;
+import com.bubble.protocol.Web3jService;
+import com.bubble.protocol.http.HttpService;
+import com.bubble.protocol.websocket.WebSocketService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -164,7 +164,7 @@ public class RetryableClient {
             long maxBlockNumber = -1;
             for (Web3jWrapper wrapper : web3jWrappers) {
                 try {
-                    BigInteger blockNumber = wrapper.getWeb3j().platonBlockNumber().send().getBlockNumber();
+                    BigInteger blockNumber = wrapper.getWeb3j().bubbleBlockNumber().send().getBlockNumber();
                     if (blockNumber.longValue() >= maxBlockNumber) {
                         maxBlockNumber = blockNumber.longValue();
                         currentWeb3jWrapper = wrapper;

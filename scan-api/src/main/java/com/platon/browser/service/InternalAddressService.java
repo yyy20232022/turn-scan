@@ -10,7 +10,7 @@ import com.platon.browser.dao.entity.InternalAddressExample;
 import com.platon.browser.request.PageReq;
 import com.platon.browser.response.RespPage;
 import com.platon.browser.response.address.InternalAddressResp;
-import com.platon.utils.Convert;
+import com.bubble.utils.Convert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

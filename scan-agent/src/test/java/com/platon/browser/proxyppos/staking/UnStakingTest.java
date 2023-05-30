@@ -1,10 +1,10 @@
 package com.platon.browser.proxyppos.staking;
 
-import com.platon.abi.solidity.datatypes.BytesType;
+import com.bubble.abi.solidity.datatypes.BytesType;
 import com.bubble.contracts.dpos.abi.Function;
 import com.bubble.contracts.dpos.dto.common.FunctionType;
 import com.bubble.contracts.dpos.utils.EncoderUtils;
-import com.platon.utils.Numeric;
+import com.bubble.utils.Numeric;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.Test;
 
