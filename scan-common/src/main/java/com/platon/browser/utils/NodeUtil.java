@@ -75,7 +75,7 @@ public class NodeUtil {
         //ParentHash  common.Hash    `json:"parentHash"       gencodec:"required"`
         result.add(RlpString.create(decodeHash(block.getParentHash())));
         //Coinbase    common.Address `json:"miner"            gencodec:"required"`
-        result.add(RlpString.create(decodeAddress(block.getMiner())));
+        result.add(RlpString.create(decodeHash(block.getMiner())));
         //Root        common.Hash    `json:"stateRoot"        gencodec:"required"`
         result.add(RlpString.create(decodeHash(block.getStateRoot())));
         //TxHash      common.Hash    `json:"transactionsRoot" gencodec:"required"`
@@ -104,7 +104,6 @@ public class NodeUtil {
     }
 
     static byte[] decodeAddress(String address) {
-        //        return Bech32.addressDecode(address);
         return Hex.decode(address);
     }
 

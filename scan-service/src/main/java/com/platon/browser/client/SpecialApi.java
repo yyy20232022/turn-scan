@@ -410,7 +410,7 @@ public class SpecialApi {
     }
 
     public ReceiptResult getReceiptResult(Web3jWrapper web3jWrapper, BigInteger blockNumber) throws IOException {
-        Request<?, ReceiptResult> request = new Request<>("bubble_getTransactionByBlock",
+        Request<?, ReceiptResult> request = new Request<>("bub_getTransactionByBlock",
                                                           Arrays.asList(blockNumber),
                                                           web3jWrapper.getWeb3jService(),
                                                           ReceiptResult.class);

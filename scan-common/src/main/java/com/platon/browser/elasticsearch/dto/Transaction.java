@@ -68,6 +68,8 @@ public class Transaction {
 
     private String pposTxInfo; // 存储基本信息的json数组串，来自pposTxList
 
+    private String texasHoldemTxInfo;
+
     private String failReason;
 
     private Integer contractType;
@@ -285,8 +287,7 @@ public class Transaction {
      * 交易结果成败枚举类： 1.成功 2.失败
      */
     public enum StatusEnum {
-        SUCCESS(1, "成功"),
-        FAILURE(2, "失败");
+        SUCCESS(1, "成功"), FAILURE(2, "失败");
 
         private int code;
 
@@ -328,12 +329,8 @@ public class Transaction {
      * 交易接收者类型(to是合约还是账户):地址类型 :1账号,2内置合约 ,3EVM合约,4WASM合约
      */
     public enum ToTypeEnum {
-        ACCOUNT(1, "账户"),
-        INNER_CONTRACT(2, "内置合约"),
-        EVM_CONTRACT(3, "EVM合约"),
-        WASM_CONTRACT(4, "WASM合约"),
-        ERC20_CONTRACT(5, "ERC20-EVM合约"),
-        ERC721_CONTRACT(6, "ERC721-EVM合约"),
+        ACCOUNT(1, "账户"), INNER_CONTRACT(2, "内置合约"), EVM_CONTRACT(3, "EVM合约"), WASM_CONTRACT(4, "WASM合约"),
+        ERC20_CONTRACT(5, "ERC20-EVM合约"), ERC721_CONTRACT(6, "ERC721-EVM合约"),
         ERC1155_CONTRACT(7, "ERC1155-EVM合约");
 
         private int code;

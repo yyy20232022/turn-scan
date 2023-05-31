@@ -1,11 +1,21 @@
 package com.platon.browser.utils;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
+import com.bubble.protocol.Web3j;
+import com.bubble.protocol.core.methods.response.BubbleGetTransactionReceipt;
+import com.bubble.protocol.core.methods.response.TransactionReceipt;
+import com.bubble.tx.gas.DefaultGasProvider;
 import com.platon.browser.bean.*;
 import com.platon.browser.cache.AddressCache;
 import com.platon.browser.cache.PPosInvokeContractInputCache;
+import com.platon.browser.cache.TexasHoldemCache;
 import com.platon.browser.client.PlatOnClient;
 import com.platon.browser.client.SpecialApi;
+import com.platon.browser.contract.TexasHoldem;
 import com.platon.browser.decoder.PPOSTxDecodeResult;
 import com.platon.browser.decoder.PPOSTxDecodeUtil;
 import com.platon.browser.elasticsearch.dto.Block;
@@ -423,6 +433,37 @@ public class TransactionUtil {
             return;
         }
         ci.setToType(Transaction.ToTypeEnum.ACCOUNT.getCode());
+    }
+
+    public static void handleTexasHoldem(CollectionTransaction contractInvokeTx,
+                                         Receipt receipt,
+                                         Web3j web3j,
+                                         Logger logger) {
+        if (CollUtil.isNotEmpty(receipt.getLogs())) {
+            for (Log log : receipt.getLogs()) {
+                if (CollUtil.isNotEmpty(log.getTopics())) {
+                    String topics = log.getTopics().get(0);
+                    if (TexasHoldemCache.cache.containsKey(topics)) {
+                        try {
+                            TexasHoldem texasHoldem = TexasHoldem.load(contractInvokeTx.getTo(),
+                                                                       web3j,
+                                                                       TexasHoldemCache.readCredentials,
+                                                                       new DefaultGasProvider());
+                            BubbleGetTransactionReceipt bubbleGetTransactionReceipt = web3j.bubbleGetTransactionReceipt(
+                                    receipt.getTransactionHash()).send();
+                            TransactionReceipt transactionReceipt = bubbleGetTransactionReceipt.getTransactionReceipt()
+                                                                                               .get();
+                            List<Object> startRoundEvents = ReflectUtil.invoke(texasHoldem,
+                                                                               TexasHoldemCache.cache.get(topics),
+                                                                               transactionReceipt);
+                            contractInvokeTx.setTexasHoldemTxInfo(JSONUtil.toJsonStr(startRoundEvents));
+                        } catch (Exception e) {
+                            logger.error(StrUtil.format("解析TexasHoldem交易异常{}", receipt.getTransactionHash()), e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -46,7 +46,9 @@ public class ErcTokenHolderAnalyzer {
             resolveTokenHolder(tx.getTo(), tx, insertOrUpdate);
         });
         if (CollUtil.isNotEmpty(insertOrUpdate)) {
-            customTokenHolderMapper.batchInsertOrUpdateSelective(insertOrUpdate, TokenHolder.Column.values());
+            customTokenHolderMapper.batchInsertOrUpdateSelective(insertOrUpdate,
+                                                                 TokenHolder.Column.excludes(TokenHolder.Column.createTime,
+                                                                                             TokenHolder.Column.updateTime));
         }
     }
 
@@ -68,7 +70,10 @@ public class ErcTokenHolderAnalyzer {
             tokenHolder.setTokenTxQty(tokenHolder.getTokenTxQty() + 1);
         }
         //TokenTxQty： 用户对该erc20的交易总数，或者是用户对该erc721, erc1155所有tokenId的交易总数
-        log.info("该合约地址[{}],持有者地址[{}],持有者对该合约的交易数为[{}]", tokenHolder.getTokenAddress(), tokenHolder.getAddress(), tokenHolder.getTokenTxQty());
+        log.info("该合约地址[{}],持有者地址[{}],持有者对该合约的交易数为[{}]",
+                 tokenHolder.getTokenAddress(),
+                 tokenHolder.getAddress(),
+                 tokenHolder.getTokenTxQty());
         insertOrUpdate.add(tokenHolder);
     }
 

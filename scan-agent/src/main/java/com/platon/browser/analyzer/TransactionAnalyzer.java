@@ -88,11 +88,16 @@ public class TransactionAnalyzer {
      */
     private void initGeneralContractCache() {
         if (GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.isEmpty()) {
-            addressCache.getEvmContractAddressCache().forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.EVM));
-            addressCache.getWasmContractAddressCache().forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.WASM));
-            ercCache.getErc20AddressCache().forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC20_EVM));
-            ercCache.getErc721AddressCache().forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC721_EVM));
-            ercCache.getErc1155AddressCache().forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC1155_EVM));
+            addressCache.getEvmContractAddressCache()
+                        .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.EVM));
+            addressCache.getWasmContractAddressCache()
+                        .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.WASM));
+            ercCache.getErc20AddressCache()
+                    .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC20_EVM));
+            ercCache.getErc721AddressCache()
+                    .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC721_EVM));
+            ercCache.getErc1155AddressCache()
+                    .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC1155_EVM));
         }
     }
 
@@ -110,7 +115,9 @@ public class TransactionAnalyzer {
                                                                                                              BeanCreateOrUpdateException,
                                                                                                              ContractInvokeException,
                                                                                                              BlankResponseException {
-        CollectionTransaction result = CollectionTransaction.newInstance().updateWithBlock(collectionBlock).updateWithRawTransaction(rawTransaction);
+        CollectionTransaction result = CollectionTransaction.newInstance()
+                                                            .updateWithBlock(collectionBlock)
+                                                            .updateWithRawTransaction(rawTransaction);
         log.info("当前区块[{}]交易[{}]解析开始...", collectionBlock.getNum(), result.getHash());
         // 使用地址缓存初始化普通合约缓存信息
         initGeneralContractCache();
@@ -122,7 +129,8 @@ public class TransactionAnalyzer {
         if (CollUtil.isNotEmpty(receipt.getContractCreated())) {
             receipt.getContractCreated().forEach(contract -> {
                 // solidity 类型 erc20 或 721 token检测及入口
-                ErcToken ercToken = ercTokenAnalyzer.resolveToken(contract.getAddress(), BigInteger.valueOf(collectionBlock.getNum()));
+                ErcToken ercToken = ercTokenAnalyzer.resolveToken(contract.getAddress(),
+                                                                  BigInteger.valueOf(collectionBlock.getNum()));
                 // solidity or wasm
                 TxInputDecodeResult txInputDecodeResult = TxInputDecodeUtil.decode(result.getInput());
                 // 内存中更新地址类型
@@ -139,7 +147,10 @@ public class TransactionAnalyzer {
                     contractTypeEnum = ContractTypeEnum.EVM;
                 }
                 GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(contract.getAddress(), contractTypeEnum);
-                log.info("当前交易[{}]合约地址[{}]的合约类型为[{}]", result.getHash(), contract.getAddress(), contractTypeEnum);
+                log.info("当前交易[{}]合约地址[{}]的合约类型为[{}]",
+                         result.getHash(),
+                         contract.getAddress(),
+                         contractTypeEnum);
                 if (!AddressUtil.isAddrZero(contract.getAddress())) {
                     // 补充address
                     addressCache.updateFirst(contract.getAddress(), contractTypeEnum);
@@ -150,11 +161,16 @@ public class TransactionAnalyzer {
         }
 
         // 处理交易信息
-        String inputWithoutPrefix = StringUtils.isNotBlank(result.getInput()) ? result.getInput().replace("0x", "") : "";
-        if (InnerContractAddrEnum.getAddresses().contains(result.getTo()) && StringUtils.isNotBlank(inputWithoutPrefix)) {
+        String inputWithoutPrefix = StringUtils.isNotBlank(result.getInput()) ? result.getInput()
+                                                                                      .replace("0x", "") : "";
+        if (InnerContractAddrEnum.getAddresses()
+                                 .contains(result.getTo()) && StringUtils.isNotBlank(inputWithoutPrefix)) {
             // 如果to地址是内置合约地址，则解码交易输入
             TransactionUtil.resolveInnerContractInvokeTxComplementInfo(result, receipt.getLogs(), ci);
-            log.info("当前交易[{}]为内置合约,from[{}],to[{}],解码交易输入", result.getHash(), result.getFrom(), result.getTo());
+            log.info("当前交易[{}]为内置合约,from[{}],to[{}],解码交易输入",
+                     result.getHash(),
+                     result.getFrom(),
+                     result.getTo());
         } else {
             // to地址为空 或者 contractAddress有值时代表交易为创建合约
             if (StringUtils.isBlank(result.getTo())) {
@@ -163,7 +179,8 @@ public class TransactionAnalyzer {
                                                                              platOnClient,
                                                                              ci,
                                                                              log,
-                                                                             GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.get(receipt.getContractAddress()));
+                                                                             GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.get(
+                                                                                     receipt.getContractAddress()));
                 result.setTo(receipt.getContractAddress());
                 log.info("当前交易[{}]为创建合约,from[{}],to[{}],type为[{}],toType[{}],contractType为[{}]",
                          result.getHash(),
@@ -176,7 +193,11 @@ public class TransactionAnalyzer {
                 if (GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.containsKey(result.getTo()) && inputWithoutPrefix.length() >= 8) {
                     // 如果是普通合约调用（EVM||WASM）
                     ContractTypeEnum contractTypeEnum = GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.get(result.getTo());
-                    TransactionUtil.resolveGeneralContractInvokeTxComplementInfo(result, platOnClient, ci, contractTypeEnum, log);
+                    TransactionUtil.resolveGeneralContractInvokeTxComplementInfo(result,
+                                                                                 platOnClient,
+                                                                                 ci,
+                                                                                 contractTypeEnum,
+                                                                                 log);
                     // 普通合约调用的交易是否成功只看回执的status,不用看log中的状态
                     result.setStatus(receipt.getStatus());
                     if (result.getStatus() == com.platon.browser.elasticsearch.dto.Transaction.StatusEnum.SUCCESS.getCode()) {
@@ -190,6 +211,10 @@ public class TransactionAnalyzer {
                                 log);
                         // 把成功的虚拟交易挂到当前普通合约交易上
                         result.setVirtualTransactions(successVirtualTransactions);
+                        TransactionUtil.handleTexasHoldem(result,
+                                                          receipt,
+                                                          platOnClient.getWeb3jWrapper().getWeb3j(),
+                                                          log);
                     }
                     log.info("当前交易[{}]为普通合约调用,from[{}],to[{}],type为[{}],toType[{}],虚拟交易数为[{}]",
                              result.getHash(),
@@ -203,7 +228,11 @@ public class TransactionAnalyzer {
                     if (value.compareTo(BigInteger.ZERO) >= 0) {
                         // 如果输入为空且value大于0，则是普通转账
                         TransactionUtil.resolveGeneralTransferTxComplementInfo(result, ci, addressCache);
-                        log.info("当前交易[{}]为普通转账,from[{}],to[{}],转账金额为[{}]", result.getHash(), result.getFrom(), result.getTo(), value);
+                        log.info("当前交易[{}]为普通转账,from[{}],to[{}],转账金额为[{}]",
+                                 result.getHash(),
+                                 result.getFrom(),
+                                 result.getTo(),
+                                 value);
                     }
                 }
             }
@@ -268,7 +297,9 @@ public class TransactionAnalyzer {
                 collectionBlock.setDQty(collectionBlock.getDQty() + 1);
                 break;
             case CLAIM_REWARDS: // 领取委托奖励
-                DelegateRewardClaimParam param = DelegateRewardClaimParam.builder().rewardList(new ArrayList<>()).build();
+                DelegateRewardClaimParam param = DelegateRewardClaimParam.builder()
+                                                                         .rewardList(new ArrayList<>())
+                                                                         .build();
                 if (status == Receipt.SUCCESS) {
                     // 成功的领取交易才解析info回填
                     param = result.getTxParam(DelegateRewardClaimParam.class);

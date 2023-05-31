@@ -97,12 +97,6 @@
                 <if test="'balance'.toString() == column.value">
                     #{item.balance,jdbcType=DECIMAL}
                 </if>
-                <if test="'create_time'.toString() == column.value">
-                    #{item.createTime,jdbcType=TIMESTAMP}
-                </if>
-                <if test="'update_time'.toString() == column.value">
-                    #{item.updateTime,jdbcType=TIMESTAMP}
-                </if>
                 <if test="'token_tx_qty'.toString() == column.value">
                     #{item.tokenTxQty,jdbcType=INTEGER}
                 </if>
