@@ -18,6 +18,8 @@ task copyConf(type: Copy) {
     from('release/start.sh')
     from('release/stop.sh')
     from('jasypt.properties')
+    from('docker-compose.yml')
+    from('Dockerfile')
     from("build/libs/${packageName}.jar")
     into('build/package')
 }

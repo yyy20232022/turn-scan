@@ -82,7 +82,7 @@ platon:
   #keyBase api
   keyBaseApi: _/api/1.0/user/lookup.json?key_suffix=
   #链id
-  chainId: 2022041901
+  chainId: 210425
   #同步时的索引查询分页参数配置
   paging:
     erc20-transaction:
@@ -112,8 +112,8 @@ xxl:
     logretentiondays: 90
     executor:
       #执行器AppName
-      appname: dev-platon-job
-      ip: 192.168.21.194
+      appname: platon-scan-job
+      ip: 192.168.21.114
       #执行器端口号
       port: 9997
       #执行器运行日志文件存储磁盘路径
