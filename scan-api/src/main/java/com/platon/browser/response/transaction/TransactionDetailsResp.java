@@ -144,6 +144,8 @@ public class TransactionDetailsResp {
 
     private List<Arc1155Param> erc1155Params;
 
+    private List<TexasHoldemParam> texasHoldemParam;
+
     /**
      * 总领取解锁的委托
      */
@@ -671,4 +673,13 @@ public class TransactionDetailsResp {
     public void setRedeemDelegationValue(BigDecimal redeemDelegationValue) {
         this.redeemDelegationValue = redeemDelegationValue;
     }
+
+    public List<TexasHoldemParam> getTexasHoldemParam() {
+        return texasHoldemParam;
+    }
+
+    public void setTexasHoldemParam(List<TexasHoldemParam> texasHoldemParam) {
+        this.texasHoldemParam = texasHoldemParam;
+    }
+
 }

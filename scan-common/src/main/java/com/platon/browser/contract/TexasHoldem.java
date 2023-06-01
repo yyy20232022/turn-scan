@@ -174,6 +174,10 @@ public class TexasHoldem extends Contract {
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._player = (String) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse._bet = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.CALL_EVENT);
+            typedResponse.name = TexasHoldem.CALL_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -207,6 +211,10 @@ public class TexasHoldem extends Contract {
             CheckEventResponse typedResponse = new CheckEventResponse();
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._player = (String) eventValues.getNonIndexedValues().get(1).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.CHECK_EVENT);
+            typedResponse.name = TexasHoldem.CHECK_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -242,6 +250,10 @@ public class TexasHoldem extends Contract {
             typedResponse._smallBlind = (BigInteger) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse._bigBlind = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
             typedResponse._tokenAddr = (String) eventValues.getNonIndexedValues().get(3).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.CREATETABLE_EVENT);
+            typedResponse.name = TexasHoldem.CREATETABLE_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -277,6 +289,10 @@ public class TexasHoldem extends Contract {
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._round = (String) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse._board = (List<BigInteger>) eventValues.getNonIndexedValues().get(2).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.ENDROUND_EVENT);
+            typedResponse.name = TexasHoldem.ENDROUND_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -310,6 +326,10 @@ public class TexasHoldem extends Contract {
             FoldEventResponse typedResponse = new FoldEventResponse();
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._player = (String) eventValues.getNonIndexedValues().get(1).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.FOLD_EVENT);
+            typedResponse.name = TexasHoldem.FOLD_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -341,6 +361,10 @@ public class TexasHoldem extends Contract {
         for (Contract.EventValuesWithLog eventValues : valueList) {
             GameOverEventResponse typedResponse = new GameOverEventResponse();
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.GAMEOVER_EVENT);
+            typedResponse.name = TexasHoldem.GAMEOVER_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -373,6 +397,10 @@ public class TexasHoldem extends Contract {
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._player = (String) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse._amount = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.JOINGAME_EVENT);
+            typedResponse.name = TexasHoldem.JOINGAME_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -408,6 +436,10 @@ public class TexasHoldem extends Contract {
             typedResponse._player = (String) eventValues.getNonIndexedValues().get(1).getValue();
             typedResponse._raise = (BigInteger) eventValues.getNonIndexedValues().get(2).getValue();
             typedResponse._highestBet = (BigInteger) eventValues.getNonIndexedValues().get(3).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.RAISE_EVENT);
+            typedResponse.name = TexasHoldem.RAISE_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -443,6 +475,10 @@ public class TexasHoldem extends Contract {
             StartRoundEventResponse typedResponse = new StartRoundEventResponse();
             typedResponse._tableId = (BigInteger) eventValues.getNonIndexedValues().get(0).getValue();
             typedResponse._playerAddrList = (List<String>) eventValues.getNonIndexedValues().get(1).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.STARTROUND_EVENT);
+            typedResponse.name = TexasHoldem.STARTROUND_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -478,6 +514,10 @@ public class TexasHoldem extends Contract {
             typedResponse._winnerList = (List<String>) eventValues.getNonIndexedValues().get(2).getValue();
             typedResponse._handRank = (BigInteger) eventValues.getNonIndexedValues().get(3).getValue();
             typedResponse._revenuePerWinner = (BigInteger) eventValues.getNonIndexedValues().get(4).getValue();
+            typedResponse.topics = EventEncoder.encode(TexasHoldem.WINNER_EVENT);
+            typedResponse.name = TexasHoldem.WINNER_EVENT.getName();
+            typedResponse.contract = eventValues.getLog().getAddress();
+            typedResponse.data = eventValues.getLog().getData();
             responses.add(typedResponse);
         }
         return responses;
@@ -769,6 +809,14 @@ public class TexasHoldem extends Contract {
 
     public static class CallEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
         public String _player;
@@ -779,6 +827,14 @@ public class TexasHoldem extends Contract {
 
     public static class CheckEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
         public String _player;
@@ -786,6 +842,14 @@ public class TexasHoldem extends Contract {
     }
 
     public static class CreateTableEventResponse {
+
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
 
         public BigInteger _tableId;
 
@@ -799,6 +863,14 @@ public class TexasHoldem extends Contract {
 
     public static class EndRoundEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
         public String _round;
@@ -809,6 +881,14 @@ public class TexasHoldem extends Contract {
 
     public static class FoldEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
         public String _player;
@@ -817,11 +897,27 @@ public class TexasHoldem extends Contract {
 
     public static class GameOverEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
     }
 
     public static class JoinGameEventResponse {
+
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
 
         public BigInteger _tableId;
 
@@ -832,6 +928,14 @@ public class TexasHoldem extends Contract {
     }
 
     public static class RaiseEventResponse {
+
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
 
         public BigInteger _tableId;
 
@@ -845,6 +949,14 @@ public class TexasHoldem extends Contract {
 
     public static class StartRoundEventResponse {
 
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
+
         public BigInteger _tableId;
 
         public List<String> _playerAddrList;
@@ -852,6 +964,14 @@ public class TexasHoldem extends Contract {
     }
 
     public static class WinnerEventResponse {
+
+        public String topics;
+
+        public String name;
+
+        public String contract;
+
+        public String data;
 
         public BigInteger _tableId;
 

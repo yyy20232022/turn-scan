@@ -67,7 +67,7 @@ public class RewardExportTask {
 
     private final static String ROUND_KEY = "ROUND_KEY";
 
-    @Scheduled(cron = "0/5 * * * * ?")
+//    @Scheduled(cron = "0/5 * * * * ?")
     public void exportRewardNode() {
         // 只有程序正常运行才执行任务
         if (!AppStatusUtil.isRunning()) {

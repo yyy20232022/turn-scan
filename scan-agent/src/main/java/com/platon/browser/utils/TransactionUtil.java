@@ -453,10 +453,10 @@ public class TransactionUtil {
                                     receipt.getTransactionHash()).send();
                             TransactionReceipt transactionReceipt = bubbleGetTransactionReceipt.getTransactionReceipt()
                                                                                                .get();
-                            List<Object> startRoundEvents = ReflectUtil.invoke(texasHoldem,
-                                                                               TexasHoldemCache.cache.get(topics),
-                                                                               transactionReceipt);
-                            contractInvokeTx.setTexasHoldemTxInfo(JSONUtil.toJsonStr(startRoundEvents));
+                            List<Object> events = ReflectUtil.invoke(texasHoldem,
+                                                                     TexasHoldemCache.cache.get(topics),
+                                                                     transactionReceipt);
+                            contractInvokeTx.setTexasHoldemTxInfo(JSONUtil.toJsonStr(events));
                         } catch (Exception e) {
                             logger.error(StrUtil.format("解析TexasHoldem交易异常{}", receipt.getTransactionHash()), e);
                         }
