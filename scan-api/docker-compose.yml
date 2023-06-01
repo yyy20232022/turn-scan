@@ -22,7 +22,8 @@ services:
     restart: always
     privileged: true
     volumes:
-      - /home/qiliu/dockerImages/bubble-scan/scan-api:/opt
+      - /home/qiliu/dockerImages/bubble-scan/scan-api/config:/opt/config
+      - /home/qiliu/dockerImages/bubble-scan/scan-api/public:/opt/public
       - /home/qiliu/dockerImages/bubble-scan/scan-api/logs:/opt/logs
     ports:
       - 40010:40010

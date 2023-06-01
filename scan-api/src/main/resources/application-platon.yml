@@ -145,7 +145,7 @@ platon:
   #keyBase api
   keyBaseApi: _/api/1.0/user/lookup.json?key_suffix=
   #链id
-  chainId: 210425
+  chainId: 100
   #Redis命名空间
   redis-namespace: browser:${profile}
   #Es索引命名空间

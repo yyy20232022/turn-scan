@@ -14,7 +14,8 @@ ENV FIRPATH=/opt
 WORKDIR $FIRPATH
 # 应用构建成功后的jar文件被复制到镜像内，名字也改成app.jar
 ADD ./scan-agent-*.jar app.jar
-ADD ./application-*.yml ./
+ADD ./application-*.yml config/
+ADD ./jasypt.properties jasypt.properties
 # 启动容器时的进程
 #ENTRYPOINT exec java -jar $JAVA_OPTS app.jar
 ENTRYPOINT ["java","-jar","app.jar"]

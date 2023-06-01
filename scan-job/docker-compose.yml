@@ -22,8 +22,10 @@ services:
     restart: always
     privileged: true
     volumes:
-      - /home/qiliu/dockerImages/bubble-scan/scan-job:/opt
+      - /home/qiliu/dockerImages/bubble-scan/scan-job/config:/opt/config
       - /home/qiliu/dockerImages/bubble-scan/scan-job/logs:/opt/logs
+    ports:
+      - 9997:9997
     environment:
       TZ: Asia/Shanghai
       'spring.profiles.active': ${env:-platon}

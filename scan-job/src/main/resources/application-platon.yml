@@ -6,17 +6,17 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.9.191:3306/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
-    username: ENC(bpshgjWOgn2d+oGmSTBPNA==)
-    password: ENC(bpshgjWOgn2d+oGmSTBPNA==)
+    url: jdbc:mysql://192.168.31.114:12012/scan_${profile}?useUnicode=true&characterEncoding=utf-8&useSSL=false&useTimezone=true&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: qiliu
+    password: qiliu123456
   #ES索引配置
   elasticsearch:
     high-level-client:
-      hosts: 192.168.120.103,192.168.120.104,192.168.120.105
-      port: 9200
+      hosts: 192.168.31.105:19200,192.168.31.105:29200,192.168.31.105:39200
+      port: 19200
       schema: http
-      username: ENC(VME69JEYLfmUXi3KuDQTWA==)
-      password: ENC(A6E/VrNrulxXUK7GSjlmiN7NqxZV5P6o)
+      username:
+      password:
     index:
       blockIndexName: ${platon.es-namespace}_block
       transactionIndexName: ${platon.es-namespace}_transaction
@@ -37,16 +37,16 @@ profile: platon
 #PlatOn相关配置
 platon:
   # 地址HRP前缀
-  addressPrefix: lat
+  addressPrefix: AA
   # 金额显示单位
-  valueUnit: LAT
+  valueUnit: AA
   # 交易输入参数并行解码线程数
   txLogDecodeThreadNum: 200
   # Web3j访问地址
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 192.168.120.151:7789,192.168.120.151:7790
+    addresses: 192.168.31.117:7790
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)
@@ -82,7 +82,7 @@ platon:
   #keyBase api
   keyBaseApi: _/api/1.0/user/lookup.json?key_suffix=
   #链id
-  chainId: 210425
+  chainId: 100
   #同步时的索引查询分页参数配置
   paging:
     erc20-transaction:
@@ -105,15 +105,15 @@ xxl:
   job:
     admin:
       #调度中心部署跟地址
-      addresses: http://10.0.0.34:8060/xxl-job-admin
+      addresses: http://192.168.31.110:18080/xxl-job-admin
     #调度中心通讯TOKEN
-    accessToken: ENC(IZf5O7X2oiVstkwHNZUxEhPzDKInPh0TexHqj7b4YY39c10DzZaDqqQYWoSw8l2q)
+    accessToken: qiliu123456
     #调度中心日志文件保存天数
     logretentiondays: 90
     executor:
       #执行器AppName
       appname: platon-scan-job
-      ip: 192.168.21.114
+      ip: 192.168.31.212
       #执行器端口号
       port: 9997
       #执行器运行日志文件存储磁盘路径
