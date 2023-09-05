@@ -253,7 +253,47 @@ public class Transaction {
         /**
          * 5000-领取奖励
          */
-        CLAIM_REWARDS(5000, "领取奖励");
+        CLAIM_REWARDS(5000, "领取奖励"),
+        /**
+         * 6000-铸币
+         */
+        MINT_TOKEN(6000, "铸币"),
+        /**
+         * 6001-结算
+         */
+        SETTLE_BUBBLEL2(6001, "结算"),
+        /**
+         * 7000-节点质押
+         */
+        CREATE_STAKING(7000, "节点质押"),
+        /**
+         * 7001-更新节点信息
+         */
+        EDIT_CANDIDATE(7001, "更新节点信息"),
+        /**
+         * 7003-节点解质押
+         */
+        WITHDREW_STAKING(7003, "节点解质押"),
+        /**
+         * 8001-创建Bubble
+         */
+        CREATE_BUBBLE(8001, "创建Bubble"),
+        /**
+         * 释放Bubble
+         */
+        RELEASE_BUBBLE(8002, "释放Bubble"),
+        /**
+         * 8003-押Token
+         */
+        STAKING_TOKEN(8003, "押Token"),
+        /**
+         * 8004-赎回Token
+         */
+        WITHDREW_TOKEN(8004, "赎回Token"),
+        /**
+         * 8005-结算
+         */
+        SETTLE_BUBBLE(8005, "结算");
 
         private static Map<Integer, TypeEnum> map = new HashMap<>();
 

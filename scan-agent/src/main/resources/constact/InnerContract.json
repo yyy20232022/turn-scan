@@ -34,5 +34,17 @@
     "contractName": "DelegateRewardPool",
     "creator": "system",
     "contractHash": ""
+  },
+  {
+    "contractDescEnumName": "STAKINGL2_CONTRACT",
+    "contractName": "StakingL2Contract",
+    "creator": "system",
+    "contractHash": ""
+  },
+  {
+    "contractDescEnumName": "BUBBLE_CONTRACT",
+    "contractName": "BubbleContract",
+    "creator": "system",
+    "contractHash": ""
   }
 ]
