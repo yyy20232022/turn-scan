@@ -147,16 +147,16 @@ logging:
 #PlatOn相关配置
 platon:
   # 地址HRP前缀
-  addressPrefix: AA
+  addressPrefix: turn
   # 金额显示单位
-  valueUnit: AA
+  valueUnit: turn
   # 交易输入参数并行解码线程数
   txLogDecodeThreadNum: 200
   # Web3j访问地址
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 192.168.31.117:7790
+    addresses: 47.242.31.187:19002
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)
