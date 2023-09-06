@@ -21,8 +21,8 @@ public enum InnerContractAddrEnum {
     INCENTIVE_POOL_CONTRACT(NetworkParameters.getDposContractAddressOfIncentivePool(), "激励池合约"),
     NODE_CONTRACT(NetworkParameters.getDposContractAddressOfStaking(), "节点相关合约"),
     REWARD_CONTRACT(NetworkParameters.getDposContractAddressOfReward(), "领取奖励合约"),
-    STAKINGL2_CONTRACT(NetworkParameters.getDposContractAddressOfReward(), "二层网络微节点质押合约"),
-    BUBBLE_CONTRACT(NetworkParameters.getDposContractAddressOfReward(), "气泡子网络管理合约");
+    STAKINGL2_CONTRACT(NetworkParameters.getDposContractAddressOfL2Staking(), "二层网络微节点质押合约"),
+    BUBBLE_CONTRACT(NetworkParameters.getDposContractAddressOfBubble(), "气泡子网络管理合约");
 
     private String address;
 

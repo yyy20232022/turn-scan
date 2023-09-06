@@ -22,7 +22,9 @@ public enum ContractDescEnum {
     INCENTIVE_POOL_CONTRACT(NetworkParameters.getDposContractAddressOfIncentivePool()),
     SLASH_CONTRACT(NetworkParameters.getDposContractAddressOfSlash()),
     PROPOSAL_CONTRACT(NetworkParameters.getDposContractAddressOfProposal()),
-    REWARD_CONTRACT(NetworkParameters.getDposContractAddressOfReward());
+    REWARD_CONTRACT(NetworkParameters.getDposContractAddressOfReward()),
+    STAKINGL2_CONTRACT(NetworkParameters.getDposContractAddressOfL2Staking()),
+    BUBBLE_CONTRACT(NetworkParameters.getDposContractAddressOfBubble());
 
     private String address;
 
