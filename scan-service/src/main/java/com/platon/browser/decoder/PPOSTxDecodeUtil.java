@@ -94,6 +94,8 @@ public class PPOSTxDecodeUtil {
                             return result;
                         }
                         return result.setParam(DelegateRewardClaimDecoder.decode(rootList, logs));
+                    case CREATE_STAKING: // 7000
+                        return result.setParam(CreateStakingDecoder.decode(rootList));
                     default:
                         break;
                 }
