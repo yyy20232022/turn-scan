@@ -3,7 +3,7 @@ info:
   version: 'v_VERSION_ Build #_COMMIT_ID_'
   title: 浏览器API文档
   description:
-host: localhost:9061
+host: localhost:40010
 basePath: "_BASE_PATH_"
 
 schemes:
@@ -1166,6 +1166,96 @@ paths:
           description: 返回奖励列表
           schema:
             $ref: '#/definitions/QueryClaimByStakingListResult'
+  #微节点相关接口
+  /micronode/statistic:
+    post:
+      operationId: statistic
+      tags:
+        - 微节点接口
+      summary: 汇总数据（websocket）
+      description: |
+        wesocket调用：/topic/micronode/statistic/new<br/>
+        1. 功能：推送汇总数据<br/>
+        2. 实现逻辑：<br/>
+         查询redis结构：browser:[应用版本]:[应用运行配置名称]:networkstat<br/>
+         5s全量推送一次
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 返回统计详情
+          schema:
+            $ref: '#/definitions/MicroNodeStatisticResult'
+  /micronode/aliveNodeList:
+    post:
+      operationId: aliveNodeList
+      tags:
+        - 微节点接口
+      summary: 实时微节点列表
+      description: |
+        1. 功能：实时微节点列表查询<br/>
+        2. 实现逻辑：<br/>
+          查询mysql中micro_node表
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 参数对象
+          in: body
+          schema:
+            $ref: '#/definitions/AliveMicroNodeListReqParam'
+      responses:
+        '200':
+          description: 返回推送详情
+          schema:
+            $ref: '#/definitions/AliveMicroNodeListResult'
+  /micronode/microNodeDetails:
+    post:
+      operationId: microNodeDetails
+      tags:
+        - 微节点接口
+      summary: 微节点详情
+      description: |
+        1. 功能：微节点详情查询<br/>
+        2. 实现逻辑：<br/>
+          查询mysql中micro_node表
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 参数对象
+          in: body
+          schema:
+            $ref: '#/definitions/MicroNodeDetailsParam'
+      responses:
+        '200':
+          description: 返回节点详情
+          schema:
+            $ref: '#/definitions/MicroNodeDetailResult'
+  /micronode/microNodeOptRecordList:
+    post:
+      operationId: microNodeOptRecordList
+      tags:
+        - 微节点接口
+      summary: 微节点操作记录
+      description: |
+        1. 功能：微节点操作记录查询<br/>
+        2. 实现逻辑：<br/>
+          查询mysql中micro_node_opt表
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 参数对象
+          in: body
+          schema:
+            $ref: '#/definitions/MicroNodeOptRecordListParam'
+      responses:
+        '200':
+          description: 返回节点详情
+          schema:
+            $ref: '#/definitions/MicroNodeOptRecordListResult'
+
 #实体定义
 definitions:
   #通用参数对象
@@ -3761,4 +3851,177 @@ definitions:
         type: string
       updateTime:
         description: 修改时间
+        type: string
+  MicroNodeStatisticResult:
+    type: object
+    properties:
+      errMsg:
+        description: 描述信息
+        type: string
+      code:
+        description: 成功（0），失败则有相关失败码
+        type: integer
+      data:
+        $ref: '#/definitions/MicroNodeStatisticDetail'
+  MicroNodeStatisticDetail:
+    type: object
+    properties:
+      stakingValue:
+        description: 质押总数
+        type: string
+  AliveMicroNodeListReqParam:
+    type: object
+    properties:
+      pageNo:
+        description: 页数(必填)
+        type: integer
+      pageSize:
+        description: 页大小(必填)
+        type: integer
+      key:
+        description: 验证人名称
+        type: string
+      queryStatus:
+        description: 查询状态|
+          all：全部的<br/>
+          exited：已退出的<br/>
+          candidate：候选中的<br/>
+        type: string
+  AliveMicroNodeListResult:
+    type: object
+    properties:
+      errMsg:
+        description: 描述信息
+        type: string
+      code:
+        description: 成功（0），失败则有相关失败码
+        type: integer
+      totalCount:
+        description: 总数
+        type: integer
+      totalPages:
+        description: 总页数
+        type: integer
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AliveMicroNodeDetail'
+  AliveMicroNodeDetail:
+    type: object
+    description: 活跃中的节点详情
+    properties:
+      ranking:
+        description: 排行
+        type: integer
+      nodeId:
+        description: 节点id
+        type: string
+      nodeName:
+        description: 微节点名称
+        type: string
+      status:
+        description: 状态 1:候选中 2:已退出
+        type: integer
+      bubbleId:
+        description: 子网络id
+        type: long
+      totalValue:
+        description: 质押总数
+        type: string
+      Version:
+        description: 版本
+        type: string
+  MicroNodeDetailsParam:
+    type: object
+    properties:
+      nodeId:
+        description: 节点地址(必填)
+        type: string
+  MicroNodeDetailResult:
+    type: object
+    properties:
+      errMsg:
+        description: 描述信息
+        type: string
+      code:
+        description: 成功（0），失败则有相关失败码
+        type: integer
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/MicroNodeDetail'
+  MicroNodeDetail:
+    type: object
+    description: 微节点详情
+    properties:
+      nodeName:
+        description: 微节点名称
+        type: string
+      status:
+        description: 状态 1:候选中 2:已退出
+        type: integer
+      totalValue:
+        description: 质押总数
+        type: string
+      nodeId:
+        description: 节点id
+        type: string
+      operationAddr:
+        description: 操作地址
+        type: string
+      beneficiary:
+        description: 收益地址
+        type: string
+      Version:
+        description: 版本
+        type: string
+  MicroNodeOptRecordListParam:
+    type: object
+    properties:
+      pageNo:
+        description: 页数(必填)
+        type: integer
+      pageSize:
+        description: 页大小(必填)
+        type: integer
+      nodeId:
+        description: 节点ID(必填)
+        type: string
+  MicroNodeOptRecordListResult:
+    type: object
+    properties:
+      errMsg:
+        description: 描述信息
+        type: string
+      code:
+        description: 成功（0），失败则有相关失败码
+        type: integer
+      totalCount:
+        description: 记录总数
+        type: integer
+      totalPages:
+        description: 总页数
+        type: integer
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/MicroNodeOptRecordDetail'
+  MicroNodeOptRecordDetail:
+    type: object
+    description: 节点操作日志详情
+    properties:
+      timestamp:
+        description: 创建时间
+        type: string
+      txHash:
+        description: 所属交易
+        type: string
+      blockNumber:
+        description: 所属区块
+        type: integer
+      type:
+        description: 操作描述(code表示)|
+          1 create 创建 <br/>
+          2 edit 修改<br/>
+          3 quit 退出<br/>
         type: string

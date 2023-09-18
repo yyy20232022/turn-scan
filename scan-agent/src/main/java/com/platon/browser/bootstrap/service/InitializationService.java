@@ -111,6 +111,9 @@ public class InitializationService {
     @Resource
     private ErcCache ercCache;
 
+    @Resource
+    private EsMicroNodeOptRepository esMicroNodeOptRepository;
+
     /**
      * 进入应用初始化子流程
      *
@@ -340,6 +343,7 @@ public class InitializationService {
             esErc20TxRepository.initIndex();
             esErc721TxRepository.initIndex();
             esErc1155TxRepository.initIndex();
+            esMicroNodeOptRepository.initIndex();
         } catch (Exception e) {
             log.error("初始化ES异常", e);
         }

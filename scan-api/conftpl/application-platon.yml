@@ -73,6 +73,7 @@ spring:
       erc20TxIndexName: ${platon.es-namespace}_erc20_tx
       erc721TxIndexName: ${platon.es-namespace}_erc721_tx
       erc1155TxIndexName: ${platon.es-namespace}_erc1155_tx
+      microNodeOptIndexName: ${platon.es-namespace}_micro_node_opt
 # MyBatis配置（注意：一定要对应mapper映射xml文件的所在路径）
 mybatis:
   mapper-locations: classpath*:mapper/*.xml,classpath*:custommapper/*.xml
@@ -111,7 +112,7 @@ platon:
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 192.168.31.117:7790
+    addresses: 47.242.31.187:19002
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)

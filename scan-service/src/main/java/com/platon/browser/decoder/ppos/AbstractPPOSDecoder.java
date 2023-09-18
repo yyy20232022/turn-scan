@@ -29,6 +29,13 @@ public abstract class AbstractPPOSDecoder {
         return new BigInteger(1, integersString.getBytes());
     }
 
+    static Boolean boolResolver(RlpString rlpString) {
+        RlpList integersList = RlpDecoder.decode(rlpString.getBytes());
+        if(integersList.getValues().isEmpty()) return null;
+        RlpString integersString = (RlpString) integersList.getValues().get(0);
+        return Boolean.valueOf(integersString.asString());
+    }
+
     static String stringResolver(RlpString rlpString) {
         RlpList stringsList = RlpDecoder.decode(rlpString.getBytes());
         if(stringsList.getValues().isEmpty()) return null;

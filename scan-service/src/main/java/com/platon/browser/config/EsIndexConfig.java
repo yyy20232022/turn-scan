@@ -22,4 +22,5 @@ public class EsIndexConfig {
     private String erc20TxIndexName; // 主交易内部erc20交易索引名称(new)
     private String erc721TxIndexName; // 主交易内部erc721交易索引名称
     private String erc1155TxIndexName; // 主交易内部erc1155交易索引名称
+    private String microNodeOptIndexName; // 节点操作日志索引名称
 }

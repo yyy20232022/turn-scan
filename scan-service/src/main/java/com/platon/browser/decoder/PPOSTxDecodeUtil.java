@@ -96,6 +96,10 @@ public class PPOSTxDecodeUtil {
                         return result.setParam(DelegateRewardClaimDecoder.decode(rootList, logs));
                     case CREATE_STAKING: // 7000
                         return result.setParam(CreateStakingDecoder.decode(rootList));
+                    case EDIT_CANDIDATE: // 7001
+                        return result.setParam(EditCandidateDecoder.decode(rootList));
+                    case WITHDREW_STAKING: // 7003
+                        return result.setParam(WithdrewStakingDecoder.decode(rootList));
                     case CREATE_BUBBLE: // 8001
                         return result.setParam(CreateBubbleDecoder.decode(rootList, logs));
 

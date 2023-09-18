@@ -13,24 +13,14 @@ import java.math.BigInteger;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CreateStakeParam extends TxParam {
+public class EditCandidateParam extends TxParam {
 
     private String nodeId;
-
-    private BigInteger amount;
 
     private String beneficiary;
 
     private String name;
 
     private String details;
-
-    private String electronURI;
-
-    private String p2pURI;
-
-    private String version;
-
-    private Integer isOperator;
 
 }

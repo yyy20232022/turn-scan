@@ -29,6 +29,7 @@ import com.platon.browser.utils.TransactionUtil;
 import com.platon.browser.v0152.analyzer.ErcCache;
 import com.platon.browser.v0152.analyzer.ErcTokenAnalyzer;
 import com.bubble.protocol.core.methods.response.Transaction;
+import com.platon.browser.v0152.analyzer.MicroNodeAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -66,6 +67,9 @@ public class TransactionAnalyzer {
 
     @Resource
     private TokenMapper tokenMapper;
+
+    @Resource
+    private MicroNodeAnalyzer microNodeAnalyzer;
 
     // 交易解析阶段，维护自身的普通合约地址列表，其初始化数据来自地址缓存和erc緩存
     // <普通合约地址,合约类型枚举>
@@ -167,6 +171,9 @@ public class TransactionAnalyzer {
                                  .contains(result.getTo()) && StringUtils.isNotBlank(inputWithoutPrefix)) {
             // 如果to地址是内置合约地址，则解码交易输入
             TransactionUtil.resolveInnerContractInvokeTxComplementInfo(result, receipt.getLogs(), ci);
+
+
+            microNodeAnalyzer.resolveTx(result, ci, receipt.getStatus());
             log.info("当前交易[{}]为内置合约,from[{}],to[{}],解码交易输入",
                      result.getHash(),
                      result.getFrom(),
