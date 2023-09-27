@@ -90,7 +90,7 @@ spring:
   #ES索引配置
   elasticsearch:
     high-level-client:
-      hosts: 192.168.31.105:19200,192.168.31.105:29200,192.168.31.105:39200
+      hosts: 192.168.31.115:19200,192.168.31.115:29200,192.168.31.115:39200
       port: 19200
       schema: http
       username:
@@ -157,7 +157,7 @@ platon:
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 47.242.31.187:19002
+    addresses: 8.210.9.83:6790
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)

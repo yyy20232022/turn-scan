@@ -103,6 +103,12 @@ public class RetryableClient {
         return rewardContract;
     }
 
+    private BubbleContract bubbleContract;
+
+    public BubbleContract getBubbleContract() {
+        return bubbleContract;
+    }
+
     @Retryable(value = Exception.class, maxAttempts = Integer.MAX_VALUE)
     public void init() throws ConfigLoadingException {
         WEB3J_CONFIG_LOCK.writeLock().lock();
@@ -221,5 +227,4 @@ public class RetryableClient {
             log.error("0出块等待异常", e);
         }
     }
-
 }

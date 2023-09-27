@@ -12,9 +12,13 @@ public class MicroNodeDetailsResp {
 
     private String nodeId;
 
+    private String name;
+
+    private String version;
+
     private BigDecimal totalValue;
 
-    private Integer status;
+    private Integer nodeStatus;
 
     private String operationAddr;
 
@@ -38,12 +42,12 @@ public class MicroNodeDetailsResp {
         this.totalValue = totalValue;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getNodeStatus() {
+        return nodeStatus;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setNodeStatus(Integer nodeStatus) {
+        this.nodeStatus = nodeStatus;
     }
 
     public String getOperationAddr() {
@@ -60,5 +64,21 @@ public class MicroNodeDetailsResp {
 
     public void setBeneficiary(String beneficiary) {
         this.beneficiary = beneficiary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

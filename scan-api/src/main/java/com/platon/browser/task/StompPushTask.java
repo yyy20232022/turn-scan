@@ -13,6 +13,7 @@ import com.platon.browser.response.RespPage;
 import com.platon.browser.response.home.BlockStatisticNewResp;
 import com.platon.browser.response.home.ChainStatisticNewResp;
 import com.platon.browser.response.home.StakingListNewResp;
+import com.platon.browser.response.microNode.MicroNodeStatisticResp;
 import com.platon.browser.response.staking.AliveStakingListResp;
 import com.platon.browser.response.staking.StakingStatisticNewResp;
 import com.platon.browser.service.*;
@@ -60,6 +61,9 @@ public class StompPushTask {
 
     @Resource
     private StatisticCacheService statisticCacheService;
+
+    @Resource
+    private MicroNodeService microNodeService;
 
     private boolean checkData() {
         NetworkStat networkStatRedis = this.statisticCacheService.getNetworkStatCache();
@@ -118,6 +122,18 @@ public class StompPushTask {
             StakingStatisticNewResp stakingStatisticNewResp = this.stakingService.stakingStatisticNew();
             BaseResp<StakingStatisticNewResp> resp = BaseResp.build(RetEnum.RET_SUCCESS.getCode(), this.i18n.i(I18nEnum.SUCCESS), stakingStatisticNewResp);
             this.messagingTemplate.convertAndSend("/topic/staking/statistic/new", resp);
+        }
+    }
+
+    /**
+     * 推送微节点汇总相关信息
+     */
+    @Scheduled(cron = "0/5 * * * * ?")
+    public void pushMicroNodeStatisticNew() {
+        if (this.checkData()) {
+            MicroNodeStatisticResp microNodeStatisticResp = this.microNodeService.stakingStatistic();
+            BaseResp<MicroNodeStatisticResp> resp = BaseResp.build(RetEnum.RET_SUCCESS.getCode(), this.i18n.i(I18nEnum.SUCCESS), microNodeStatisticResp);
+            this.messagingTemplate.convertAndSend("/topic/micronode/statistic/new", resp);
         }
     }
 

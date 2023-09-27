@@ -26,7 +26,7 @@ public class CreateStakingDecoder extends AbstractPPOSDecoder {
         electronURI = new String(Numeric.hexStringToByteArray(electronURI));
         String p2pURI = stringResolver((RlpString) rootList.getValues().get(7));
         p2pURI = new String(Numeric.hexStringToByteArray(p2pURI));
-        BigInteger versionInteger = bigIntegerResolver((RlpString) rootList.getValues().get(8));
+        BigInteger versionInteger = bigIntegerResolver((RlpString) rootList.getValues().get(9));
         byte[] bytes = versionInteger.toByteArray();
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < bytes.length; i++) {

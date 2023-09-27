@@ -38,6 +38,8 @@ public class AliveMicroNodeListResp {
 
     private Long bubbleId;
 
+    private String bubbleCreator;
+
     public Integer getRanking() {
         return ranking;
     }
@@ -135,6 +137,11 @@ public class AliveMicroNodeListResp {
         this.bubbleId = bubbleId;
     }
 
+    public String getBubbleCreator() {
+        return bubbleCreator;
+    }
 
-
+    public void setBubbleCreator(String bubbleCreator) {
+        this.bubbleCreator = bubbleCreator;
+    }
 }

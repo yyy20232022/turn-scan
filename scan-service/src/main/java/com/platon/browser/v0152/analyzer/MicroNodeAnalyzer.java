@@ -1,9 +1,11 @@
 package com.platon.browser.v0152.analyzer;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platon.browser.bean.CollectionTransaction;
 import com.platon.browser.bean.ComplementInfo;
 import com.platon.browser.bean.CustomStaking;
+import com.platon.browser.client.PlatOnClient;
 import com.platon.browser.dao.entity.MicroNode;
 import com.platon.browser.dao.entity.MicroNodeExample;
 import com.platon.browser.dao.entity.MicroNodeOptBak;
@@ -13,6 +15,7 @@ import com.platon.browser.elasticsearch.dto.Transaction;
 import com.platon.browser.enums.MicroNodeStatusEnum;
 import com.platon.browser.enums.StakingStatusEnum;
 import com.platon.browser.enums.TransactionStatusEnum;
+import com.platon.browser.param.CreateBubbleParam;
 import com.platon.browser.param.CreateStakeParam;
 import com.platon.browser.param.EditCandidateParam;
 import com.platon.browser.service.elasticsearch.EsMicroNodeOptService;
@@ -38,16 +41,45 @@ public class MicroNodeAnalyzer {
     @Resource
     private EsMicroNodeOptService esMicroNodeOptService;
 
+    @Resource
+    private PlatOnClient platOnClient;
+
     public void resolveTx(CollectionTransaction result, ComplementInfo ci, int status) {
         if(TransactionStatusEnum.FAIL.getCode() == status){
             return;
         }
         Transaction.TypeEnum typeEnum = Transaction.TypeEnum.getEnum(ci.getType());
         switch (typeEnum){
-            case CREATE_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);
-            case EDIT_CANDIDATE: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);
-            case WITHDREW_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.EXITED);
+            case CREATE_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);break;
+            case EDIT_CANDIDATE: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);break;
+            case WITHDREW_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.EXITED);break;
+            case CREATE_BUBBLE: createBubble(result,ci);break;
+            case RELEASE_BUBBLE: releaseBubble(result,ci);break;
         }
+    }
+
+    private void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
+    }
+
+    private void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
+        CreateBubbleParam createBubbleParam = JSONObject.parseObject(ci.getInfo(), CreateBubbleParam.class);
+        String bubbleInfo = platOnClient.getBubbleInfo(createBubbleParam.getBubbleId());
+        JSONObject info = JSONObject.parseObject(bubbleInfo);
+        JSONObject data = info.getJSONObject("data");
+        JSONObject basics = data.getJSONObject("Basics");
+        JSONArray microNodes = basics.getJSONArray("MicroNodes");
+        List<String> result = new ArrayList<>(microNodes.size());
+        for (Object microNode : microNodes) {
+            JSONObject microNodeJson = (JSONObject)microNode;
+            result.add(microNodeJson.getString("StakingAddress"));
+        }
+        String creator = basics.getString("Creator");
+        MicroNode node = new MicroNode();
+        node.setBubbleId(createBubbleParam.getBubbleId().longValue());
+        node.setBubbleCreator(creator);
+        MicroNodeExample microNodeExample = new MicroNodeExample();
+        microNodeExample.createCriteria().andOperationAddrIn(result);
+        microNodeMapper.updateByExampleSelective(node,microNodeExample);
     }
 
     private void microNodeHandler(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {

@@ -75,8 +75,8 @@ public class MicroNodeService {
     public MicroNodeStatisticResp stakingStatistic() {
         /** 获取统计信息 */
         MicroNodeStatisticResp stakingStatisticNewResp = new MicroNodeStatisticResp();
-        long stakingAmount = microNodeMapper.countStakingAmount();
-        stakingStatisticNewResp.setStakingValue(BigDecimal.valueOf(stakingAmount));
+        BigInteger stakingAmount = microNodeMapper.countStakingAmount();
+        stakingStatisticNewResp.setStakingValue(new BigDecimal(stakingAmount));
         return stakingStatisticNewResp;
     }
 

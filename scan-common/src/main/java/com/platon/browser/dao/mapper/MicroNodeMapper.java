@@ -3,6 +3,8 @@ package com.platon.browser.dao.mapper;
 import com.github.pagehelper.Page;
 import com.platon.browser.dao.entity.MicroNode;
 import com.platon.browser.dao.entity.MicroNodeExample;
+
+import java.math.BigInteger;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -47,7 +49,7 @@ public interface MicroNodeMapper {
      */
     int batchInsertSelective(@Param("list") List<MicroNode> list, @Param("selective") MicroNode.Column ... selective);
 
-    Page<MicroNode> selectListByExample(MicroNodeExample microNodeExample);
+    BigInteger countStakingAmount();
 
-    long countStakingAmount();
+    Page<MicroNode> selectListByExample(MicroNodeExample microNodeExample);
 }

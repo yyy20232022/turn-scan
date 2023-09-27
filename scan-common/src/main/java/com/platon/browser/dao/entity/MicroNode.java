@@ -30,6 +30,8 @@ public class MicroNode {
 
     private Long bubbleId;
 
+    private String bubbleCreator;
+
     private Date createTime;
 
     private Date updateTime;
@@ -130,6 +132,14 @@ public class MicroNode {
         this.bubbleId = bubbleId;
     }
 
+    public String getBubbleCreator() {
+        return bubbleCreator;
+    }
+
+    public void setBubbleCreator(String bubbleCreator) {
+        this.bubbleCreator = bubbleCreator == null ? null : bubbleCreator.trim();
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -166,6 +176,7 @@ public class MicroNode {
         isOperator("is_operator", "isOperator", "INTEGER", false),
         nodeStatus("node_status", "nodeStatus", "INTEGER", false),
         bubbleId("bubble_id", "bubbleId", "BIGINT", false),
+        bubbleCreator("bubble_creator", "bubbleCreator", "VARCHAR", false),
         createTime("create_time", "createTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false);
 

@@ -76,6 +76,10 @@ public class PlatOnClient {
         return retryableClient.getRewardContract();
     }
 
+    public BubbleContract getBubbleContract(){
+        return retryableClient.getBubbleContract();
+    }
+
     @PostConstruct
     private void init() throws ConfigLoadingException {
         logDecodeExecutor = Executors.newFixedThreadPool(logDecodeThreadNum);
@@ -139,6 +143,14 @@ public class PlatOnClient {
             return getProposalContract().getParamList(module).send().getData();
         } catch (Exception e) {
             throw new BusinessException(e.getMessage());
+        }
+    }
+
+    public String getBubbleInfo(BigInteger bubbleId){
+        try {
+            return getBubbleContract().getBubbleInfo(bubbleId).send().getData();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

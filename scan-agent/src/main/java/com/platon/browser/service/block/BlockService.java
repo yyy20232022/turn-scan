@@ -1,5 +1,7 @@
 package com.platon.browser.service.block;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.platon.browser.analyzer.epoch.OnConsensusAnalyzer;
 import com.platon.browser.analyzer.epoch.OnElectionAnalyzer;
 import com.platon.browser.analyzer.epoch.OnNewBlockAnalyzer;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -115,4 +118,18 @@ public class BlockService {
         return nodeOptList;
     }
 
+    public List<String> getBubbleInfo(BigInteger bubbleId){
+
+        String bubbleInfo = retryService.getBubbleInfo(bubbleId);
+        JSONObject info = JSONObject.parseObject(bubbleInfo);
+        JSONObject data = info.getJSONObject("data");
+        JSONObject basics = data.getJSONObject("Basics");
+        JSONArray microNodes = basics.getJSONArray("MicroNodes");
+        List<String> result = new ArrayList<>(microNodes.size());
+        for (Object microNode : microNodes) {
+            JSONObject node = (JSONObject)microNode;
+            result.add(node.getString("StakingAddress"));
+        }
+        return result;
+    }
 }

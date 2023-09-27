@@ -14,6 +14,7 @@
     <result column="is_operator" jdbcType="INTEGER" property="isOperator" />
     <result column="node_status" jdbcType="INTEGER" property="nodeStatus" />
     <result column="bubble_id" jdbcType="BIGINT" property="bubbleId" />
+    <result column="bubble_creator" jdbcType="VARCHAR" property="bubbleCreator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     node_id, amount, operation_addr, beneficiary, `name`, details, electron_uri, p2p_uri, 
-    version, is_operator, node_status, bubble_id, create_time, update_time
+    version, is_operator, node_status, bubble_id, bubble_creator, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
     select
@@ -114,12 +115,14 @@
       beneficiary, `name`, details, 
       electron_uri, p2p_uri, version, 
       is_operator, node_status, bubble_id, 
-      create_time, update_time)
+      bubble_creator, create_time, update_time
+      )
     values (#{nodeId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{operationAddr,jdbcType=VARCHAR}, 
       #{beneficiary,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, 
       #{electronUri,jdbcType=VARCHAR}, #{p2pUri,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
       #{isOperator,jdbcType=INTEGER}, #{nodeStatus,jdbcType=INTEGER}, #{bubbleId,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{bubbleCreator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.MicroNode">
     insert into micro_node
@@ -159,6 +162,9 @@
       </if>
       <if test="bubbleId != null">
         bubble_id,
+      </if>
+      <if test="bubbleCreator != null">
+        bubble_creator,
       </if>
       <if test="createTime != null">
         create_time,
@@ -203,6 +209,9 @@
       </if>
       <if test="bubbleId != null">
         #{bubbleId,jdbcType=BIGINT},
+      </if>
+      <if test="bubbleCreator != null">
+        #{bubbleCreator,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -257,6 +266,9 @@
       <if test="record.bubbleId != null">
         bubble_id = #{record.bubbleId,jdbcType=BIGINT},
       </if>
+      <if test="record.bubbleCreator != null">
+        bubble_creator = #{record.bubbleCreator,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -282,6 +294,7 @@
       is_operator = #{record.isOperator,jdbcType=INTEGER},
       node_status = #{record.nodeStatus,jdbcType=INTEGER},
       bubble_id = #{record.bubbleId,jdbcType=BIGINT},
+      bubble_creator = #{record.bubbleCreator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -324,6 +337,9 @@
       <if test="bubbleId != null">
         bubble_id = #{bubbleId,jdbcType=BIGINT},
       </if>
+      <if test="bubbleCreator != null">
+        bubble_creator = #{bubbleCreator,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -346,6 +362,7 @@
       is_operator = #{isOperator,jdbcType=INTEGER},
       node_status = #{nodeStatus,jdbcType=INTEGER},
       bubble_id = #{bubbleId,jdbcType=BIGINT},
+      bubble_creator = #{bubbleCreator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where node_id = #{nodeId,jdbcType=VARCHAR}
@@ -358,14 +375,16 @@
     -->
     insert into micro_node
     (node_id, amount, operation_addr, beneficiary, `name`, details, electron_uri, p2p_uri, 
-      version, is_operator, node_status, bubble_id, create_time, update_time)
+      version, is_operator, node_status, bubble_id, bubble_creator, create_time, update_time
+      )
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.nodeId,jdbcType=VARCHAR}, #{item.amount,jdbcType=DECIMAL}, #{item.operationAddr,jdbcType=VARCHAR}, 
         #{item.beneficiary,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.details,jdbcType=VARCHAR}, 
         #{item.electronUri,jdbcType=VARCHAR}, #{item.p2pUri,jdbcType=VARCHAR}, #{item.version,jdbcType=VARCHAR}, 
         #{item.isOperator,jdbcType=INTEGER}, #{item.nodeStatus,jdbcType=INTEGER}, #{item.bubbleId,jdbcType=BIGINT}, 
-        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+        #{item.bubbleCreator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.updateTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   <insert id="batchInsertSelective" parameterType="map">
@@ -419,6 +438,9 @@
         <if test="'bubble_id'.toString() == column.value">
           #{item.bubbleId,jdbcType=BIGINT}
         </if>
+        <if test="'bubble_creator'.toString() == column.value">
+          #{item.bubbleCreator,jdbcType=VARCHAR}
+        </if>
         <if test="'create_time'.toString() == column.value">
           #{item.createTime,jdbcType=TIMESTAMP}
         </if>
@@ -430,10 +452,10 @@
     </foreach>
   </insert>
 
-  <select id="countStakingAmount" resultType="java.lang.Long">
+  <select id="countStakingAmount" resultType="java.math.BigInteger">
     select sum(amount) from micro_node where node_status=1;
   </select>
-  <select id="selectListByExample" resultType="com.platon.browser.dao.entity.MicroNode">
+  <select id="selectListByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct

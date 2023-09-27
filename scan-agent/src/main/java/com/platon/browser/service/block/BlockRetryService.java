@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 
 /**
  * @Auther: Chendongming
@@ -74,4 +75,7 @@ public class BlockRetryService {
         }
     }
 
+    public String getBubbleInfo(BigInteger bubbleId) {
+        return platOnClient.getBubbleInfo(bubbleId);
+    }
 }

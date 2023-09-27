@@ -906,6 +906,76 @@ public class MicroNodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andBubbleCreatorIsNull() {
+            addCriterion("bubble_creator is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorIsNotNull() {
+            addCriterion("bubble_creator is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorEqualTo(String value) {
+            addCriterion("bubble_creator =", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorNotEqualTo(String value) {
+            addCriterion("bubble_creator <>", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorGreaterThan(String value) {
+            addCriterion("bubble_creator >", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorGreaterThanOrEqualTo(String value) {
+            addCriterion("bubble_creator >=", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorLessThan(String value) {
+            addCriterion("bubble_creator <", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorLessThanOrEqualTo(String value) {
+            addCriterion("bubble_creator <=", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorLike(String value) {
+            addCriterion("bubble_creator like", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorNotLike(String value) {
+            addCriterion("bubble_creator not like", value, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorIn(List<String> values) {
+            addCriterion("bubble_creator in", values, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorNotIn(List<String> values) {
+            addCriterion("bubble_creator not in", values, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorBetween(String value1, String value2) {
+            addCriterion("bubble_creator between", value1, value2, "bubbleCreator");
+            return (Criteria) this;
+        }
+
+        public Criteria andBubbleCreatorNotBetween(String value1, String value2) {
+            addCriterion("bubble_creator not between", value1, value2, "bubbleCreator");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

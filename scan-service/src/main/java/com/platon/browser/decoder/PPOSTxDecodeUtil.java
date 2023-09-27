@@ -102,6 +102,10 @@ public class PPOSTxDecodeUtil {
                         return result.setParam(WithdrewStakingDecoder.decode(rootList));
                     case CREATE_BUBBLE: // 8001
                         return result.setParam(CreateBubbleDecoder.decode(rootList, logs));
+                    case SETTLE_BUBBLE: // 8005
+                        return result.setParam(SettleBubbleDecoder.decode(rootList, logs));
+                    case RELEASE_BUBBLE: // 8002
+                        return result.setParam(ReleaseBubbleDecoder.decode(rootList, logs));
 
                     default:
                         break;
