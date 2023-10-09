@@ -7,6 +7,7 @@ import com.bubble.rlp.solidity.RlpString;
 import com.bubble.rlp.solidity.RlpType;
 import com.bubble.utils.Numeric;
 import com.platon.browser.param.CreateBubbleParam;
+import com.platon.browser.param.ReleaseBubbleParam;
 import com.platon.browser.param.TxParam;
 
 import java.math.BigInteger;
@@ -24,9 +25,9 @@ public class ReleaseBubbleDecoder extends AbstractPPOSDecoder {
         BigInteger bubbleId = ((RlpString) RlpDecoder.decode(((RlpString) rlpList.get(1)).getBytes())
                                                      .getValues()
                                                      .get(0)).asPositiveBigInteger();
-        CreateBubbleParam createBubbleParam = new CreateBubbleParam();
-        createBubbleParam.setBubbleId(bubbleId);
-        return createBubbleParam;
+        ReleaseBubbleParam releaseBubbleParam= new ReleaseBubbleParam();
+        releaseBubbleParam.setBubbleId(bubbleId);
+        return releaseBubbleParam;
     }
 
 }

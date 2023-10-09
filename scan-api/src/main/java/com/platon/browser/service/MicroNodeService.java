@@ -96,6 +96,13 @@ public class MicroNodeService {
         }
         if (StringUtils.isNotBlank(req.getKey())) {
             criteria1.andNameLike("%" + req.getKey() + "%");
+            microNodeExample.or(criteria1);
+            MicroNodeExample.Criteria criteria2 = microNodeExample.createCriteria();
+            criteria2.andBubbleCreatorLike("%" + req.getKey() + "%");
+            microNodeExample.or().andBubbleCreatorLike("%" + req.getKey() + "%");
+        }
+        if(ObjectUtil.isNotNull(req.getBubbleId())) {
+            microNodeExample.or().andBubbleIdEqualTo(req.getBubbleId());
         }
 
         Page<MicroNode> microNodePage = microNodeMapper.selectListByExample(microNodeExample);

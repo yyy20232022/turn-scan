@@ -17,6 +17,17 @@ public class AliveMicroNodeListReq extends PageReq{
     @NotBlank(message = "{queryStatus not null}")
     @Pattern(regexp = "all|active|candidate", message = "{queryStatus.illegal}")
     private String queryStatus;
+
+	private Long bubbleId;
+
+	public Long getBubbleId() {
+		return bubbleId;
+	}
+
+	public void setBubbleId(Long bubbleId) {
+		this.bubbleId = bubbleId;
+	}
+
 	public String getKey() {
 		return key;
 	}

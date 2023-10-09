@@ -3887,6 +3887,9 @@ definitions:
           exited：已退出的<br/>
           candidate：候选中的<br/>
         type: string
+      bubbleId:
+        description: bubbleId
+        type: long
   AliveMicroNodeListResult:
     type: object
     properties:

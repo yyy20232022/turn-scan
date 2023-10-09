@@ -18,6 +18,7 @@ import com.platon.browser.enums.TransactionStatusEnum;
 import com.platon.browser.param.CreateBubbleParam;
 import com.platon.browser.param.CreateStakeParam;
 import com.platon.browser.param.EditCandidateParam;
+import com.platon.browser.param.ReleaseBubbleParam;
 import com.platon.browser.service.elasticsearch.EsMicroNodeOptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,19 @@ public class MicroNodeAnalyzer {
         }
     }
 
+    /**
+     * bubble释放，节点的bubbleId和bubbleCreator需要重置
+     * @param result
+     * @param ci
+     */
     private void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
+        ReleaseBubbleParam releaseBubbleParam = JSONObject.parseObject(ci.getInfo(), ReleaseBubbleParam.class);
+        MicroNode node = new MicroNode();
+        node.setBubbleId(null);
+        node.setBubbleCreator(null);
+        MicroNodeExample microNodeExample = new MicroNodeExample();
+        microNodeExample.createCriteria().andBubbleIdEqualTo(releaseBubbleParam.getBubbleId().longValue());
+        microNodeMapper.updateByExampleSelective(node,microNodeExample);
     }
 
     private void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
