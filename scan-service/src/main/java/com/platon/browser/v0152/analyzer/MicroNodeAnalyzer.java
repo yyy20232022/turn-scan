@@ -78,8 +78,7 @@ public class MicroNodeAnalyzer {
         CreateBubbleParam createBubbleParam = JSONObject.parseObject(ci.getInfo(), CreateBubbleParam.class);
         String bubbleInfo = platOnClient.getBubbleInfo(createBubbleParam.getBubbleId());
         JSONObject info = JSONObject.parseObject(bubbleInfo);
-        JSONObject data = info.getJSONObject("data");
-        JSONObject basics = data.getJSONObject("Basics");
+        JSONObject basics = info.getJSONObject("Basics");
         JSONArray microNodes = basics.getJSONArray("MicroNodes");
         List<String> result = new ArrayList<>(microNodes.size());
         for (Object microNode : microNodes) {
