@@ -165,6 +165,7 @@ public class RetryableClient {
         restrictingPlanContract = RestrictingPlanContract.load(currentWeb3jWrapper.getWeb3j());
         slashContract = SlashContract.load(currentWeb3jWrapper.getWeb3j());
         stakingContract = StakingContract.load(currentWeb3jWrapper.getWeb3j());
+        bubbleContract = BubbleContract.load(currentWeb3jWrapper.getWeb3j());
     }
 
     @Retryable(value = Exception.class, maxAttempts = Integer.MAX_VALUE)
