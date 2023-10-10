@@ -19,12 +19,10 @@ public class ReleaseBubbleDecoder extends AbstractPPOSDecoder {
     }
 
     public static TxParam decode(RlpList rootList, List<Log> logs) {
-        String logData = logs.get(0).getData();
-        RlpList rlp = RlpDecoder.decode(Numeric.hexStringToByteArray(logData));
-        List<RlpType> rlpList = ((RlpList) (rlp.getValues().get(0))).getValues();
-        BigInteger bubbleId = ((RlpString) RlpDecoder.decode(((RlpString) rlpList.get(1)).getBytes())
-                                                     .getValues()
-                                                     .get(0)).asPositiveBigInteger();
+        RlpString rlpString = (RlpString) rootList.getValues().get(1);
+        BigInteger bubbleId = ((RlpString) RlpDecoder.decode((rlpString.getBytes()))
+                .getValues()
+                .get(0)).asPositiveBigInteger();
         ReleaseBubbleParam releaseBubbleParam= new ReleaseBubbleParam();
         releaseBubbleParam.setBubbleId(bubbleId);
         return releaseBubbleParam;

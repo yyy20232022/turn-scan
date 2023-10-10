@@ -66,12 +66,12 @@ public class MicroNodeAnalyzer {
      */
     private void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
         ReleaseBubbleParam releaseBubbleParam = JSONObject.parseObject(ci.getInfo(), ReleaseBubbleParam.class);
-        MicroNode node = new MicroNode();
-        node.setBubbleId(null);
-        node.setBubbleCreator(null);
+        MicroNode microNode = new MicroNode();
+        microNode.setBubbleId(0L);
+        microNode.setBubbleCreator("");
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andBubbleIdEqualTo(releaseBubbleParam.getBubbleId().longValue());
-        microNodeMapper.updateByExampleSelective(node,microNodeExample);
+        microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
     }
 
     private void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
@@ -86,12 +86,12 @@ public class MicroNodeAnalyzer {
             result.add(microNodeJson.getString("StakingAddress"));
         }
         String creator = basics.getString("Creator");
-        MicroNode node = new MicroNode();
-        node.setBubbleId(createBubbleParam.getBubbleId().longValue());
-        node.setBubbleCreator(creator);
+        MicroNode microNode = new MicroNode();
+        microNode.setBubbleId(createBubbleParam.getBubbleId().longValue());
+        microNode.setBubbleCreator(creator);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andOperationAddrIn(result);
-        microNodeMapper.updateByExampleSelective(node,microNodeExample);
+        microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
     }
 
     private void microNodeHandler(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
