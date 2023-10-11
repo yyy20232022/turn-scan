@@ -1,5 +1,6 @@
 package com.platon.browser.v0152.analyzer;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platon.browser.bean.CollectionTransaction;
@@ -52,7 +53,7 @@ public class MicroNodeAnalyzer {
         Transaction.TypeEnum typeEnum = Transaction.TypeEnum.getEnum(ci.getType());
         switch (typeEnum){
             case CREATE_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);break;
-            case EDIT_CANDIDATE: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);break;
+            case EDIT_CANDIDATE: microNodeHandler(result, ci, null);break;
             case WITHDREW_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.EXITED);break;
             case CREATE_BUBBLE: createBubble(result,ci);break;
             case RELEASE_BUBBLE: releaseBubble(result,ci);break;
@@ -154,18 +155,20 @@ public class MicroNodeAnalyzer {
             microNode.setBeneficiary(editCandidateParam.getBeneficiary());
             microNode.setName(editCandidateParam.getName());
             microNode.setDetails(editCandidateParam.getDetails());
-        }else {
-            microNode.setNodeStatus(MicroNodeStatusEnum.EXITED.getCode());
+        }
+        if(ObjectUtil.isNotNull(microNodeStatusEnum)){
+            microNode.setNodeStatus(microNodeStatusEnum.getCode());
         }
         microNode.setUpdateTime(new Date());
         microNodeMapper.updateByExample(microNode,microNodeExample);
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
         microNodeOptBak.setNodeId(editCandidateParam.getNodeId());
-        if(MicroNodeStatusEnum.CANDIDATE == microNodeStatusEnum){
+        if(ObjectUtil.isNotNull(microNodeStatusEnum)){
             microNodeOptBak.setType(OptTypeEnum.UPDATE.code);
         }else {
             microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
         }
+        microNodeOptBak.setCreTime(new Date());
         microNodeOptBak.setbNum(result.getNum());
         microNodeOptBak.setTxHash(result.getHash());
         microNodeOptBak.setTime(result.getTime());
