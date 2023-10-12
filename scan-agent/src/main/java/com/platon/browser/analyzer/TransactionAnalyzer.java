@@ -255,7 +255,9 @@ public class TransactionAnalyzer {
         // 默认取状态字段作为交易成功与否的状态
         int status = receipt.getStatus();
         if (InnerContractAddrEnum.getAddresses()
-                                 .contains(result.getTo()) && ci.getType() != com.platon.browser.elasticsearch.dto.Transaction.TypeEnum.TRANSFER.getCode()) {
+                                 .contains(result.getTo())
+                && ci.getType() != com.platon.browser.elasticsearch.dto.Transaction.TypeEnum.STAKING_TOKEN.getCode()
+                && ci.getType() != com.platon.browser.elasticsearch.dto.Transaction.TypeEnum.TRANSFER.getCode()) {
             // 如果接收者为内置合约且不为转账, 取日志中的状态作为交易成功与否的状态
             status = receipt.getLogStatus();
         }
