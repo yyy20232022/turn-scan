@@ -177,17 +177,16 @@ public class MicroNodeAnalyzer {
         microNodeExample.createCriteria().andNodeIdEqualTo(editCandidateParam.getNodeId());
         List<MicroNode> microNodes = microNodeMapper.selectByExample(microNodeExample);
         MicroNode microNode = microNodes.get(0);
-        if(Objects.equals(MicroNodeStatusEnum.CANDIDATE.getCode(), microNodeStatusEnum.getCode())){
+        if(ObjectUtil.isNull(microNodeStatusEnum)){
             microNode.setBeneficiary(editCandidateParam.getBeneficiary());
             microNode.setName(editCandidateParam.getName());
             microNode.setDetails(editCandidateParam.getDetails());
         }
-        if(Objects.equals(MicroNodeStatusEnum.EXITED.getCode(), microNodeStatusEnum.getCode())){
-            microNode.setAmount(BigDecimal.ZERO);
-        }
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
+            microNode.setAmount(BigDecimal.ZERO);
             microNode.setNodeStatus(microNodeStatusEnum.getCode());
         }
+
         microNode.setUpdateTime(new Date());
         microNodeMapper.updateByExample(microNode,microNodeExample);
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
