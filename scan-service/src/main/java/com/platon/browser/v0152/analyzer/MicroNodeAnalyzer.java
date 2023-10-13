@@ -97,13 +97,19 @@ public class MicroNodeAnalyzer {
 
     private void microNodeHandler(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         if(MicroNodeStatusEnum.CANDIDATE == microNodeStatusEnum){
-            insert(result, ci,microNodeStatusEnum);
+            createStaking(result, ci,microNodeStatusEnum);
         }else {
-            update(result, ci,microNodeStatusEnum);
+            editWithdrew(result, ci,microNodeStatusEnum);
         }
     }
 
-    private void insert(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
+    /**
+     * 微节点质押处理
+     * @param result
+     * @param ci
+     * @param microNodeStatusEnum
+     */
+    private void createStaking(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         CreateStakeParam createStakeParam = JSONObject.parseObject(ci.getInfo(), CreateStakeParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andNodeIdEqualTo(createStakeParam.getNodeId());
@@ -123,29 +129,49 @@ public class MicroNodeAnalyzer {
             microNode.setVersion(createStakeParam.getVersion());
             microNode.setOperationAddr(result.getFrom());
             microNode.setCreateTime(new Date());
-
-            MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
-            microNodeOptBak.setNodeId(createStakeParam.getNodeId());
-            microNodeOptBak.setType(OptTypeEnum.STAKE.code);
-            microNodeOptBak.setbNum(result.getNum());
-            microNodeOptBak.setTxHash(result.getHash());
-            microNodeOptBak.setTime(result.getTime());
-            microNodeOptBak.setCreTime(new Date());
             microNodeMapper.insert(microNode);
-            int insert = microNodeOptBakMapper.insert(microNodeOptBak);
-
-            try {
-                esMicroNodeOptService.add(microNodeOptBak);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }else {
-            update(result, ci, microNodeStatusEnum);
+            // 质押过重新质押
+            MicroNode microNode = microNodes.get(0);
+            microNode.setNodeStatus(microNodeStatusEnum.getCode());
+            microNode.setAmount(new BigDecimal(createStakeParam.getAmount()));
+            microNode.setBeneficiary(createStakeParam.getBeneficiary());
+            microNode.setDetails(createStakeParam.getDetails());
+            microNode.setElectronUri(createStakeParam.getElectronURI());
+            microNode.setIsOperator(createStakeParam.getIsOperator());
+            microNode.setNodeStatus(microNodeStatusEnum.getCode());
+            microNode.setP2pUri(createStakeParam.getP2pURI());
+            microNode.setVersion(createStakeParam.getVersion());
+            microNode.setOperationAddr(result.getFrom());
+            microNode.setUpdateTime(new Date());
+            microNode.setName(createStakeParam.getName());
+            microNodeMapper.updateByPrimaryKey(microNode);
+        }
+        MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
+        microNodeOptBak.setNodeId(createStakeParam.getNodeId());
+        microNodeOptBak.setType(OptTypeEnum.STAKE.code);
+        microNodeOptBak.setbNum(result.getNum());
+        microNodeOptBak.setTxHash(result.getHash());
+        microNodeOptBak.setTime(result.getTime());
+        microNodeOptBak.setCreTime(new Date());
+
+        microNodeOptBakMapper.insert(microNodeOptBak);
+
+        try {
+            esMicroNodeOptService.add(microNodeOptBak);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
 
-    private void update(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
+    /**
+     * 更新节点信息、解质押，处理
+     * @param result
+     * @param ci
+     * @param microNodeStatusEnum
+     */
+    private void editWithdrew(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         EditCandidateParam editCandidateParam = JSONObject.parseObject(ci.getInfo(), EditCandidateParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andNodeIdEqualTo(editCandidateParam.getNodeId());
@@ -167,12 +193,7 @@ public class MicroNodeAnalyzer {
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
         microNodeOptBak.setNodeId(editCandidateParam.getNodeId());
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
-            if(Objects.equals(MicroNodeStatusEnum.CANDIDATE.getCode(), microNodeStatusEnum.getCode())){
-                microNodeOptBak.setType(OptTypeEnum.STAKE.code);
-            }
-            if(Objects.equals(MicroNodeStatusEnum.EXITED.getCode(), microNodeStatusEnum.getCode())){
-                microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
-            }
+            microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
         }else {
             microNodeOptBak.setType(OptTypeEnum.UPDATE.code);
         }
