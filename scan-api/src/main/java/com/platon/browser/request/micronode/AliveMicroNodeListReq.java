@@ -15,7 +15,7 @@ import javax.validation.constraints.Pattern;
 public class AliveMicroNodeListReq extends PageReq{
     private String key;
     @NotBlank(message = "{queryStatus not null}")
-    @Pattern(regexp = "all|active|candidate", message = "{queryStatus.illegal}")
+    @Pattern(regexp = "all|candidate|exited", message = "{queryStatus.illegal}")
     private String queryStatus;
 
 	private Long bubbleId;

@@ -156,6 +156,9 @@ public class MicroNodeAnalyzer {
             microNode.setName(editCandidateParam.getName());
             microNode.setDetails(editCandidateParam.getDetails());
         }
+        if(Objects.equals(MicroNodeStatusEnum.EXITED.getCode(), microNodeStatusEnum.getCode())){
+            microNode.setAmount(BigDecimal.ZERO);
+        }
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
             microNode.setNodeStatus(microNodeStatusEnum.getCode());
         }
