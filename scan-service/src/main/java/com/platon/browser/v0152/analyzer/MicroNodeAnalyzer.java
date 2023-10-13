@@ -167,9 +167,14 @@ public class MicroNodeAnalyzer {
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
         microNodeOptBak.setNodeId(editCandidateParam.getNodeId());
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
-            microNodeOptBak.setType(OptTypeEnum.UPDATE.code);
+            if(Objects.equals(MicroNodeStatusEnum.CANDIDATE.getCode(), microNodeStatusEnum.getCode())){
+                microNodeOptBak.setType(OptTypeEnum.STAKE.code);
+            }
+            if(Objects.equals(MicroNodeStatusEnum.EXITED.getCode(), microNodeStatusEnum.getCode())){
+                microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
+            }
         }else {
-            microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
+            microNodeOptBak.setType(OptTypeEnum.UPDATE.code);
         }
         microNodeOptBak.setCreTime(new Date());
         microNodeOptBak.setbNum(result.getNum());
