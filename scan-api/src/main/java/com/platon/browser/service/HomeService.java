@@ -145,7 +145,7 @@ public class HomeService {
                     queryNavigationStructResp.setNodeId(HexUtil.prefix(node.getNodeId()));
                 }
             }
-            if (keyword.startsWith(networkParams.getHrp())) {
+            if (keyword.startsWith("0x")) {
                 if (keyword.length() == 42) {
                     /* 判断为合约或账户地址 */
                     Address address = addressMapper.selectByPrimaryKey(keyword);
@@ -156,8 +156,6 @@ public class HomeService {
                     }
                     queryNavigationStructResp.setAddress(keyword);
                 }
-            }
-            if (keyword.startsWith("0x")) {
                 if (keyword.length() == 130) {
                     /* 判断为节点Id */
                     Node node = nodeMapper.selectByPrimaryKey(keyword);

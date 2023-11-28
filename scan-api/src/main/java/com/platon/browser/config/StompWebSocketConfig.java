@@ -22,7 +22,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/platon-websocket")
+        registry.addEndpoint("/scan-websocket")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }

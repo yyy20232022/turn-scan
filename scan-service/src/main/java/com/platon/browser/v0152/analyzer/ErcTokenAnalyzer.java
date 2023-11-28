@@ -10,7 +10,9 @@ import com.platon.browser.bean.Receipt;
 import com.platon.browser.cache.AddressCache;
 import com.platon.browser.dao.custommapper.CustomTokenMapper;
 import com.platon.browser.dao.entity.Address;
+import com.platon.browser.dao.entity.Game;
 import com.platon.browser.dao.entity.Token;
+import com.platon.browser.dao.mapper.GameMapper;
 import com.platon.browser.dao.mapper.TokenMapper;
 import com.platon.browser.elasticsearch.dto.Block;
 import com.platon.browser.elasticsearch.dto.ErcTx;
@@ -71,6 +73,12 @@ public class ErcTokenAnalyzer {
     @Resource
     private TokenMapper tokenMapper;
 
+    @Resource
+    private GameCache gameCache;
+
+    @Resource
+    private GameMapper gameMapper;
+
     /**
      * 解析Token,在合约创建时调用
      *
@@ -82,6 +90,9 @@ public class ErcTokenAnalyzer {
         try {
             token.setAddress(contractAddress);
             ErcContractId contractId = ercDetectService.getContractId(contractAddress, blockNumber);
+            if(ErcTypeEnum.UNKNOWN.equals(contractId.getTypeEnum())){
+                return token;
+            }
             BeanUtils.copyProperties(contractId, token);
             token.setTotalSupply(CommonUtil.ofNullable(() -> contractId.getTotalSupply().toPlainString()).orElse("0"));
             token.setTypeEnum(contractId.getTypeEnum());
@@ -120,6 +131,7 @@ public class ErcTokenAnalyzer {
                     break;
                 default:
             }
+
             if (token.getTypeEnum() != ErcTypeEnum.UNKNOWN) {
                 // 入库ERC721、ERC20或ERC1155 Token记录
                 token.setTokenTxQty(0);
@@ -130,11 +142,9 @@ public class ErcTokenAnalyzer {
                 customTokenMapper.batchInsertOrUpdateSelective(Collections.singletonList(token), Token.Column.values());
                 ercCache.tokenCache.put(token.getAddress(), token);
                 log.info("创建合约成功，合约地址为[{}],合约类型为[{}]", token.getAddress(), token.getType());
-            } else {
-                log.warn("该合约地址[{}]无法识别该类型[{}]", token.getAddress(), token.getTypeEnum());
             }
         } catch (Exception e) {
-            log.error("合约创建,解析Token异常", e);
+            log.error("ERC合约创建,解析Token异常", e);
         }
         return token;
     }

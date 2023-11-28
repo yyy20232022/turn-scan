@@ -7,7 +7,6 @@ import com.platon.browser.param.CreateStakeParam;
 import com.platon.browser.param.TxParam;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 public class CreateStakingDecoder extends AbstractPPOSDecoder {
 
@@ -24,7 +23,9 @@ public class CreateStakingDecoder extends AbstractPPOSDecoder {
         details = new String(Numeric.hexStringToByteArray(details));
         String electronURI = stringResolver((RlpString) rootList.getValues().get(6));
         electronURI = new String(Numeric.hexStringToByteArray(electronURI));
-        String p2pURI = stringResolver((RlpString) rootList.getValues().get(7));
+        String rpcURI = stringResolver((RlpString) rootList.getValues().get(7));
+        rpcURI = new String(Numeric.hexStringToByteArray(rpcURI));
+        String p2pURI = stringResolver((RlpString) rootList.getValues().get(8));
         p2pURI = new String(Numeric.hexStringToByteArray(p2pURI));
         BigInteger versionInteger = bigIntegerResolver((RlpString) rootList.getValues().get(9));
         byte[] bytes = versionInteger.toByteArray();
@@ -35,7 +36,7 @@ public class CreateStakingDecoder extends AbstractPPOSDecoder {
         String version = stringBuffer.toString();
         version = version.substring(0,version.lastIndexOf("."));
 
-        Integer isOperator = boolResolver((RlpString) rootList.getValues().get(12))==true?1:0;
+        Integer isOperator = boolResolver((RlpString) rootList.getValues().get(11))==true?1:0;
         CreateStakeParam createStakeParam = new CreateStakeParam();
         createStakeParam.setNodeId(nodeId)
                         .setAmount(amount)
@@ -43,6 +44,7 @@ public class CreateStakingDecoder extends AbstractPPOSDecoder {
                         .setName(name)
                         .setDetails(details)
                         .setElectronURI(electronURI)
+                        .setRpcUri(rpcURI)
                         .setP2pURI(p2pURI)
                         .setVersion(version)
                         .setIsOperator(isOperator);

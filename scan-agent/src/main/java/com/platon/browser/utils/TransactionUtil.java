@@ -11,6 +11,7 @@ import com.bubble.protocol.core.methods.response.TransactionReceipt;
 import com.bubble.tx.gas.DefaultGasProvider;
 import com.platon.browser.bean.*;
 import com.platon.browser.cache.AddressCache;
+import com.platon.browser.cache.GameContractCache;
 import com.platon.browser.cache.PPosInvokeContractInputCache;
 import com.platon.browser.cache.TexasHoldemCache;
 import com.platon.browser.client.PlatOnClient;
@@ -38,15 +39,13 @@ import com.bubble.rlp.solidity.RlpList;
 import com.bubble.rlp.solidity.RlpString;
 import com.bubble.rlp.solidity.RlpType;
 import com.bubble.utils.Numeric;
+import com.platon.browser.contract.GameContract;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 虚拟交易工具
@@ -380,6 +379,11 @@ public class TransactionUtil {
             ci.setType(Transaction.TypeEnum.ERC1155_CONTRACT_EXEC.getCode());
         }
 
+        if (contractTypeEnum == ContractTypeEnum.GAME_EVM) {
+            ci.setToType(Transaction.ToTypeEnum.GAME_CONTRACT.getCode());
+            ci.setType(Transaction.TypeEnum.GAME_CONTRACT_EXEC.getCode());
+        }
+
         if ("0x".equals(binCode)) {
             // 如果交易的binCode属性为0x,则表明掉用了合约自毁方法, 交易类型设置为 合约销毁
             ci.setType(Transaction.TypeEnum.CONTRACT_EXEC_DESTROY.getCode());
@@ -461,6 +465,50 @@ public class TransactionUtil {
                             logger.error(StrUtil.format("解析TexasHoldem交易异常{}", receipt.getTransactionHash()), e);
                         }
                     }
+                }
+            }
+        }
+    }
+
+
+    public static void handleGameContract(CollectionTransaction contractInvokeTx,
+                                          Receipt receipt,
+                                          Web3j web3j,
+                                          Logger logger, ComplementInfo ci) {
+        if (CollUtil.isNotEmpty(receipt.getLogs())) {
+            for (Log log : receipt.getLogs()) {
+                if (CollUtil.isNotEmpty(log.getTopics())) {
+                    log.getTopics().stream().forEach(topics->{
+                        if (GameContractCache.cache.containsKey(topics)) {
+                            try {
+                                GameContract gameContract = GameContract.load(contractInvokeTx.getTo(),
+                                        web3j,
+                                        TexasHoldemCache.readCredentials,
+                                        new DefaultGasProvider());
+                                BubbleGetTransactionReceipt bubbleGetTransactionReceipt = web3j.bubbleGetTransactionReceipt(
+                                        receipt.getTransactionHash()).send();
+                                TransactionReceipt transactionReceipt = bubbleGetTransactionReceipt.getTransactionReceipt()
+                                        .get();
+                                List<Object> events = ReflectUtil.invoke(gameContract,
+                                        GameContractCache.cache.get(topics),
+                                        transactionReceipt);
+
+                                HashMap<String,String> eventMap = new HashMap<>();
+                                eventMap.put(GameContractCache.cache.get(topics),JSONUtil.toJsonStr(events));
+
+                                List<String> gameContractEventInfo = contractInvokeTx.getGameContractEventInfo();
+                                if(CollUtil.isEmpty(gameContractEventInfo)){
+                                    gameContractEventInfo = new ArrayList<>();
+                                }
+
+                                gameContractEventInfo.add(JSONUtil.toJsonStr(eventMap));
+                                contractInvokeTx.setGameContractEventInfo(gameContractEventInfo);
+                                ci.setContractType(ContractTypeEnum.GAME_EVM.getCode());
+                            } catch (Exception e) {
+                                logger.error(StrUtil.format("解析游戏合约交易异常{}", receipt.getTransactionHash()), e);
+                            }
+                    }});
+
                 }
             }
         }

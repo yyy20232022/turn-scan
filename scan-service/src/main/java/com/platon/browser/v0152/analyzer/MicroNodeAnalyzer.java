@@ -23,6 +23,7 @@ import com.platon.browser.param.ReleaseBubbleParam;
 import com.platon.browser.service.elasticsearch.EsMicroNodeOptService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -65,7 +66,8 @@ public class MicroNodeAnalyzer {
      * @param result
      * @param ci
      */
-    private void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
+    @Transactional(rollbackFor = Exception.class)
+    public void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
         ReleaseBubbleParam releaseBubbleParam = JSONObject.parseObject(ci.getInfo(), ReleaseBubbleParam.class);
         MicroNode microNode = new MicroNode();
         microNode.setBubbleId(0L);
@@ -75,7 +77,13 @@ public class MicroNodeAnalyzer {
         microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
     }
 
-    private void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
+    /**
+     * 创建bubble
+     * @param collectionTransaction
+     * @param ci
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
         CreateBubbleParam createBubbleParam = JSONObject.parseObject(ci.getInfo(), CreateBubbleParam.class);
         String bubbleInfo = platOnClient.getBubbleInfo(createBubbleParam.getBubbleId());
         JSONObject info = JSONObject.parseObject(bubbleInfo);
@@ -84,14 +92,14 @@ public class MicroNodeAnalyzer {
         List<String> result = new ArrayList<>(microNodes.size());
         for (Object microNode : microNodes) {
             JSONObject microNodeJson = (JSONObject)microNode;
-            result.add(microNodeJson.getString("StakingAddress"));
+            result.add(microNodeJson.getString("NodeId"));
         }
         String creator = basics.getString("Creator");
         MicroNode microNode = new MicroNode();
         microNode.setBubbleId(createBubbleParam.getBubbleId().longValue());
         microNode.setBubbleCreator(creator);
         MicroNodeExample microNodeExample = new MicroNodeExample();
-        microNodeExample.createCriteria().andOperationAddrIn(result);
+        microNodeExample.createCriteria().andNodeIdIn(result);
         microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
     }
 
@@ -109,7 +117,8 @@ public class MicroNodeAnalyzer {
      * @param ci
      * @param microNodeStatusEnum
      */
-    private void createStaking(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
+    @Transactional(rollbackFor = Exception.class)
+    public void createStaking(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         CreateStakeParam createStakeParam = JSONObject.parseObject(ci.getInfo(), CreateStakeParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andNodeIdEqualTo(createStakeParam.getNodeId());
@@ -129,6 +138,7 @@ public class MicroNodeAnalyzer {
             microNode.setVersion(createStakeParam.getVersion());
             microNode.setOperationAddr(result.getFrom());
             microNode.setCreateTime(new Date());
+            microNode.setRpcUri(createStakeParam.getRpcUri());
             microNodeMapper.insert(microNode);
         }else {
             // 质押过重新质押
@@ -145,6 +155,7 @@ public class MicroNodeAnalyzer {
             microNode.setOperationAddr(result.getFrom());
             microNode.setUpdateTime(new Date());
             microNode.setName(createStakeParam.getName());
+            microNode.setRpcUri(createStakeParam.getRpcUri());
             microNodeMapper.updateByPrimaryKey(microNode);
         }
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
@@ -171,7 +182,8 @@ public class MicroNodeAnalyzer {
      * @param ci
      * @param microNodeStatusEnum
      */
-    private void editWithdrew(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
+    @Transactional(rollbackFor = Exception.class)
+    public void editWithdrew(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         EditCandidateParam editCandidateParam = JSONObject.parseObject(ci.getInfo(), EditCandidateParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andNodeIdEqualTo(editCandidateParam.getNodeId());
@@ -181,6 +193,7 @@ public class MicroNodeAnalyzer {
             microNode.setBeneficiary(editCandidateParam.getBeneficiary());
             microNode.setName(editCandidateParam.getName());
             microNode.setDetails(editCandidateParam.getDetails());
+            microNode.setRpcUri(editCandidateParam.getRpcUri());
         }
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
             microNode.setAmount(BigDecimal.ZERO);

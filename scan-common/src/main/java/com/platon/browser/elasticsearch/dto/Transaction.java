@@ -70,6 +70,8 @@ public class Transaction {
 
     private String texasHoldemTxInfo;
 
+    private List<String> gameContractEventInfo;
+
     private String failReason;
 
     private Integer contractType;
@@ -191,6 +193,10 @@ public class Transaction {
          */
         ERC1155_CONTRACT_EXEC(11, "ERC1155合约调用(合约执行)"),
         /**
+         * 12-游戏合约调用(合约执行)
+         */
+        GAME_CONTRACT_EXEC(12, "游戏合约调用(合约执行)"),
+        /**
          * 1000-发起质押(创建验证人)
          */
         STAKE_CREATE(1000, "发起质押(创建验证人)"),
@@ -285,7 +291,7 @@ public class Transaction {
         /**
          * 8003-押Token
          */
-        STAKING_TOKEN(8003, "押Token"),
+        STAKING_TOKEN(8003, "质押Token"),
         /**
          * 8004-赎回Token
          */
@@ -371,7 +377,7 @@ public class Transaction {
     public enum ToTypeEnum {
         ACCOUNT(1, "账户"), INNER_CONTRACT(2, "内置合约"), EVM_CONTRACT(3, "EVM合约"), WASM_CONTRACT(4, "WASM合约"),
         ERC20_CONTRACT(5, "ERC20-EVM合约"), ERC721_CONTRACT(6, "ERC721-EVM合约"),
-        ERC1155_CONTRACT(7, "ERC1155-EVM合约");
+        ERC1155_CONTRACT(7, "ERC1155-EVM合约"),GAME_CONTRACT(8, "GAME-EVM合约");
 
         private int code;
 

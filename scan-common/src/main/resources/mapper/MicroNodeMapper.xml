@@ -10,6 +10,7 @@
     <result column="details" jdbcType="VARCHAR" property="details" />
     <result column="electron_uri" jdbcType="VARCHAR" property="electronUri" />
     <result column="p2p_uri" jdbcType="VARCHAR" property="p2pUri" />
+    <result column="rpc_uri" jdbcType="VARCHAR" property="rpcUri" />
     <result column="version" jdbcType="VARCHAR" property="version" />
     <result column="is_operator" jdbcType="INTEGER" property="isOperator" />
     <result column="node_status" jdbcType="INTEGER" property="nodeStatus" />
@@ -78,7 +79,8 @@
   </sql>
   <sql id="Base_Column_List">
     node_id, amount, operation_addr, beneficiary, `name`, details, electron_uri, p2p_uri, 
-    version, is_operator, node_status, bubble_id, bubble_creator, create_time, update_time
+    rpc_uri, version, is_operator, node_status, bubble_id, bubble_creator, create_time, 
+    update_time
   </sql>
   <select id="selectByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
     select
@@ -113,16 +115,16 @@
   <insert id="insert" parameterType="com.platon.browser.dao.entity.MicroNode">
     insert into micro_node (node_id, amount, operation_addr, 
       beneficiary, `name`, details, 
-      electron_uri, p2p_uri, version, 
-      is_operator, node_status, bubble_id, 
-      bubble_creator, create_time, update_time
-      )
+      electron_uri, p2p_uri, rpc_uri, 
+      version, is_operator, node_status, 
+      bubble_id, bubble_creator, create_time, 
+      update_time)
     values (#{nodeId,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{operationAddr,jdbcType=VARCHAR}, 
       #{beneficiary,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, 
-      #{electronUri,jdbcType=VARCHAR}, #{p2pUri,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, 
-      #{isOperator,jdbcType=INTEGER}, #{nodeStatus,jdbcType=INTEGER}, #{bubbleId,jdbcType=BIGINT}, 
-      #{bubbleCreator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{electronUri,jdbcType=VARCHAR}, #{p2pUri,jdbcType=VARCHAR}, #{rpcUri,jdbcType=VARCHAR}, 
+      #{version,jdbcType=VARCHAR}, #{isOperator,jdbcType=INTEGER}, #{nodeStatus,jdbcType=INTEGER}, 
+      #{bubbleId,jdbcType=BIGINT}, #{bubbleCreator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.MicroNode">
     insert into micro_node
@@ -150,6 +152,9 @@
       </if>
       <if test="p2pUri != null">
         p2p_uri,
+      </if>
+      <if test="rpcUri != null">
+        rpc_uri,
       </if>
       <if test="version != null">
         version,
@@ -197,6 +202,9 @@
       </if>
       <if test="p2pUri != null">
         #{p2pUri,jdbcType=VARCHAR},
+      </if>
+      <if test="rpcUri != null">
+        #{rpcUri,jdbcType=VARCHAR},
       </if>
       <if test="version != null">
         #{version,jdbcType=VARCHAR},
@@ -254,6 +262,9 @@
       <if test="record.p2pUri != null">
         p2p_uri = #{record.p2pUri,jdbcType=VARCHAR},
       </if>
+      <if test="record.rpcUri != null">
+        rpc_uri = #{record.rpcUri,jdbcType=VARCHAR},
+      </if>
       <if test="record.version != null">
         version = #{record.version,jdbcType=VARCHAR},
       </if>
@@ -290,6 +301,7 @@
       details = #{record.details,jdbcType=VARCHAR},
       electron_uri = #{record.electronUri,jdbcType=VARCHAR},
       p2p_uri = #{record.p2pUri,jdbcType=VARCHAR},
+      rpc_uri = #{record.rpcUri,jdbcType=VARCHAR},
       version = #{record.version,jdbcType=VARCHAR},
       is_operator = #{record.isOperator,jdbcType=INTEGER},
       node_status = #{record.nodeStatus,jdbcType=INTEGER},
@@ -325,6 +337,9 @@
       <if test="p2pUri != null">
         p2p_uri = #{p2pUri,jdbcType=VARCHAR},
       </if>
+      <if test="rpcUri != null">
+        rpc_uri = #{rpcUri,jdbcType=VARCHAR},
+      </if>
       <if test="version != null">
         version = #{version,jdbcType=VARCHAR},
       </if>
@@ -358,6 +373,7 @@
       details = #{details,jdbcType=VARCHAR},
       electron_uri = #{electronUri,jdbcType=VARCHAR},
       p2p_uri = #{p2pUri,jdbcType=VARCHAR},
+      rpc_uri = #{rpcUri,jdbcType=VARCHAR},
       version = #{version,jdbcType=VARCHAR},
       is_operator = #{isOperator,jdbcType=INTEGER},
       node_status = #{nodeStatus,jdbcType=INTEGER},
@@ -375,15 +391,15 @@
     -->
     insert into micro_node
     (node_id, amount, operation_addr, beneficiary, `name`, details, electron_uri, p2p_uri, 
-      version, is_operator, node_status, bubble_id, bubble_creator, create_time, update_time
-      )
+      rpc_uri, version, is_operator, node_status, bubble_id, bubble_creator, create_time, 
+      update_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.nodeId,jdbcType=VARCHAR}, #{item.amount,jdbcType=DECIMAL}, #{item.operationAddr,jdbcType=VARCHAR}, 
         #{item.beneficiary,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.details,jdbcType=VARCHAR}, 
-        #{item.electronUri,jdbcType=VARCHAR}, #{item.p2pUri,jdbcType=VARCHAR}, #{item.version,jdbcType=VARCHAR}, 
-        #{item.isOperator,jdbcType=INTEGER}, #{item.nodeStatus,jdbcType=INTEGER}, #{item.bubbleId,jdbcType=BIGINT}, 
-        #{item.bubbleCreator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+        #{item.electronUri,jdbcType=VARCHAR}, #{item.p2pUri,jdbcType=VARCHAR}, #{item.rpcUri,jdbcType=VARCHAR}, 
+        #{item.version,jdbcType=VARCHAR}, #{item.isOperator,jdbcType=INTEGER}, #{item.nodeStatus,jdbcType=INTEGER}, 
+        #{item.bubbleId,jdbcType=BIGINT}, #{item.bubbleCreator,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
         #{item.updateTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
@@ -425,6 +441,9 @@
         </if>
         <if test="'p2p_uri'.toString() == column.value">
           #{item.p2pUri,jdbcType=VARCHAR}
+        </if>
+        <if test="'rpc_uri'.toString() == column.value">
+          #{item.rpcUri,jdbcType=VARCHAR}
         </if>
         <if test="'version'.toString() == column.value">
           #{item.version,jdbcType=VARCHAR}

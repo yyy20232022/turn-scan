@@ -2,10 +2,7 @@ package com.platon.browser.analyzer;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.platon.browser.bean.CollectionTransaction;
-import com.platon.browser.bean.ComplementInfo;
-import com.platon.browser.bean.ErcToken;
-import com.platon.browser.bean.Receipt;
+import com.platon.browser.bean.*;
 import com.platon.browser.cache.AddressCache;
 import com.platon.browser.client.PlatOnClient;
 import com.platon.browser.client.SpecialApi;
@@ -18,6 +15,7 @@ import com.platon.browser.decoder.TxInputDecodeUtil;
 import com.platon.browser.elasticsearch.dto.Block;
 import com.platon.browser.enums.ContractTypeEnum;
 import com.platon.browser.enums.ErcTypeEnum;
+import com.platon.browser.enums.GameTypeEnum;
 import com.platon.browser.enums.InnerContractAddrEnum;
 import com.platon.browser.exception.BeanCreateOrUpdateException;
 import com.platon.browser.exception.BlankResponseException;
@@ -26,10 +24,8 @@ import com.platon.browser.param.DelegateExitParam;
 import com.platon.browser.param.DelegateRewardClaimParam;
 import com.platon.browser.utils.AddressUtil;
 import com.platon.browser.utils.TransactionUtil;
-import com.platon.browser.v0152.analyzer.ErcCache;
-import com.platon.browser.v0152.analyzer.ErcTokenAnalyzer;
+import com.platon.browser.v0152.analyzer.*;
 import com.bubble.protocol.core.methods.response.Transaction;
-import com.platon.browser.v0152.analyzer.MicroNodeAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -63,6 +59,9 @@ public class TransactionAnalyzer {
     private ErcTokenAnalyzer ercTokenAnalyzer;
 
     @Resource
+    private GameContractAnalyzer gameContractAnalyzer;
+
+    @Resource
     private AddressMapper addressMapper;
 
     @Resource
@@ -70,6 +69,9 @@ public class TransactionAnalyzer {
 
     @Resource
     private MicroNodeAnalyzer microNodeAnalyzer;
+
+    @Resource
+    private GameCache gameCache;
 
     // 交易解析阶段，维护自身的普通合约地址列表，其初始化数据来自地址缓存和erc緩存
     // <普通合约地址,合约类型枚举>
@@ -102,6 +104,8 @@ public class TransactionAnalyzer {
                     .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC721_EVM));
             ercCache.getErc1155AddressCache()
                     .forEach(address -> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.ERC1155_EVM));
+            gameCache.getGameAddressCache()
+                    .forEach(address-> GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(address, ContractTypeEnum.GAME_EVM));
         }
     }
 
@@ -135,8 +139,17 @@ public class TransactionAnalyzer {
                 // solidity 类型 erc20 或 721 token检测及入口
                 ErcToken ercToken = ercTokenAnalyzer.resolveToken(contract.getAddress(),
                                                                   BigInteger.valueOf(collectionBlock.getNum()));
+
                 // solidity or wasm
                 TxInputDecodeResult txInputDecodeResult = TxInputDecodeUtil.decode(result.getInput());
+                // 检测业务合约
+                if(ErcTypeEnum.UNKNOWN.equals(ercToken.getTypeEnum())){
+                    GameContract gameContract = gameContractAnalyzer.resolveGameContract(contract.getAddress());
+                    if (gameContract.getTypeEnum() == GameTypeEnum.GAME && txInputDecodeResult.getTypeEnum() == com.platon.browser.elasticsearch.dto.Transaction.TypeEnum.EVM_CONTRACT_CREATE) {
+                        GENERAL_CONTRACT_ADDRESS_2_TYPE_MAP.put(contract.getAddress(), ContractTypeEnum.GAME_EVM);
+                    }
+                }
+
                 // 内存中更新地址类型
                 ContractTypeEnum contractTypeEnum;
                 if (ercToken.getTypeEnum() == ErcTypeEnum.ERC20 && txInputDecodeResult.getTypeEnum() == com.platon.browser.elasticsearch.dto.Transaction.TypeEnum.EVM_CONTRACT_CREATE) {
@@ -173,6 +186,7 @@ public class TransactionAnalyzer {
             TransactionUtil.resolveInnerContractInvokeTxComplementInfo(result, receipt.getLogs(), ci);
 
 
+            //微节点交易处理
             microNodeAnalyzer.resolveTx(result, ci, receipt.getStatus());
             log.info("当前交易[{}]为内置合约,from[{}],to[{}],解码交易输入",
                      result.getHash(),
@@ -222,6 +236,10 @@ public class TransactionAnalyzer {
                                                           receipt,
                                                           platOnClient.getWeb3jWrapper().getWeb3j(),
                                                           log);
+                        TransactionUtil.handleGameContract(result,
+                                receipt,
+                                platOnClient.getWeb3jWrapper().getWeb3j(),
+                                log,ci);
                     }
                     log.info("当前交易[{}]为普通合约调用,from[{}],to[{}],type为[{}],toType[{}],虚拟交易数为[{}]",
                              result.getHash(),
@@ -276,6 +294,9 @@ public class TransactionAnalyzer {
               .setBin(ci.getBinCode())
               .setMethod(ci.getMethod());
         ercTokenAnalyzer.resolveTx(collectionBlock, result, receipt);
+        if(ci.getContractType() != null && ContractTypeEnum.GAME_EVM.getCode() == ci.getContractType()){
+            gameContractAnalyzer.resolveTx(result);
+        }
 
         // 累加总交易数
         collectionBlock.setTxQty(collectionBlock.getTxQty() + 1);

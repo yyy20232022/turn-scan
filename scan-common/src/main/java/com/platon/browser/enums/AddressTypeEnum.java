@@ -11,7 +11,8 @@ public enum AddressTypeEnum {
     WASM_CONTRACT(4, "WASM合约"),
     ERC20_EVM_CONTRACT(5, "ERC合约"),
     ERC721_EVM_CONTRACT(6, "ERC合约"),
-    ERC1155_EVM_CONTRACT(7, "ERC合约");
+    ERC1155_EVM_CONTRACT(7, "ERC合约"),
+    GAME_EVM_CONTRACT(8, "游戏合约");
 
     private int code;
     private String desc;

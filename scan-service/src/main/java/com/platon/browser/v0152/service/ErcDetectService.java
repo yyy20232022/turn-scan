@@ -1,16 +1,15 @@
 package com.platon.browser.v0152.service;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.bubble.tx.exceptions.BubbleCallException;
 import com.platon.browser.bean.CommonConstant;
 import com.platon.browser.client.PlatOnClient;
 import com.platon.browser.config.BlockChainConfig;
 import com.platon.browser.enums.ErcTypeEnum;
 import com.platon.browser.exception.BusinessException;
 import com.platon.browser.v0152.bean.ErcContractId;
-import com.platon.browser.v0152.contract.Erc1155Contract;
-import com.platon.browser.v0152.contract.Erc20Contract;
-import com.platon.browser.v0152.contract.Erc721Contract;
-import com.platon.browser.v0152.contract.ErcContract;
+import com.platon.browser.v0152.contract.*;
 import com.bubble.crypto.Credentials;
 import com.bubble.crypto.Keys;
 import com.bubble.parameters.NetworkParameters;
@@ -519,9 +518,15 @@ public class ErcDetectService {
 
             // 不是ERC721，则检测是否是ERC20
             log.info("该合约[{}]不是721合约，开始检测是否是ERC20", contractAddress);
-            contractId = getErc20ContractId(contractAddress, blockNumber);
-            if (StringUtils.isBlank(contractId.getName()) || StringUtils.isBlank(contractId.getSymbol()) | contractId.getDecimal() == null || contractId.getTotalSupply() == null) {
-                // name/symbol/decimals/totalSupply 其中之一为空，则判定为未知类型
+            boolean isErc20 = isErc20Contract(contractAddress, blockNumber);
+            if(isErc20){
+                contractId = getErc20ContractId(contractAddress, blockNumber);
+                if (StringUtils.isBlank(contractId.getName()) || StringUtils.isBlank(contractId.getSymbol()) | contractId.getDecimal() == null || contractId.getTotalSupply() == null) {
+                    // name/symbol/decimals/totalSupply 其中之一为空，则判定为未知类型
+                    contractId.setTypeEnum(ErcTypeEnum.UNKNOWN);
+                }
+            }else {
+                contractId =new ErcContractId();
                 contractId.setTypeEnum(ErcTypeEnum.UNKNOWN);
             }
         } catch (BubbleCallTimeoutException e) {
@@ -532,6 +537,73 @@ public class ErcDetectService {
             throw e;
         }
         return contractId;
+    }
+
+    /**
+     * 判断是不是erc20合约,是erc20返回true,不是返回false
+     * @param contractAddress
+     * @param blockNumber
+     * @return
+     */
+    private boolean isErc20Contract(String contractAddress, BigInteger blockNumber) throws BubbleCallTimeoutException {
+        ErcContract ercContract = Erc20Contract.load(contractAddress,
+                platOnClient.getWeb3jWrapper().getWeb3j(),
+                CREDENTIALS,
+                GAS_PROVIDER,
+                blockNumber);
+        try {
+            if(ObjectUtil.isNull(ercContract.name().send())){
+                return false;
+            }
+        } catch (BubbleCallTimeoutException e) {
+            log.error("ERC获取name超时异常", e);
+            throw e;
+        } catch (BubbleCallException e){
+            log.info("该合约[{}]不是ERC20合约", contractAddress);
+            return false;
+        } catch (Exception e) {
+            log.warn("erc get name error", e);
+        }
+        try {
+            if(ObjectUtil.isNull(ercContract.symbol().send())){
+                return false;
+            }
+        } catch (BubbleCallTimeoutException e) {
+            log.error("ERC获取symbol超时异常", e);
+            throw e;
+        } catch (BubbleCallException e){
+            log.info("该合约[{}]不是ERC20合约", contractAddress);
+            return false;
+        }  catch (Exception e) {
+            log.warn("erc get symbol error", e);
+        }
+        try {
+            if(ObjectUtil.isNull(ercContract.decimals().send())){
+                return false;
+            }
+        } catch (BubbleCallTimeoutException e) {
+            log.error("ERC获取decimal超时异常", e);
+            throw e;
+        } catch (BubbleCallException e){
+            log.info("该合约[{}]不是ERC20合约", contractAddress);
+            return false;
+        }  catch (Exception e) {
+            log.warn("erc get decimal error", e);
+        }
+        try {
+            if(ObjectUtil.isNull(ercContract.totalSupply().send())){
+                return false;
+            }
+        } catch (BubbleCallException e){
+            log.info("该合约[{}]不是ERC20合约", contractAddress);
+            return false;
+        }  catch (BubbleCallTimeoutException e) {
+            log.error("ERC获取totalSupply超时异常", e);
+            throw e;
+        } catch (Exception e) {
+            log.warn("erc get totalSupply error", e);
+        }
+        return true;
     }
 
     /**

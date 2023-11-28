@@ -27,6 +27,8 @@ public class CreateStakeParam extends TxParam {
 
     private String electronURI;
 
+    private String rpcUri;
+
     private String p2pURI;
 
     private String version;

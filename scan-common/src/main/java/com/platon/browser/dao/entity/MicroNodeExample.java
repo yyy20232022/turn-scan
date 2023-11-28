@@ -656,6 +656,76 @@ public class MicroNodeExample {
             return (Criteria) this;
         }
 
+        public Criteria andRpcUriIsNull() {
+            addCriterion("rpc_uri is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriIsNotNull() {
+            addCriterion("rpc_uri is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriEqualTo(String value) {
+            addCriterion("rpc_uri =", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriNotEqualTo(String value) {
+            addCriterion("rpc_uri <>", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriGreaterThan(String value) {
+            addCriterion("rpc_uri >", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriGreaterThanOrEqualTo(String value) {
+            addCriterion("rpc_uri >=", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriLessThan(String value) {
+            addCriterion("rpc_uri <", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriLessThanOrEqualTo(String value) {
+            addCriterion("rpc_uri <=", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriLike(String value) {
+            addCriterion("rpc_uri like", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriNotLike(String value) {
+            addCriterion("rpc_uri not like", value, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriIn(List<String> values) {
+            addCriterion("rpc_uri in", values, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriNotIn(List<String> values) {
+            addCriterion("rpc_uri not in", values, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriBetween(String value1, String value2) {
+            addCriterion("rpc_uri between", value1, value2, "rpcUri");
+            return (Criteria) this;
+        }
+
+        public Criteria andRpcUriNotBetween(String value1, String value2) {
+            addCriterion("rpc_uri not between", value1, value2, "rpcUri");
+            return (Criteria) this;
+        }
+
         public Criteria andVersionIsNull() {
             addCriterion("version is null");
             return (Criteria) this;

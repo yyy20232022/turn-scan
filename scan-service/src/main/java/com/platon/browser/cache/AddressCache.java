@@ -122,6 +122,9 @@ public class AddressCache {
                 case ERC1155_EVM:
                     address.setType(AddressTypeEnum.ERC1155_EVM_CONTRACT.getCode());
                     break;
+                case GAME_EVM:
+                    address.setType(AddressTypeEnum.GAME_EVM_CONTRACT.getCode());
+                    break;
                 default:
                     break;
             }

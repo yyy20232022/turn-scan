@@ -131,7 +131,7 @@ public class ErcTxService {
         List<ErcTx> records;
         long totalCount = 0;
         long displayTotalCount = 0;
-        if (StringUtils.isEmpty(req.getContract()) && StringUtils.isEmpty(req.getAddress()) && StringUtils.isEmpty(req.getTokenId())) {
+        if (StringUtils.isEmpty(req.getContract()) && StringUtils.isEmpty(req.getTxHash()) && StringUtils.isEmpty(req.getAddress()) && StringUtils.isEmpty(req.getTokenId())) {
             // 仅分页查询，直接走缓存
             TokenTransferRecordCacheDto tokenTransferRecordCacheDto = statisticCacheService.getTokenTransferCache(req.getPageNo(), req.getPageSize(), typeEnum);
             records = tokenTransferRecordCacheDto.getTransferRecordList();
@@ -439,14 +439,20 @@ public class ErcTxService {
                     }
                 } else if (ErcTypeEnum.ERC721.getDesc().equalsIgnoreCase(tokenHolder.getType())) {
                     //erc721
-                    int holderNum = map.get(tokenHolder.getAddress()).intValue();
-                    long total = totalTokenInventory.size();
-                    String percent = new BigDecimal(holderNum).divide(new BigDecimal(total), decimal, RoundingMode.HALF_UP)
-                                                              .multiply(BigDecimal.valueOf(100))
-                                                              .setScale(decimal, RoundingMode.HALF_UP)
-                                                              .stripTrailingZeros()
-                                                              .toPlainString() + "%";
-                    resp.setPercent(percent);
+                    Long holderNumData = map.get(tokenHolder.getAddress());
+                    if(holderNumData != null){
+                        int holderNum = holderNumData.intValue();
+                        long total = totalTokenInventory.size();
+                        String percent = new BigDecimal(holderNum).divide(new BigDecimal(total), decimal, RoundingMode.HALF_UP)
+                                .multiply(BigDecimal.valueOf(100))
+                                .setScale(decimal, RoundingMode.HALF_UP)
+                                .stripTrailingZeros()
+                                .toPlainString() + "%";
+                        resp.setPercent(percent);
+                    }else {
+                        resp.setPercent("0.0000%");
+                    }
+
                 }
             } else {
                 resp.setBalance(originBalance);

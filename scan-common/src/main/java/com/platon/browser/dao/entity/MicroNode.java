@@ -22,6 +22,8 @@ public class MicroNode {
 
     private String p2pUri;
 
+    private String rpcUri;
+
     private String version;
 
     private Integer isOperator;
@@ -100,6 +102,14 @@ public class MicroNode {
         this.p2pUri = p2pUri == null ? null : p2pUri.trim();
     }
 
+    public String getRpcUri() {
+        return rpcUri;
+    }
+
+    public void setRpcUri(String rpcUri) {
+        this.rpcUri = rpcUri == null ? null : rpcUri.trim();
+    }
+
     public String getVersion() {
         return version;
     }
@@ -172,6 +182,7 @@ public class MicroNode {
         details("details", "details", "VARCHAR", false),
         electronUri("electron_uri", "electronUri", "VARCHAR", false),
         p2pUri("p2p_uri", "p2pUri", "VARCHAR", false),
+        rpcUri("rpc_uri", "rpcUri", "VARCHAR", false),
         version("version", "version", "VARCHAR", false),
         isOperator("is_operator", "isOperator", "INTEGER", false),
         nodeStatus("node_status", "nodeStatus", "INTEGER", false),

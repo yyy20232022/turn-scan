@@ -21,11 +21,14 @@ public class EditCandidateDecoder extends AbstractPPOSDecoder {
         name = new String(Numeric.hexStringToByteArray(name));
         String details = stringResolver((RlpString) rootList.getValues().get(4));
         details = new String(Numeric.hexStringToByteArray(details));
+        String rpcUri = stringResolver((RlpString) rootList.getValues().get(5));
+        rpcUri = new String(Numeric.hexStringToByteArray(rpcUri));
         EditCandidateParam createStakeParam = new EditCandidateParam();
         createStakeParam.setNodeId(nodeId)
                         .setBeneficiary(beneficiary)
                         .setName(name)
-                        .setDetails(details);
+                        .setDetails(details)
+                        .setRpcUri(rpcUri);
         return createStakeParam;
     }
 

@@ -23,4 +23,6 @@ public class EditCandidateParam extends TxParam {
 
     private String details;
 
+    private String rpcUri;
+
 }

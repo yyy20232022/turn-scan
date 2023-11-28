@@ -69,6 +69,8 @@ public class ErcTokenInventoryAnalyzer {
                         tokenInventory.setTokenId(tokenId);
                         tokenInventory.setTokenTxQty(1);
                         tokenInventory.setRetryNum(0);
+                        tokenInventory.setCreateTime(new Date());
+                        tokenInventory.setUpdateTime(new Date());
                         String tokenURI = ercServiceImpl.getTokenURI(tokenAddress, new BigInteger(tokenId), blockNumber);
                         if (StrUtil.isNotBlank(tokenURI)) {
                             tokenInventory.setTokenUrl(tokenURI);

@@ -3,10 +3,7 @@ package com.platon.browser.bootstrap.service;
 import com.alibaba.fastjson.JSON;
 import com.platon.browser.bean.*;
 import com.platon.browser.bootstrap.bean.InitializationResult;
-import com.platon.browser.cache.AddressCache;
-import com.platon.browser.cache.NetworkStatCache;
-import com.platon.browser.cache.NodeCache;
-import com.platon.browser.cache.ProposalCache;
+import com.platon.browser.cache.*;
 import com.platon.browser.config.BlockChainConfig;
 import com.platon.browser.dao.entity.*;
 import com.platon.browser.dao.mapper.*;
@@ -21,6 +18,7 @@ import com.platon.browser.service.ppos.StakeEpochService;
 import com.platon.browser.utils.EpochUtil;
 import com.platon.browser.v0152.analyzer.ErcCache;
 import com.bubble.contracts.dpos.dto.resp.Node;
+import com.platon.browser.v0152.analyzer.GameCache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -114,6 +112,9 @@ public class InitializationService {
     @Resource
     private EsMicroNodeOptRepository esMicroNodeOptRepository;
 
+    @Resource
+    private GameCache gameCache;
+
     /**
      * 进入应用初始化子流程
      *
@@ -190,6 +191,9 @@ public class InitializationService {
         addressExample.createCriteria().andTypeEqualTo(AddressTypeEnum.WASM_CONTRACT.getCode());
         addressList = addressMapper.selectByExample(addressExample);
         addressCache.initWasmContractAddressCache(addressList);
+
+        // 初始化游戏合约
+        gameCache.init();
 
         // 初始化网络缓存
         networkStatCache.init(networkStat);

@@ -1255,6 +1255,30 @@ paths:
           description: 返回节点详情
           schema:
             $ref: '#/definitions/MicroNodeOptRecordListResult'
+  #游戏相关接口
+  /addrGame/list:
+    post:
+      operationId: list
+      tags:
+        - 游戏接口
+      summary: 查询地址参与的游戏列表详情
+      description: |
+        1. 功能：查询地址参与的游戏列表详情<br/>
+        2. 实现逻辑：<br/>
+          查询mysql中addr_game表
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: 参数对象
+          in: body
+          schema:
+            $ref: '#/definitions/QueryAddrGameListReq'
+      responses:
+        '200':
+          description: 返回节点详情
+          schema:
+            $ref: '#/definitions/AddrGameDetailResp'
 
 #实体定义
 definitions:
@@ -4028,3 +4052,57 @@ definitions:
           2 edit 修改<br/>
           3 quit 退出<br/>
         type: string
+  #游戏
+  QueryAddrGameListReq:
+    type: object
+    properties:
+      address:
+        description: 地址(必填)
+        type: string
+      roundId:
+        description: 回合id
+        type: long
+  AddrGameListResult:
+    type: object
+    properties:
+      errMsg:
+        description: 描述信息
+        type: string
+      code:
+        description: 成功（0），失败则有相关失败码
+        type: integer
+      totalCount:
+        description: 记录总数
+        type: integer
+      totalPages:
+        description: 总页数
+        type: integer
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/AddrGameDetailResp'
+  AddrGameDetailResp:
+    type: object
+    description: 节点操作日志详情
+    properties:
+      address:
+        description: 地址
+        type: string
+      roundId:
+        description: 回合id
+        type: long
+      gameContractAddress:
+        description: 游戏合约地址
+        type: string
+      bubbleId:
+        description: 子网络id
+        type: long
+      tokenAddress:
+        description: 代币合约地址
+        type: string
+      tokenSymbol:
+        description: 代币符号
+        type: string
+      tokenDecimal:
+        description: 代币精度
+        type: integer
