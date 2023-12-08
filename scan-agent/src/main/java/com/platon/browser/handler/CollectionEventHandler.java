@@ -17,6 +17,7 @@ import com.platon.browser.service.block.BlockService;
 import com.platon.browser.service.ppos.PPOSService;
 import com.platon.browser.service.statistic.StatisticService;
 import com.platon.browser.utils.CommonUtil;
+import com.platon.browser.v0152.analyzer.MicroNodeAnalyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
@@ -77,6 +78,9 @@ public class CollectionEventHandler implements EventHandler<CollectionEvent> {
     @Resource
     private CustomTxDelegationRewardBakMapper customTxDelegationRewardBakMapper;
 
+    @Resource
+    private MicroNodeAnalyzer microNodeAnalyzer;
+
     /**
      * 重试次数
      */
@@ -126,6 +130,8 @@ public class CollectionEventHandler implements EventHandler<CollectionEvent> {
                 copyEvent.getBlock().setErc721TxQty(copyEvent.getBlock().getErc721TxQty() + transaction.getErc721TxList().size());
                 copyEvent.getBlock().setErc1155TxQty(copyEvent.getBlock().getErc1155TxQty() + transaction.getErc1155TxList().size());
             }
+            // 子链释放
+            microNodeAnalyzer.releaseBubble(copyEvent.getBlock().getNum());
 
             List<Transaction> transactions = copyEvent.getTransactions();
             // 确保交易从小到大的索引顺序

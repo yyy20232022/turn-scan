@@ -615,6 +615,76 @@ public class RoundExample {
             return (Criteria) this;
         }
 
+        public Criteria andTokenRpcIsNull() {
+            addCriterion("token_rpc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcIsNotNull() {
+            addCriterion("token_rpc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcEqualTo(String value) {
+            addCriterion("token_rpc =", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcNotEqualTo(String value) {
+            addCriterion("token_rpc <>", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcGreaterThan(String value) {
+            addCriterion("token_rpc >", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcGreaterThanOrEqualTo(String value) {
+            addCriterion("token_rpc >=", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcLessThan(String value) {
+            addCriterion("token_rpc <", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcLessThanOrEqualTo(String value) {
+            addCriterion("token_rpc <=", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcLike(String value) {
+            addCriterion("token_rpc like", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcNotLike(String value) {
+            addCriterion("token_rpc not like", value, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcIn(List<String> values) {
+            addCriterion("token_rpc in", values, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcNotIn(List<String> values) {
+            addCriterion("token_rpc not in", values, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcBetween(String value1, String value2) {
+            addCriterion("token_rpc between", value1, value2, "tokenRpc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenRpcNotBetween(String value1, String value2) {
+            addCriterion("token_rpc not between", value1, value2, "tokenRpc");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("`status` is null");
             return (Criteria) this;

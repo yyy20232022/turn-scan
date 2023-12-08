@@ -222,24 +222,32 @@ public class TransactionAnalyzer {
                     // 普通合约调用的交易是否成功只看回执的status,不用看log中的状态
                     result.setStatus(receipt.getStatus());
                     if (result.getStatus() == com.platon.browser.elasticsearch.dto.Transaction.StatusEnum.SUCCESS.getCode()) {
-                        // 普通合约调用成功, 取成功的代理PPOS虚拟交易列表
-                        List<com.platon.browser.elasticsearch.dto.Transaction> successVirtualTransactions = TransactionUtil.processVirtualTx(
-                                collectionBlock,
-                                specialApi,
-                                platOnClient,
-                                result,
-                                receipt,
-                                log);
-                        // 把成功的虚拟交易挂到当前普通合约交易上
-                        result.setVirtualTransactions(successVirtualTransactions);
-                        TransactionUtil.handleTexasHoldem(result,
-                                                          receipt,
-                                                          platOnClient.getWeb3jWrapper().getWeb3j(),
-                                                          log);
-                        TransactionUtil.handleGameContract(result,
-                                receipt,
-                                platOnClient.getWeb3jWrapper().getWeb3j(),
-                                log,ci);
+                        // bubble创建合约处理
+                        List<Long> bubbleIds = TransactionUtil.handleBubbleId(receipt.getLogs());
+                        if(CollUtil.isNotEmpty(bubbleIds)){
+                            bubbleIds.forEach(x-> microNodeAnalyzer.createBubble(x));
+                        }else {
+                            // 普通合约调用成功, 取成功的代理PPOS虚拟交易列表
+                            List<com.platon.browser.elasticsearch.dto.Transaction> successVirtualTransactions = TransactionUtil.processVirtualTx(
+                                    collectionBlock,
+                                    specialApi,
+                                    platOnClient,
+                                    result,
+                                    receipt,
+                                    log);
+                            // 把成功的虚拟交易挂到当前普通合约交易上
+                            result.setVirtualTransactions(successVirtualTransactions);
+                            TransactionUtil.handleTexasHoldem(result,
+                                    receipt,
+                                    platOnClient.getWeb3jWrapper().getWeb3j(),
+                                    log);
+                            // 处理游戏合约
+                            TransactionUtil.handleGameContract(result,
+                                    receipt,
+                                    platOnClient.getWeb3jWrapper().getWeb3j(),
+                                    log,ci);
+                        }
+
                     }
                     log.info("当前交易[{}]为普通合约调用,from[{}],to[{}],type为[{}],toType[{}],虚拟交易数为[{}]",
                              result.getHash(),

@@ -31,6 +31,16 @@ public class AddrGameDetailResp {
 
     private Integer tokenDecimal;
 
+    private String tokenRpc;
+
+    public String getTokenRpc() {
+        return tokenRpc;
+    }
+
+    public void setTokenRpc(String tokenRpc) {
+        this.tokenRpc = tokenRpc;
+    }
+
     public String getTokenAddress() {
         return tokenAddress;
     }

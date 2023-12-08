@@ -210,12 +210,12 @@ public class GameContractAnalyzer {
                         List<JSONObject> joinGameEventResponses = JSONObject.parseObject(eventStr, List.class);
                         joinGameHandle(game,joinGameEventResponses);
                     }
-                    if(GameEventTypeEnum.END_GAME_EVENT.getDesc().equals(x)){
+                    /*if(GameEventTypeEnum.END_GAME_EVENT.getDesc().equals(x)){
                         //处理结束游戏回合事件
                         String eventStr = map.get(x);
                         List<JSONObject> endGameEventResponses = JSONObject.parseObject(eventStr, List.class);
                         endGameHandle(game,endGameEventResponses);
-                    }
+                    }*/
                 });
             });
             log.info("当前游戏交易[{}]有[{}]个event",

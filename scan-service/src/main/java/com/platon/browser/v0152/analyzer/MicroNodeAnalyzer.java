@@ -1,6 +1,8 @@
 package com.platon.browser.v0152.analyzer;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.platon.browser.bean.CollectionTransaction;
@@ -14,13 +16,13 @@ import com.platon.browser.dao.mapper.MicroNodeMapper;
 import com.platon.browser.dao.mapper.MicroNodeOptBakMapper;
 import com.platon.browser.elasticsearch.dto.Transaction;
 import com.platon.browser.enums.MicroNodeStatusEnum;
-import com.platon.browser.enums.StakingStatusEnum;
 import com.platon.browser.enums.TransactionStatusEnum;
-import com.platon.browser.param.CreateBubbleParam;
 import com.platon.browser.param.CreateStakeParam;
 import com.platon.browser.param.EditCandidateParam;
-import com.platon.browser.param.ReleaseBubbleParam;
+import com.platon.browser.service.BubbleCacheService;
+import com.platon.browser.service.ReleaseBubbleCacheService;
 import com.platon.browser.service.elasticsearch.EsMicroNodeOptService;
+import com.platon.browser.v0152.bean.BubbleDetailDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,9 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Service
@@ -47,6 +51,12 @@ public class MicroNodeAnalyzer {
     @Resource
     private PlatOnClient platOnClient;
 
+    @Resource
+    private BubbleCacheService bubbleCacheService;
+
+    @Resource
+    private ReleaseBubbleCacheService releaseBubbleCacheService;
+
     public void resolveTx(CollectionTransaction result, ComplementInfo ci, int status) {
         if(TransactionStatusEnum.FAIL.getCode() == status){
             return;
@@ -56,51 +66,59 @@ public class MicroNodeAnalyzer {
             case CREATE_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.CANDIDATE);break;
             case EDIT_CANDIDATE: microNodeHandler(result, ci, null);break;
             case WITHDREW_STAKING: microNodeHandler(result, ci, MicroNodeStatusEnum.EXITED);break;
-            case CREATE_BUBBLE: createBubble(result,ci);break;
-            case RELEASE_BUBBLE: releaseBubble(result,ci);break;
         }
     }
 
     /**
-     * bubble释放，节点的bubbleId和bubbleCreator需要重置
-     * @param result
-     * @param ci
+     * bubble释放，节点的bubbleId需要重置
      */
     @Transactional(rollbackFor = Exception.class)
-    public void releaseBubble(CollectionTransaction result, ComplementInfo ci) {
-        ReleaseBubbleParam releaseBubbleParam = JSONObject.parseObject(ci.getInfo(), ReleaseBubbleParam.class);
-        MicroNode microNode = new MicroNode();
-        microNode.setBubbleId(0L);
-        microNode.setBubbleCreator("");
-        MicroNodeExample microNodeExample = new MicroNodeExample();
-        microNodeExample.createCriteria().andBubbleIdEqualTo(releaseBubbleParam.getBubbleId().longValue());
-        microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
+    public void releaseBubble(Long releaseBubbleNum) {
+        List<Long> bubbleReleaseCache = releaseBubbleCacheService.getBubbleReleaseCache(releaseBubbleNum);
+        if(CollUtil.isNotEmpty(bubbleReleaseCache)){
+            MicroNode microNode = new MicroNode();
+            microNode.setBubbleId(0L);
+            MicroNodeExample microNodeExample = new MicroNodeExample();
+            microNodeExample.createCriteria().andBubbleIdIn(bubbleReleaseCache);
+            microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
+            bubbleReleaseCache.forEach(item->bubbleCacheService.delBubbleCache(item));;
+            releaseBubbleCacheService.delReleaseBubbleCache(releaseBubbleNum);
+        }
+
     }
 
     /**
      * 创建bubble
-     * @param collectionTransaction
-     * @param ci
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createBubble(CollectionTransaction collectionTransaction, ComplementInfo ci) {
-        CreateBubbleParam createBubbleParam = JSONObject.parseObject(ci.getInfo(), CreateBubbleParam.class);
-        String bubbleInfo = platOnClient.getBubbleInfo(createBubbleParam.getBubbleId());
+    public void createBubble(Long bubbleId) {
+        String bubbleInfo = platOnClient.getBubbleInfo(BigInteger.valueOf(bubbleId));
         JSONObject info = JSONObject.parseObject(bubbleInfo);
-        JSONObject basics = info.getJSONObject("Basics");
-        JSONArray microNodes = basics.getJSONArray("MicroNodes");
+        JSONArray microNodes = info.getJSONArray("MicroNodes");
         List<String> result = new ArrayList<>(microNodes.size());
+        List<String> rpcUris = new ArrayList<>(microNodes.size());
         for (Object microNode : microNodes) {
             JSONObject microNodeJson = (JSONObject)microNode;
+            if(StrUtil.isNotBlank(microNodeJson.getString("RPCURI"))){
+                rpcUris.add(microNodeJson.getString("RPCURI"));
+            }
             result.add(microNodeJson.getString("NodeId"));
         }
-        String creator = basics.getString("Creator");
+        Long releaseBlock = info.getLong("ReleaseBlock")+1;
         MicroNode microNode = new MicroNode();
-        microNode.setBubbleId(createBubbleParam.getBubbleId().longValue());
-        microNode.setBubbleCreator(creator);
+        microNode.setBubbleId(bubbleId);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andNodeIdIn(result);
         microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
+        List<MicroNode> microNodeList = microNodeMapper.selectByExample(microNodeExample);
+        BubbleDetailDto bubbleDetailDto = new BubbleDetailDto();
+        bubbleDetailDto.setRpcUris(rpcUris);
+        bubbleDetailDto.setReleaseBubbleNum(releaseBlock);
+        bubbleDetailDto.setMicroNodes(microNodeList);
+        bubbleCacheService.addBubbleCache(bubbleDetailDto,bubbleId);
+        List<Long> bubbleReleaseCache = releaseBubbleCacheService.getBubbleReleaseCache(releaseBlock);
+        bubbleReleaseCache.add(bubbleId);
+        releaseBubbleCacheService.addReleaseBubbleCache(releaseBlock,bubbleReleaseCache);
     }
 
     private void microNodeHandler(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
@@ -126,7 +144,7 @@ public class MicroNodeAnalyzer {
         // 节点未质押过
         if(CollectionUtils.isEmpty(microNodes)){
             MicroNode microNode = new MicroNode();
-            microNode.setNodeId(createStakeParam.getNodeId());
+            microNode.setNodeId(createStakeParam.getNodeId().substring(2));
             microNode.setAmount(new BigDecimal(createStakeParam.getAmount()));
             microNode.setBeneficiary(createStakeParam.getBeneficiary());
             microNode.setDetails(createStakeParam.getDetails());
@@ -186,7 +204,7 @@ public class MicroNodeAnalyzer {
     public void editWithdrew(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         EditCandidateParam editCandidateParam = JSONObject.parseObject(ci.getInfo(), EditCandidateParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
-        microNodeExample.createCriteria().andNodeIdEqualTo(editCandidateParam.getNodeId());
+        microNodeExample.createCriteria().andNodeIdEqualTo(editCandidateParam.getNodeId().substring(2));
         List<MicroNode> microNodes = microNodeMapper.selectByExample(microNodeExample);
         MicroNode microNode = microNodes.get(0);
         if(ObjectUtil.isNull(microNodeStatusEnum)){

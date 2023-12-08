@@ -10,6 +10,7 @@
     <result column="token_address" jdbcType="VARCHAR" property="tokenAddress" />
     <result column="token_symbol" jdbcType="VARCHAR" property="tokenSymbol" />
     <result column="token_decimal" jdbcType="INTEGER" property="tokenDecimal" />
+    <result column="token_rpc" jdbcType="VARCHAR" property="tokenRpc" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -74,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, game_id, round_id, bubble_id, creator, token_address, token_symbol, token_decimal, 
-    `status`, create_time, update_time
+    token_rpc, `status`, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="com.platon.browser.dao.entity.RoundExample" resultMap="BaseResultMap">
     select
@@ -109,12 +110,14 @@
   <insert id="insert" parameterType="com.platon.browser.dao.entity.Round">
     insert into round (id, game_id, round_id, 
       bubble_id, creator, token_address, 
-      token_symbol, token_decimal, `status`, 
-      create_time, update_time)
+      token_symbol, token_decimal, token_rpc, 
+      `status`, create_time, update_time
+      )
     values (#{id,jdbcType=BIGINT}, #{gameId,jdbcType=BIGINT}, #{roundId,jdbcType=BIGINT}, 
       #{bubbleId,jdbcType=BIGINT}, #{creator,jdbcType=VARCHAR}, #{tokenAddress,jdbcType=VARCHAR}, 
-      #{tokenSymbol,jdbcType=VARCHAR}, #{tokenDecimal,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{tokenSymbol,jdbcType=VARCHAR}, #{tokenDecimal,jdbcType=INTEGER}, #{tokenRpc,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Round">
     insert into round
@@ -142,6 +145,9 @@
       </if>
       <if test="tokenDecimal != null">
         token_decimal,
+      </if>
+      <if test="tokenRpc != null">
+        token_rpc,
       </if>
       <if test="status != null">
         `status`,
@@ -177,6 +183,9 @@
       </if>
       <if test="tokenDecimal != null">
         #{tokenDecimal,jdbcType=INTEGER},
+      </if>
+      <if test="tokenRpc != null">
+        #{tokenRpc,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -222,6 +231,9 @@
       <if test="record.tokenDecimal != null">
         token_decimal = #{record.tokenDecimal,jdbcType=INTEGER},
       </if>
+      <if test="record.tokenRpc != null">
+        token_rpc = #{record.tokenRpc,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=INTEGER},
       </if>
@@ -246,6 +258,7 @@
       token_address = #{record.tokenAddress,jdbcType=VARCHAR},
       token_symbol = #{record.tokenSymbol,jdbcType=VARCHAR},
       token_decimal = #{record.tokenDecimal,jdbcType=INTEGER},
+      token_rpc = #{record.tokenRpc,jdbcType=VARCHAR},
       `status` = #{record.status,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -277,6 +290,9 @@
       <if test="tokenDecimal != null">
         token_decimal = #{tokenDecimal,jdbcType=INTEGER},
       </if>
+      <if test="tokenRpc != null">
+        token_rpc = #{tokenRpc,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
       </if>
@@ -298,6 +314,7 @@
       token_address = #{tokenAddress,jdbcType=VARCHAR},
       token_symbol = #{tokenSymbol,jdbcType=VARCHAR},
       token_decimal = #{tokenDecimal,jdbcType=INTEGER},
+      token_rpc = #{tokenRpc,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -316,13 +333,14 @@
     -->
     insert into round
     (id, game_id, round_id, bubble_id, creator, token_address, token_symbol, token_decimal, 
-      `status`, create_time, update_time)
+      token_rpc, `status`, create_time, update_time)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.id,jdbcType=BIGINT}, #{item.gameId,jdbcType=BIGINT}, #{item.roundId,jdbcType=BIGINT}, 
         #{item.bubbleId,jdbcType=BIGINT}, #{item.creator,jdbcType=VARCHAR}, #{item.tokenAddress,jdbcType=VARCHAR}, 
-        #{item.tokenSymbol,jdbcType=VARCHAR}, #{item.tokenDecimal,jdbcType=INTEGER}, #{item.status,jdbcType=INTEGER}, 
-        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+        #{item.tokenSymbol,jdbcType=VARCHAR}, #{item.tokenDecimal,jdbcType=INTEGER}, #{item.tokenRpc,jdbcType=VARCHAR}, 
+        #{item.status,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}
+        )
     </foreach>
   </insert>
   <insert id="batchInsertSelective" parameterType="map">
@@ -363,6 +381,9 @@
         </if>
         <if test="'token_decimal'.toString() == column.value">
           #{item.tokenDecimal,jdbcType=INTEGER}
+        </if>
+        <if test="'token_rpc'.toString() == column.value">
+          #{item.tokenRpc,jdbcType=VARCHAR}
         </if>
         <if test="'status'.toString() == column.value">
           #{item.status,jdbcType=INTEGER}

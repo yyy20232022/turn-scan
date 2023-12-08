@@ -712,7 +712,6 @@ CREATE TABLE `micro_node` (
                               `is_operator` int DEFAULT NULL COMMENT '节点是否运营节点:0-否;1-是',
                               `node_status` int DEFAULT NULL COMMENT '节点状态:1-候选中;2-已退出',
                               `bubble_id` bigint DEFAULT '0' COMMENT '所属bubble_id:0-未组建bubble',
-                              `bubble_creator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'bubble创建者',
                               `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                               `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                               PRIMARY KEY (`node_id`) USING BTREE
@@ -774,6 +773,7 @@ CREATE TABLE `round` (
                          `token_address` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代币合约地址',
                          `token_symbol` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代币名称',
                          `token_decimal` int DEFAULT NULL COMMENT '代币精度',
+                         `token_rpc` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '代币rpc地址',
                          `status` int DEFAULT NULL COMMENT '状态：1-开始；0-结束',
                          `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
                          `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',

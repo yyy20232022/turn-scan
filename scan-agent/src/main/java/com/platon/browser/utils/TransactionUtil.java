@@ -19,6 +19,7 @@ import com.platon.browser.client.SpecialApi;
 import com.platon.browser.contract.TexasHoldem;
 import com.platon.browser.decoder.PPOSTxDecodeResult;
 import com.platon.browser.decoder.PPOSTxDecodeUtil;
+import com.platon.browser.decoder.ppos.AbstractPPOSDecoder;
 import com.platon.browser.elasticsearch.dto.Block;
 import com.platon.browser.elasticsearch.dto.Transaction;
 import com.platon.browser.enums.ContractDescEnum;
@@ -40,12 +41,15 @@ import com.bubble.rlp.solidity.RlpString;
 import com.bubble.rlp.solidity.RlpType;
 import com.bubble.utils.Numeric;
 import com.platon.browser.contract.GameContract;
+import com.platon.browser.v0152.analyzer.MicroNodeAnalyzer;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * 虚拟交易工具
@@ -57,6 +61,7 @@ public class TransactionUtil {
      */
     private static final String VRF_ADDRESS = "0x3000000000000000000000000000000000000001";
 
+    private static final String CREATE_BUBBLE_TOPIC = "0x41d67600a097ed7727e5bd0998b066339106a5df476ed1b9930da13aa8a4e63d";
     /**
      * 根据合约内部调用PPOS的输入信息生成虚拟PPOS交易列表
      *
@@ -514,4 +519,21 @@ public class TransactionUtil {
         }
     }
 
+    public static List<Long> handleBubbleId(List<Log> logs) {
+        CopyOnWriteArrayList<Long> bubbleIdList = new CopyOnWriteArrayList();
+        if(CollUtil.isNotEmpty(logs)){
+            List<Log> logList = logs.stream().filter(item -> InnerContractAddrEnum.getAddresses()
+                    .contains(item.getAddress()) &&
+                    item.getTopics().contains(CREATE_BUBBLE_TOPIC)).collect(Collectors.toList());
+            logList.forEach(x->{
+                RlpList rlp = RlpDecoder.decode(Numeric.hexStringToByteArray(x.getData()));
+                List<RlpType> rlpList = ((RlpList) (rlp.getValues().get(0))).getValues();
+                RlpList integersList = RlpDecoder.decode(((RlpString) rlpList.get(1)).getBytes());
+                RlpString integersString = (RlpString) integersList.getValues().get(0);
+                Long bubbleId = new BigInteger(1, integersString.getBytes()).longValue();
+                bubbleIdList.add(bubbleId);
+            });
+        }
+        return bubbleIdList;
+    }
 }

@@ -21,6 +21,8 @@ public class Round {
 
     private Integer tokenDecimal;
 
+    private String tokenRpc;
+
     private Integer status;
 
     private Date createTime;
@@ -91,6 +93,14 @@ public class Round {
         this.tokenDecimal = tokenDecimal;
     }
 
+    public String getTokenRpc() {
+        return tokenRpc;
+    }
+
+    public void setTokenRpc(String tokenRpc) {
+        this.tokenRpc = tokenRpc == null ? null : tokenRpc.trim();
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -131,6 +141,7 @@ public class Round {
         tokenAddress("token_address", "tokenAddress", "VARCHAR", false),
         tokenSymbol("token_symbol", "tokenSymbol", "VARCHAR", false),
         tokenDecimal("token_decimal", "tokenDecimal", "INTEGER", false),
+        tokenRpc("token_rpc", "tokenRpc", "VARCHAR", false),
         status("status", "status", "INTEGER", true),
         createTime("create_time", "createTime", "TIMESTAMP", false),
         updateTime("update_time", "updateTime", "TIMESTAMP", false);
