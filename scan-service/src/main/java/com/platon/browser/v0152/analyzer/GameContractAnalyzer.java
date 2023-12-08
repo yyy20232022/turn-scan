@@ -1,6 +1,7 @@
 package com.platon.browser.v0152.analyzer;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,8 +26,10 @@ import com.platon.browser.enums.GameEventTypeEnum;
 import com.platon.browser.enums.GameTypeEnum;
 import com.platon.browser.enums.RoundStatusEnum;
 import com.platon.browser.service.AddrGameCacheService;
+import com.platon.browser.service.BubbleCacheService;
 import com.platon.browser.utils.CommonUtil;
 import com.platon.browser.v0152.bean.AddrGameDetailDto;
+import com.platon.browser.v0152.bean.BubbleDetailDto;
 import com.platon.browser.v0152.bean.ErcTxInfo;
 import com.platon.browser.v0152.bean.GameContractId;
 import com.platon.browser.v0152.contract.Erc20Contract;
@@ -73,6 +76,9 @@ public class GameContractAnalyzer {
 
     @Resource
     private BlockChainConfig chainConfig;
+
+    @Resource
+    private BubbleCacheService bubbleCacheService;
 
     public static Credentials CREDENTIALS;
 
@@ -246,6 +252,7 @@ public class GameContractAnalyzer {
             // 更新缓存
             List<AddrGame> addrGameList = addrGameMapper.selectByExample(addrGameExample);
             addrGameCacheService.delAddrGameCache(addrGameList);
+            bubbleCacheService.delBubbleCache(roundMapper.selectByPrimaryKey(roundIds.get(0)).getBubbleId());
         }
     }
 
@@ -267,7 +274,7 @@ public class GameContractAnalyzer {
                 com.platon.browser.contract.GameContract.JoinGameEventResponse item = JSONObject.toJavaObject(x, com.platon.browser.contract.GameContract.JoinGameEventResponse.class);
                 Round round = roundMap.get(item.boundId.longValue());
                 AddrGame addrGame = new AddrGame();
-                addrGame.setAddress(item.player);
+                addrGame.setAddress(item.player.toLowerCase());
                 addrGame.setBubbleId(round.getBubbleId());
                 addrGame.setRoundId(item.boundId.longValue());
                 addrGame.setGameId(game.getId());
@@ -280,6 +287,7 @@ public class GameContractAnalyzer {
                 addrGameDetailDto.setTokenAddress(round.getTokenAddress());
                 addrGameDetailDto.setTokenDecimal(round.getTokenDecimal());
                 addrGameDetailDto.setTokenSymbol(round.getTokenSymbol());
+                addrGameDetailDto.setTokenRpc(round.getTokenRpc());
                 addrGameCacheService.addAddrGameCache(addrGameDetailDto);
             });
         }
@@ -293,6 +301,7 @@ public class GameContractAnalyzer {
      */
     private void createGameHandle(Game game, List<JSONObject> createGameEventResponses) {
         if(CollUtil.isNotEmpty(createGameEventResponses)){
+
             List<Round> roundList = new ArrayList<>(createGameEventResponses.size());
             createGameEventResponses.forEach(x->{
                 CreateGameEventResponse item = JSONObject.toJavaObject(x,CreateGameEventResponse.class);
@@ -304,6 +313,12 @@ public class GameContractAnalyzer {
                 round.setTokenAddress(item.tokenAddress);
                 round.setStatus(RoundStatusEnum.START.getCode());
                 round.setCreateTime(new Date());
+                BubbleDetailDto bubbleCache = bubbleCacheService.getBubbleCache(item.bubbleId.longValue());
+                if(ObjectUtil.isNotNull(bubbleCache)){
+                    round.setTokenRpc(JSONObject.toJSONString(bubbleCache.getRpcUris()));
+                }else {
+                    round.setTokenRpc("");
+                }
                 getTokenInfo(round);
                 roundList.add(round);
             });

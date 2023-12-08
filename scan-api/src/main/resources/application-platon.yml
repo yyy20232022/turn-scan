@@ -57,6 +57,8 @@ spring:
       erc1155Tx: ${platon.redis-namespace}:erc1155Tx
       #加入的游戏列表
       addrGames: ${platon.redis-namespace}:addrGames
+      #bubble信息
+      bubbleInfo: ${platon.redis-namespace}:bubbleInfo
   #ES索引配置
   elasticsearch:
     high-level-client:

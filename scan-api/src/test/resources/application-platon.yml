@@ -57,6 +57,8 @@ spring:
       erc1155Tx: ${platon.redis-namespace}:erc1155Tx
       #加入的游戏列表
       addrGames: ${platon.redis-namespace}:addrGames
+      #bubble信息
+      bubbleInfo: ${platon.redis-namespace}:bubbleInfo
   #ES索引配置
   elasticsearch:
     high-level-client:
@@ -114,7 +116,7 @@ platon:
   web3j:
     #HTTP或WS
     protocol: WS
-    addresses: 10.32.165.85:7777
+    addresses: 47.242.117.51:7777
   # 质押节点统计年化率最多取多少个连续周期
   maxSettlePeriodCount4AnnualizedRateStat: 4
   #PlatON初始总发行量(LAT)
