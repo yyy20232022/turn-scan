@@ -139,7 +139,7 @@ public class MicroNodeAnalyzer {
     public void createStaking(CollectionTransaction result, ComplementInfo ci, MicroNodeStatusEnum microNodeStatusEnum) {
         CreateStakeParam createStakeParam = JSONObject.parseObject(ci.getInfo(), CreateStakeParam.class);
         MicroNodeExample microNodeExample = new MicroNodeExample();
-        microNodeExample.createCriteria().andNodeIdEqualTo(createStakeParam.getNodeId());
+        microNodeExample.createCriteria().andNodeIdEqualTo(createStakeParam.getNodeId().substring(2));
         List<MicroNode> microNodes = microNodeMapper.selectByExample(microNodeExample);
         // 节点未质押过
         if(CollectionUtils.isEmpty(microNodes)){
