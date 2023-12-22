@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
  */
 public class MicroNodeOptRecordListReq extends PageReq{
 	@NotBlank(message = "{nodeId not null}")
-	@Size(min = 130,max = 130)
+	@Size(min = 128,max = 128)
     private String nodeId;
 
 	public String getNodeId() {
