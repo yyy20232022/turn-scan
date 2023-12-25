@@ -74,7 +74,6 @@ public class GeneralContractAnalyzer {
         ReleaseBubbleParam releaseBubbleParam = JSONObject.parseObject(ci.getInfo(), ReleaseBubbleParam.class);
         MicroNode microNode = new MicroNode();
         microNode.setBubbleId(0L);
-        microNode.setBubbleCreator("");
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andBubbleIdEqualTo(releaseBubbleParam.getBubbleId().longValue());
         microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
@@ -92,10 +91,8 @@ public class GeneralContractAnalyzer {
             JSONObject microNodeJson = (JSONObject)microNode;
             result.add(microNodeJson.getString("StakingAddress"));
         }
-        String creator = basics.getString("Creator");
         MicroNode microNode = new MicroNode();
         microNode.setBubbleId(createBubbleParam.getBubbleId().longValue());
-        microNode.setBubbleCreator(creator);
         MicroNodeExample microNodeExample = new MicroNodeExample();
         microNodeExample.createCriteria().andOperationAddrIn(result);
         microNodeMapper.updateByExampleSelective(microNode,microNodeExample);
