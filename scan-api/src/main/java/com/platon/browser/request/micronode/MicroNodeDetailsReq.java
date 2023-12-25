@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 public class MicroNodeDetailsReq {
 
     @NotBlank(message = "{nodeId not null}")
-    @Size(min = 128, max = 130)
+    @Size(min = 128, max = 128)
     private String nodeId;
 
     public String getNodeId() {
@@ -20,8 +20,7 @@ public class MicroNodeDetailsReq {
     }
 
     public void setNodeId(String nodeId) {
-        if (StringUtils.isBlank(nodeId)) return;
-        this.nodeId = HexUtil.prefix(nodeId.toLowerCase());
+        this.nodeId = nodeId;
     }
 
 }

@@ -177,7 +177,7 @@ public class MicroNodeAnalyzer {
             microNodeMapper.updateByPrimaryKey(microNode);
         }
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
-        microNodeOptBak.setNodeId(createStakeParam.getNodeId());
+        microNodeOptBak.setNodeId(createStakeParam.getNodeId().substring(2));
         microNodeOptBak.setType(OptTypeEnum.STAKE.code);
         microNodeOptBak.setbNum(result.getNum());
         microNodeOptBak.setTxHash(result.getHash());
@@ -221,7 +221,7 @@ public class MicroNodeAnalyzer {
         microNode.setUpdateTime(new Date());
         microNodeMapper.updateByExample(microNode,microNodeExample);
         MicroNodeOptBak microNodeOptBak = new MicroNodeOptBak();
-        microNodeOptBak.setNodeId(editCandidateParam.getNodeId());
+        microNodeOptBak.setNodeId(editCandidateParam.getNodeId().substring(2));
         if(ObjectUtil.isNotNull(microNodeStatusEnum)){
             microNodeOptBak.setType(OptTypeEnum.WITHDRAW.code);
         }else {
