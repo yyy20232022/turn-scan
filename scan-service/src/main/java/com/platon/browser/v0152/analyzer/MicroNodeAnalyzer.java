@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Service
@@ -94,6 +93,10 @@ public class MicroNodeAnalyzer {
     public void createBubble(Long bubbleId) {
         String bubbleInfo = platOnClient.getBubbleInfo(BigInteger.valueOf(bubbleId));
         JSONObject info = JSONObject.parseObject(bubbleInfo);
+        if(ObjectUtil.isNull(info)){
+            log.error("{} info not exist",bubbleId);
+            return;
+        }
         JSONArray microNodes = info.getJSONArray("MicroNodes");
         List<String> result = new ArrayList<>(microNodes.size());
         List<String> rpcUris = new ArrayList<>(microNodes.size());
