@@ -1,2 +1,0 @@
-USE
-`scan_platon`;

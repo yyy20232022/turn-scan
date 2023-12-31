@@ -1,5 +1,5 @@
-### 每个版本全量SQL
-文件命名格式：
+### Full SQL for each version
+File naming format:
 ```text
-scan-v{版本号}.sql
+scan-v{version number}.sql
 ```

@@ -1,27 +1,27 @@
-# 指定环境
+# Specify environment
 env: DEV
 app:
-  # 应用ID
-  id: platon-scan-agent
+  # Application ID
+  id: turn-scan-agent
 apollo:
   access-key:
-    # 配置访问密钥
-    secret: f982e1a8f14444c7a484dc16bcad7741
+    # Configure access key
+    secret:
   bootstrap:
-    # 是否开启 Apollo
+    # Whether to enable Apollo
     enabled: true
     eagerLoad:
-      # 开启后，Apollo的配置会先于logback的配置加载
+      # When enabled, Apollo's configuration will be loaded before logback's configuration.
       enable: true
-      # 指定使用哪个 Namespace 的配置，默认 application
+      # Specify which Namespace configuration to use, default application
     namespaces: application
-  # Apollo 配置中心地址，多个地址以逗号隔开
-  # meta和env推荐使用VM参数指定 -Dapollo.configService=http://192.168.9.149:8080 -Denv=DEV
-  # apollo.configService的优先级比apollo.meta高,configService会覆盖meta
+  # Apollo configuration center address, multiple addresses separated by commas
+  # It is recommended to use VM parameters to specify meta and env -Dapollo.configService=http://192.168.9.149:8080 -Denv=DEV
+  # The priority of apollo.configService is higher than apollo.meta, and configService will override meta.
   meta: http://10.0.0.34:8080
-  # 配置本地配置缓存目录
+  # Configure local configuration cache directory
   cacheDir: ./apolloCache/data/
   property:
     order:
-      # 设置内存中的配置项是否保持和页面上的顺序一致
+      # Set whether the configuration items in memory remain consistent with the order on the page
       enable: true

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomToken1155InventoryMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomToken1155InventoryMapper">
     <insert id="batchInsertOrUpdateSelective" parameterType="map">
         replace into token_1155_inventory (
         <foreach collection="selective" item="column" separator=",">
@@ -71,7 +71,7 @@
         </foreach>
     </delete>
 
-    <select id="selectTokenInventory" resultType="com.platon.browser.bean.CustomToken1155Inventory">
+    <select id="selectTokenInventory" resultType="com.turn.browser.bean.CustomToken1155Inventory">
         SELECT
             t1.token_address AS tokenAddress,
             t1.token_id AS tokenId,
@@ -91,7 +91,7 @@
           AND t1.token_id = #{tokenId}
     </select>
 
-    <select id="findErc1155ContractDestroyBalance" parameterType="string" resultType="com.platon.browser.bean.Erc1155ContractDestroyBalanceVO">
+    <select id="findErc1155ContractDestroyBalance" parameterType="string" resultType="com.turn.browser.bean.Erc1155ContractDestroyBalanceVO">
         select t2.token_address as tokenAddress,
                count(1)         as num
         from (
@@ -103,7 +103,7 @@
         group by t2.token_address
     </select>
 
-    <select id="findDestroyContracts" resultType="com.platon.browser.dao.entity.Token1155InventoryWithBLOBs">
+    <select id="findDestroyContracts" resultType="com.turn.browser.dao.entity.Token1155InventoryWithBLOBs">
         SELECT t1.id            as id,
                t1.token_address as tokenAddress,
                t1.token_id      as tokenId,
@@ -127,7 +127,7 @@
         ORDER BY t1.id
     </select>
 
-    <select id="findOneByUK" resultType="com.platon.browser.dao.entity.Token1155InventoryWithBLOBs">
+    <select id="findOneByUK" resultType="com.turn.browser.dao.entity.Token1155InventoryWithBLOBs">
         select id,
                token_address as tokenAddress,
                token_id as tokenId,

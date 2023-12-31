@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomAddressMapper">
-    <resultMap id="BaseResultMap" type="com.platon.browser.bean.CustomAddressDetail">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomAddressMapper">
+    <resultMap id="BaseResultMap" type="com.turn.browser.bean.CustomAddressDetail">
         <id column="address" jdbcType="VARCHAR" property="address"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
         <result column="balance" jdbcType="DECIMAL" property="balance"/>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomNodeMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomNodeMapper">
 
-    <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Node" extends="com.platon.browser.dao.mapper.NodeMapper.BaseResultMap"/>
+    <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Node" extends="com.turn.browser.dao.mapper.NodeMapper.BaseResultMap"/>
     <sql id="Example_Where_Clause">
         <where>
             <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -44,7 +44,7 @@
         from node
         where node_id = #{nodeId,jdbcType=VARCHAR}
     </select>
-    <select id="selectListByExample" parameterType="com.platon.browser.dao.entity.NodeExample" resultMap="BaseResultMap">
+    <select id="selectListByExample" parameterType="com.turn.browser.dao.entity.NodeExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct

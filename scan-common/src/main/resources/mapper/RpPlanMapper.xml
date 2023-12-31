@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.RpPlanMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.RpPlan">
+<mapper namespace="com.turn.browser.dao.mapper.RpPlanMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.RpPlan">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="epoch" jdbcType="BIGINT" property="epoch" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, address, epoch, amount, `number`, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.RpPlanExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.RpPlanExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -95,13 +95,13 @@
     delete from rp_plan
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.RpPlanExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.RpPlanExample">
     delete from rp_plan
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.RpPlan">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.RpPlan">
     insert into rp_plan (id, address, epoch, 
       amount, `number`, create_time, 
       update_time)
@@ -109,7 +109,7 @@
       #{amount,jdbcType=DECIMAL}, #{number,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.RpPlan">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.RpPlan">
     insert into rp_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.RpPlanExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.RpPlanExample" resultType="java.lang.Long">
     select count(*) from rp_plan
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.RpPlan">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.RpPlan">
     update rp_plan
     <set>
       <if test="address != null">
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.RpPlan">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.RpPlan">
     update rp_plan
     set address = #{address,jdbcType=VARCHAR},
       epoch = #{epoch,jdbcType=BIGINT},

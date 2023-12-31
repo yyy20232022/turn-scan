@@ -9,7 +9,7 @@ configurations {
 }
 
 bootJar {
-	// 排除指定文件
+	// Exclude specified files
 	exclude("public")
 	exclude("application-*.yml")
 }
@@ -22,7 +22,7 @@ dependencies {
 	compile 'io.projectreactor.netty:reactor-netty:0.8.10.RELEASE'
 }
 
-//sonar扫描的路径
+//Path scanned by sonar
 sonarqube {
     properties {
         property "sonar.sources", "src/main/java"

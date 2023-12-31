@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomTokenInventoryMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomTokenInventoryMapper">
     <insert id="batchInsertOrUpdateSelective" parameterType="map">
         replace into token_inventory (
         <foreach collection="selective" item="column" separator=",">
@@ -68,7 +68,7 @@
         </foreach>
     </delete>
 
-    <select id="selectTokenInventory" resultType="com.platon.browser.bean.CustomTokenInventory">
+    <select id="selectTokenInventory" resultType="com.turn.browser.bean.CustomTokenInventory">
         SELECT ti.token_address AS tokenAddress,
                ti.token_id      AS tokenId,
                ti.OWNER         AS OWNER,
@@ -86,7 +86,7 @@
           and ti.token_id = #{tokenId,jdbcType=VARCHAR}
     </select>
 
-    <select id="findErc721ContractDestroyBalance" parameterType="string" resultType="com.platon.browser.bean.Erc721ContractDestroyBalanceVO">
+    <select id="findErc721ContractDestroyBalance" parameterType="string" resultType="com.turn.browser.bean.Erc721ContractDestroyBalanceVO">
         select t2.token_address as tokenAddress,
                t2.owner,
                count(1)         as num

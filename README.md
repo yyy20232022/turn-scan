@@ -1,10 +1,10 @@
-# Platon blockchain browser server
-> Provides browsing functions of the Platon chain, including functions such as blocks, transactions, verification nodes, governance parameters, tokens, etc.
+# Turn blockchain browser server
+> Provides browsing functions of the Turn chain, including functions such as blocks, transactions, verification nodes, governance parameters, tokens, etc.
 
 ## Software Architecture
 
 - [Architecture Doc](docs/arch_doc/overall_structure.md)
-- [Interface Doc](https://platonnetwork.github.io/browser-server/)
+- [Interface Doc](https://turnnetwork.github.io/browser-server/)
 
 ## Use technology
 
@@ -65,7 +65,7 @@ xxljob 2.3.0
 ```bash
 scan-agent,scan-api,scan-job
 1-about apollo:application-apollo.yml
-2-no apollo:application-platon.yml
+2-no apollo:application-turn.yml
 Choose one of the above two configuration methods
 ```
 
@@ -74,7 +74,7 @@ Choose one of the above two configuration methods
 1. The repository administrator creates a feature branch (accessed based on the develop branch), feature-xxx, for the community development team.
 2. The community development team forks (feature-xxx) to its own repository after the self-test on development is completed.
 3. The community development team submits pr to the official feature-xxx (merge the modification of the official develop branch before submission)
-4. Repository administrator merges feature-xxx into one of the proposed branch, e.g. feature-platon-1.1.5
-5. Testers verify the functions of the proposed branch feature-platon-1.1.5. Issue the problem if any 
+4. Repository administrator merges feature-xxx into one of the proposed branch, e.g. feature-turn-1.1.5
+5. Testers verify the functions of the proposed branch feature-turn-1.1.5. Issue the problem if any 
 6. After the test is completed, merge it into the develop branch
 ```

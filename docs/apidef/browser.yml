@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 'v_VERSION_ Build #_COMMIT_ID_'
-  title: 浏览器API文档
+  title: Browser API documentation
   description:
 host: localhost:40010
 basePath: "_BASE_PATH_"
@@ -9,480 +9,482 @@ basePath: "_BASE_PATH_"
 schemes:
   - http
 
-#定义接口路径
+#Define interface path
 paths:
   /config.json:
     get:
       operationId: websiteConfig
       tags:
-        - 网站配置
-      summary: 网站配置
+        - Website configuration
+      summary: Website configuration
       description: |
-        网站配置
+        Website configuration
       produces:
         - application/json
       responses:
         "200":
           description: <a href="config.json">config.json</a>
-  #首页接口
+  #Home page interface
   /home/queryNavigation:
     post:
       operationId: queryNavigation
       tags:
-        - 首页接口
-      summary: 搜索导航
+        - Home page interface
+      summary: Search navigation
       description: |
-        1. 功能：通过用户输入的查询字符串，返回到导航信息<br/>
-        2. 接口使用说明：通过接口返回的type内容，在调用相应的接口查询详情<br/>
-          type=block，通过返回的height值查询区块详情接口；<br/>
-          type=transaction，通过返回的txHash值查询交易详情接口；<br/>
-          type=address，通过返回的address值查询地址详情接口；<br/>
-          type=staking，通过返回的nodeId值查询验证人详情接口；<br/>
-        3. 实现逻辑：<br/>
-          当入参为整数类型， 查询mysql中block表<br/>
-          当入参为地址类型， 查询mysql中address表<br/>
-          当入参为公钥类型， 查询mysql中staking表<br/>
-          当入参为hash类型，查询mysql中transaction表，如果没有在查询mysql中block表<br/>
-          如果上面没有查询到，查询mysql中staking表通过节点名称查询<br/>
+        1. Function: Return to navigation information through the query string entered by the user<br/>
+        2. Instructions for using the interface: use the type content returned by the interface to query the details after calling the corresponding interface.<br/>
+          type=block，Query the block details interface through the returned height value.<br/>
+          type=transaction，Query transaction details interface through the returned txHash value<br/>
+          type=address，Query the address details interface through the returned address value;<br/>
+          type=staking，Query the certifier details interface through the returned nodeId value;<br/>
+        3. Implementation logic:<br/>
+          When the input parameter is an integer type, query the block table in mysql<br/>
+          When the input parameter is an address type, query the address table in mysql<br/>
+          When the input parameter is a public key type, query the staking table in mysql<br/>
+          When the input parameter is hash type, query the transaction table in mysql. If there is no query in the block table in mysql<br/>
+          If it is not found above, query the staking table in mysql through the node name<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/QueryNavigationParam'
       responses:
         '200':
-          description: 返回查询详情
+          description: Return query details
           schema:
             $ref: '#/definitions/QueryNavigationResult'
   /home/blockStatistic:
     post:
       operationId: blockStatistic
       tags:
-        - 首页接口
-      summary: 出块趋势（websocket）
+        - Home page interface
+      summary: Block trend（websocket）
       description: |
-        websocket调用：/topic/block/statistic/new<br/>
-        1. 功能：推送最新的50条出块趋势数据<br/>
-        2. 实现逻辑：<br/>
-         查询redis结构：browser:chain[链ID]:blocks<br/>
-         5s全量推送一次<br/>
+        websocket call:/topic/block/statistic/new<br/>
+        1. Function: Push the latest 50 block trend data<br/>
+        2. Implement logic:<br/>
+         Query the redis structure: browser:chain[chain ID]:blocks<br/>
+         Push the full amount once every 5 seconds<br/>
       produces:
         - application/json
       responses:
         '200':
-          description: 返回推送详情
+          description: Return to push details
           schema:
             $ref: '#/definitions/BlockTrendPushResult'
   /home/chainStatistic:
     post:
       operationId: chainStatistic
       tags:
-        - 首页接口
-      summary: 基础数据（websocket）
+        - Home page interface
+      summary: Basic data（websocket）
       description: |
-        websocket调用：/topic/chain/statistic/new<br/>
-        1. 功能：推送区块链基础数据<br/>
-        2. 实现逻辑：<br/>
-         查询redis结构：browser:networkstat<br/>
-         5s全量推送一次
+        websocket call:/topic/chain/statistic/new<br/>
+        1. Function: Push basic blockchain data<br/>
+        2. Implement logic:<br/>
+         Query the redis structure: browser:networkstat<br/>
+         Push the full amount once every 5 seconds
       produces:
         - application/json
       responses:
         '200':
-          description: 返回推送详情
+          description: Return to push details
           schema:
             $ref: '#/definitions/ChainPushResult'
   /home/stakingList:
     post:
       operationId: stakingList
       tags:
-        - 首页接口
-      summary: 验证人列表（websocket）
+        - Home page interface
+      summary: Validator list（websocket）
       description: |
-        wesocket调用：/topic/staking/list/new<br/>
-        1. 功能：推送最新8条验证人信息<br/>
-        2. 实现逻辑：<br/>
-         查询mysql中node表<br/>
-         根据状态和是否共识验证人标识来查询<br/>
-         根据一级排序 质押金+委托总额来排序，二级排序根据版本号进行排序，三级排序根据质押索引倒序<br/>
-         5s全量推送一次<br/>
+        wesocket call:/topic/staking/list/new<br/>
+        1. Function: push the latest 8 validator information<br/>
+        2. Implement logic:<br/>
+         Query the node table in mysql<br/>
+         Query based on status and consensus validator identification<br/>
+         Sort according to the first-level sorting pledge + total commission amount, the second-level sorting is sorted according to the version number, and the third-level sorting is based on the pledge index in reverse order<br/>
+         Push the full amount once every 5 seconds<br/>
       produces:
         - application/json
       responses:
         '200':
-          description: 返回推送详情
+          description: Return to push details
           schema:
             $ref: '#/definitions/StakingPushResult'
-  #地址相关接口
+  #Address related interface
   /address/details:
     post:
       operationId: details
       tags:
-        - 地址接口
-      summary: 查询地址详情
-      description: 实现逻辑：查询mysql中address表
+        - Address interface
+      summary: Query address details
+      description: Implement logic
+       Query the address table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/AddressDetailParam'
       responses:
         '200':
-          description: 返回地址详情
+          description: Return address details
           schema:
             $ref: '#/definitions/AddressDetailResult'
   /address/rpplanDetail:
     post:
       operationId: rpplanDetail
       tags:
-        - 地址接口
-      summary: 地址锁仓详情
-      description: 实现逻辑：
-        1、查询mysql中rpplan表<br/>
-        2、查询链上实时余额<br/>
+        - address interface
+      summary: Address lock details
+      description: Implement logic：
+        1. Query the rpplan table in mysql<br/>
+        2. Query the real-time balance on the chain<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/RpplanDetailParam'
       responses:
         '200':
-          description: 返回地址详情
+          description: Return address details
           schema:
             $ref: '#/definitions/RpplanDetailResult'
-  #内置地址相关接口
+  #Built-in address related interface
   /internalAddress/foundationInfo:
     post:
       operationId: internalAddress
       tags:
-        - 内置地址接口
-      summary: 查询内置账户信息
-      description: 实现逻辑：查询mysql中internalAddress表
+        - Built-in address interface
+      summary: Query built-in account information
+      description: Implementation logic
+        Query the internalAddress table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/PageReq'
       responses:
         '200':
-          description: 返回地址详情
+          description: Return address details
           schema:
             $ref: '#/definitions/InternalAddressRespResult'
-  #区块相关接口
+  #Block related interface
   /block/blockList:
     post:
       operationId: blockList
       tags:
-        - 区块接口
-      summary: 区块列表
-      description: 实现逻辑：|
-        查询redis结构：browser:blocks
+        - Block interface
+      summary: block list
+      description: Implement logic：|
+        Query redis structure：browser:blocks
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/BlockListParam'
       responses:
         '200':
-          description: 返回区块列表
+          description: Return block list
           schema:
             $ref: '#/definitions/BlockListResult'
   /block/blockListByNodeId:
     post:
       operationId: blockListByNodeId
       tags:
-        - 区块接口
-      summary: 节点的区块列表
-      description: 实现逻辑：|
-        查询es block索引
+        - Block interface
+      summary: Node’s block list
+      description: Implement logic：|
+        Query es block index
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/NodeBlockListParam'
       responses:
         '200':
-          description: 返回区块列表
+          description: Return block list
           schema:
             $ref: '#/definitions/BlockListResult'
   /block/blockListByNodeIdDownload:
     get:
       operationId: blockListByNodeIdDownload
       tags:
-        - 区块接口
-      summary: 导出节点的区块列表
-      description: 实现逻辑：|
-        查询es block索引
+        - Block interface
+      summary: Export node’s block list
+      description: Implement logic：|
+        Query es block index
       produces:
         - application/json
       parameters:
         - name: nodeId
-          description: 节点ID
+          description: Node ID
           in: query
           type: string
           required: true
         - name: date
-          description: 数据结束日期
+          description: Data end date
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制文件流
+          description: Return binary file stream
   /block/blockDetails:
     post:
       operationId: blockDetails
       tags:
-        - 区块接口
-      summary: 区块详情
-      description: 实现逻辑：|
-        查询ES block索引
+        - Block interface
+      summary: Block details
+      description: Implement logic：|
+        Query es block index
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/BlockDetailParam'
       responses:
         '200':
-          description: 返回区块详情
+          description: Return block details
           schema:
             $ref: '#/definitions/BlockDetailResult'
   /block/blockDetailNavigate:
     post:
       operationId: blockDetailNavigate
       tags:
-        - 区块接口
-      summary: 区块详情前后跳转浏览
-      description: 实现逻辑：|
-        查询ES block索引
+        - Block interface
+      summary: Jump forward and backward to browse block details
+      description: Implement logic：|
+        Query es block index
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/BlockDetailNavigateParam'
       responses:
         '200':
-          description: 返回区块详情
+          description: Return block details
           schema:
             $ref: '#/definitions/BlockDetailResult'
 
-  #Token令牌相关接口
+  #Token related interfaces
   /token/list:
     post:
       operationId: tokenList
       tags:
-        - Token令牌接口
-      summary: Token令牌列表
-      description: 实现逻辑：|
-        查询mysql中数据<br/>
-        查询可展示的token列表,是否允许展示需要关联token_expand表中is_show_in_scan字段<br/>
+        - Token interface
+      summary: Token list
+      description: Implement logic：|
+        Query data in mysql<br/>
+        Query the list of tokens that can be displayed. Whether display is allowed needs to be associated with the is_show_in_scan field in the token_expand table<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TokenListParam'
       responses:
         '200':
-          description: 返回区块列表
+          description: Return block list
           schema:
             $ref: '#/definitions/TokenListResult'
   /token/detail:
     post:
       operationId: tokenDetail
       tags:
-        - Token令牌接口
-      summary: Token令牌详情
-      description: 实现逻辑：|
-        查询MySQL数据库，同时附加附属信息返回
+        - Token interface
+      summary: Token details
+      description: Implement logic：|
+        Query the MySQL database and return additional additional information
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TokenDetailParam'
       responses:
         '200':
-          description: 返回令牌详情
+          description: Return token details
           schema:
             $ref: '#/definitions/TokenDetailResult'
   /token/arc20-tx/list:
     post:
       operationId: arc20TxList
       tags:
-        - Token令牌接口
-      summary: ARC20交易列表
-      description: 实现逻辑：|
-        查询ES中索引数据<br/>
-        如果传入合约地址，则返回当前合约内的所有转账记录<br/>
-        如果传入用户地址，则返回该地址作为转账扣除这或者接收者的代币转账记录<br/>
-        如果同时存在，则返回地址在当前合约内的转账记录<br/>
-        如果合约地址和用户地址，则返回所有转账记录<br/>
+        - Token interface
+      summary: ARC20 transaction list
+      description: Implement logic：|
+        Query index data in ES<br/>
+        If the contract address is passed in, all transfer records in the current contract will be returned<br/>
+        If a user address is passed in, the address will be returned as the transfer deduction or the recipient's token transfer record<br/>
+        If both exist, return the transfer record of the address in the current contract<br/>
+        If the contract address and user address, all transfer records are returned<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TokenTransferListParam'
       responses:
         '200':
-          description: 返回合约列表
+          description: Return to contract list
           schema:
             $ref: '#/definitions/TokenTransferListResult'
   /token/arc20-tx/export:
     get:
       operationId: arc20TxExport
       tags:
-        - Token令牌接口
-      summary: ARC20交易列表导出
+        - Token interface
+      summary: ARC20 transaction list export
       description:
       produces:
         - application/json
       parameters:
         - name: address
-          description: 钱包地址
+          description: wallet address
           in: query
           type: string
           required: false
         - name: contract
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: false
         - name: date
-          description: 数据结束日期
+          description: Data end date
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制数据流
+          description: Returns a binary data stream
   /token/arc721-tx/list:
     post:
       operationId: arc721TxList
       tags:
-        - Token令牌接口
-      summary: ARC721交易列表
-      description: 实现逻辑：|
-        查询ES中索引数据<br/>
-        如果传入合约地址，则返回当前合约内的所有转账记录<br/>
-        如果传入用户地址，则返回该地址作为转账扣除这或者接收者的代币转账记录<br/>
-        如果传入合约地址和tokenId，则返回当前合约内tokenId的所有转账记录<br/>
-        如果同时存在，则返回地址在当前合约内的转账记录（暂无此场景）<br/>
+        - Token interface
+      summary: ARC721 transaction list
+      description: Implement logic：|
+        Query index data in ES<br/>
+        If Contract address is passed in, all transfer records in the current contract will be returned<br/>
+        If a user address is passed in, the address will be returned as the transfer deduction or the recipient's token transfer record<br/>
+        If you pass in Contract address and tokenId, all transfer records of tokenId in the current contract will be returned<br/>
+        If both exist, the return address is the transfer record in the current contract (no such scenario yet)<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/721TokenTransferListParam'
       responses:
         '200':
-          description: 返回合约列表
+          description: Return to contract list
           schema:
             $ref: '#/definitions/721TokenTransferListResult'
   /token/arc721-tx/export:
     get:
       operationId: arc721TxExport
       tags:
-        - Token令牌接口
-      summary: ARC721交易列表导出
-      description: 实现逻辑：|
-        查询ES中索引数据<br/>
-        如果传入合约地址，则返回当前合约内的所有转账记录<br/>
-        如果传入用户地址，则返回该地址作为转账扣除这或者接收者的代币转账记录<br/>
-        如果同时存在，则返回地址在当前合约内的转账记录（暂无此场景）<br/>
+        - Token interface
+      summary: ARC721 transaction list export
+      description: Implement logic：|
+        Query index data in ES<br/>
+        If Contract address is passed in, all transfer records in the current contract will be returned<br/>
+        If a user address is passed in, the address will be returned as the transfer deduction or the recipient's token transfer record<br/>
+        If both exist, the return address is the transfer record in the current contract (no such scenario yet)<br/>
       produces:
         - application/json
       parameters:
         - name: address
-          description: 钱包地址
+          description: wallet address
           in: query
           type: string
           required: false
         - name: contract
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: false
         - name: date
-          description: 数据结束日期
+          description: Data end date
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
@@ -493,969 +495,1016 @@ paths:
           required: false
       responses:
         '200':
-          description: 返回二进制数据流
+          description: Returns a binary data stream
   /token/holder/list:
     post:
       operationId: tokenHolderList
       tags:
-        - Token令牌接口
-      summary: Token令牌持有人列表
-      description: 实现逻辑：|
-        - 查询数据库中数据
+        - Token interface
+      summary: Token holder list
+      description: Implement logic：|
+        - Query data in database
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TokenHolderListParam'
       responses:
         '200':
-          description: 返回合约列表
+          description: Return to contract list
           schema:
             $ref: '#/definitions/TokenHolderListResult'
   /token/holder/export:
     get:
       operationId: tokenHolderExport
       tags:
-        - Token令牌接口
-      summary: Token令牌持有人列表导出
-      description: 实现逻辑：|
-         查询ES中索引数据<br/>
-         如果传入合约地址，则返回当前合约内的所有转账记录<br/>
-         如果传入用户地址，则返回该地址作为转账扣除这或者接收者的代币转账记录<br/>
-         如果同时存在，则返回地址在当前合约内的转账记录（暂无此场景）<br/>
+        - Token interface
+      summary: Token holder list export
+      description: Implement logic：|
+        Query index data in ES<br/>
+        If Contract address is passed in, all transfer records in the current contract will be returned<br/>
+        If a user address is passed in, the address will be returned as the transfer deduction or the recipient's token transfer record<br/>
+        If both exist, the return address is the transfer record in the current contract (no such scenario yet)<br/>
       produces:
         - application/json
       parameters:
         - name: contract
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制数据
+          description: Return binary data
   /token/holder-token/list:
     post:
       operationId: holderTokenList
       tags:
-        - Token令牌接口
-      summary: 持有者的Token令牌列表
-      description: 实现逻辑：|
-         查询数据库中数据<br/>
-         如果传入合约地址，则返回当前合约内的所有持有人记录<br/>
-         如果传入用户地址，则返回该地址持有的token记录<br/>
+        - Token interface
+      summary: Token list of holders
+      description: Implement logic：|
+        Query data in database<br/>
+        If Contract address is passed in, all holder records in the current contract will be returned<br/>
+        If a user address is passed in, the token record held by the address is returned<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/HolderTokenListParam'
       responses:
         '200':
-          description: 返回持有人token列表
+          description: Return the holder token list
           schema:
             $ref: '#/definitions/HolderTokenListResult'
   /token/holder-token/export:
     get:
       operationId: holderTokenExport
       tags:
-        - Token令牌接口
-      summary: 持有者的Token令牌列表导出
-      description: 实现逻辑：|
-         查询ES中索引数据<br/>
-         如果传入合约地址，则返回当前合约内的所有转账记录<br/>
-         如果传入用户地址，则返回该地址作为转账扣除这或者接收者的代币转账记录<br/>
-         如果同时存在，则返回地址在当前合约内的转账记录（暂无此场景）<br/>
+        - Token interface
+      summary: Export the holder’s Token list
+      description: Implement logic：|
+        Query index data in ES<br/>
+        If Contract address is passed in, all transfer records in the current contract will be returned<br/>
+        If a user address is passed in, the address will be returned as the transfer deduction or the recipient's token transfer record<br/>
+        If both exist, the return address is the transfer record in the current contract (no such scenario yet)<br/>
       produces:
         - application/json
       parameters:
         - name: address
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
         - name: type
-          description: 合约类型，取值erc20或erc721
+          description: Contract type, value erc20 or erc721
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制数据
+          description: Return binary data
   /token/arc721-inventory/list:
     post:
       operationId: arc721InventoryList
       tags:
-        - Token令牌接口
-      summary: ARC721 库存列表
-      description: 实现逻辑：|
-        查询mysql中数据<br/>
-        如果传入合约地址，则返回当前合约内的所有tokenId记录<br/>
-        如果传入合约地址和tokenId，则返回当前合约内tokenId的记录<br/>
-        如果传入用户地址，则返回当前合约内的所有tokenId记录<br/>
+        - Token interface
+      summary: ARC721 Stock List
+      description: Implement logic：|
+        Query data in mysql<br/>
+        If Contract address is passed in, all tokenId records in the current contract will be returned<br/>
+        If you pass in Contract address and tokenId, the record of tokenId in the current contract will be returned<br/>
+        If the user address is passed in, all tokenId records in the current contract will be returned<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/721TokenIdListParam'
       responses:
         '200':
-          description: 返回合约列表
+          description: Return to contract list
           schema:
             $ref: '#/definitions/721TokenIdListResult'
   /token/arc721-inventory/export:
     get:
       operationId: arc721InventoryExport
       tags:
-        - Token令牌接口
-      summary: ARC721 库存列表导出
-      description: 实现逻辑：|
-        查询mysql中数据<br/>
-        如果传入合约地址，则返回当前合约内的所有tokenId记录<br/>
-        如果传入合约地址和tokenId，则返回当前合约内tokenId的记录<br/>
-        如果传入用户地址，则返回当前合约内的所有tokenId记录<br/>
+        - Token interface
+      summary: ARC721 inventory list export
+      description: Implement logic：|
+        Query data in mysql<br/>
+        If Contract address is passed in, all tokenId records in the current contract will be returned<br/>
+        If you pass in Contract address and tokenId, the record of tokenId in the current contract will be returned<br/>
+        If the user address is passed in, all tokenId records in the current contract will be returned<br/>
       produces:
         - application/json
       parameters:
         - name: contract
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: true
         - name: address
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: true
         - name: tokenId
-          description: 合约地址
+          description: Contract address
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制数据
+          description: Return binary data
   /token/arc721-inventory/detail:
     post:
       operationId: arc721InventoryDetail
       tags:
-        - Token令牌接口
-      summary: ARC721 库存详情
-      description: 实现逻辑：|
-        - 查询数据库中数据
+        - Token interface
+      summary: ARC721 Stock details
+      description: Implement logic：|
+        - Query data in database
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/721TokenIdDetailParam'
       responses:
         '200':
-          description: 返回合约列表
+          description: Return to contract list
           schema:
           $ref: '#/definitions/721TokenIdDetailResult'
 
 
-  #治理参数配置
+  #Governance parameter configuration
   /extra/queryConfig:
     post:
       operationId: queryConfig
       tags:
-        - 配置参数接口
-      summary: 查询配置详情
-      description: 实现逻辑：|
-        - 查询mysql中config表
+        - Configuration parameter interface
+      summary: Query configuration details
+      description: Implement logic：|
+        - Query the config table in mysql
       produces:
         - application/json
       responses:
         '200':
-          description: 返回配置列表
+          description: Return to configuration list
           schema:
             $ref: '#/definitions/QueryConfigResult'
-  #提案相关接口
+  #Proposal related interfaces
   /proposal/proposalList:
     post:
       operationId: proposalList
       tags:
-        - 提案接口
-      summary: 提案列表
-      description: 实现逻辑：|
-        查询mysql中proposal表
+        - Proposal interface
+      summary: Proposal list
+      description: Implement logic：|
+        Query the proposal table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/PagingParam'
       responses:
         '200':
-          description: 返回提案列表
+          description: Return to proposal list
           schema:
             $ref: '#/definitions/ProposalListResult'
   /proposal/proposalDetails:
     post:
       operationId: proposalDetails
       tags:
-        - 提案接口
-      summary: 提案详情
-      description: 实现逻辑：|
-        查询mysql中proposal表
+        - Proposal interface
+      summary: Proposal details
+      description: Implement logic：|
+        Query the proposal table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/ProposalDetail2Param'
       responses:
         '200':
-          description: 返回区块详情
+          description: Return block details
           schema:
             $ref: '#/definitions/ProposalDetailResult'
   /proposal/voteList:
     post:
       operationId: voteList
       tags:
-        - 提案接口
-      summary: 投票列表
-      description: 实现逻辑：|
-        查询mysql中vote表
+        - Proposal interface
+      summary: voting list
+      description: Implement logic：|
+        Query the vote table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/VoteListParam'
       responses:
         '200':
-          description: 返回投票列表
+          description: Return to voting list
           schema:
             $ref: '#/definitions/VoteListResult'
-  #质押验证人相关接口
+  #Staking verifier related interfaces
   /staking/statistic:
     post:
       operationId: statistic
       tags:
-        - 验证人接口
-      summary: 汇总数据（websocket）
+        - Validator interface
+      summary: Aggregate data（websocket）
       description: |
-        wesocket调用：/topic/staking/statistic/new<br/>
-        1. 功能：推送汇总数据<br/>
-        2. 实现逻辑：<br/>
-         查询redis结构：browser:[应用版本]:[应用运行配置名称]:networkstat<br/>
-         5s全量推送一次
+        wesocket call:/topic/staking/statistic/new<br/>
+        1. Function: push summary data<br/>
+        2. Implement logic：<br/>
+         Query the redis structure: browser:[Application version]:[Application running configuration name]:networkstat<br/>
+         Push the full amount once every 5 seconds
       produces:
         - application/json
       responses:
         '200':
-          description: 返回统计详情
+          description: Return to statistical details
           schema:
             $ref: '#/definitions/StakingStatisticResult'
   /staking/aliveStakingList:
     post:
       operationId: aliveStakingList
       tags:
-        - 验证人接口
-      summary: 实时验证人列表
+        - Validator interface
+      summary: Real-time validator list
       description: |
-        1. 功能：实时验证人列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中node表并关联staking表，进程中排序
+        1. Function: Real-time verifier list query<br/>
+        2. Implement logic：<br/>
+          Query the node table in mysql and associate the staking table, sorting in the process
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/AliveStakingListParam'
       responses:
         '200':
-          description: 返回推送详情
+          description: Return to push details
           schema:
             $ref: '#/definitions/AliveStakingListResult'
   /staking/historyStakingList:
     post:
       operationId: historyStakingList
       tags:
-        - 验证人接口
-      summary: 历史验证人列表
+        - Validator interface
+      summary: Historical validator list
       description: |
-        1. 功能：历史验证人列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中node表并关联staking表
+        1. Function: Query historical certifier list<br/>
+        2. Implement logic：<br/>
+          Query the node table in mysql and associate the staking table
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/HistoryStakingListParam'
       responses:
         '200':
-          description: 返回历史节点详情
+          description: Return to historical node details
           schema:
             $ref: '#/definitions/HistoryStakingListResult'
   /staking/lockedStakingList:
     post:
       operationId: lockedStakingList
       tags:
-        - 验证人接口
-      summary: 已锁定验证人列表
+        - Validator interface
+      summary: Locked validator list
       description: |
-        1. 功能：已锁定验证人列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中node表并关联staking表
+        1. Function: Query locked certifier list<br/>
+        2. Implement logic：<br/>
+          Query the node table in mysql and associate the staking table
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/LockedStakingListParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/LockedStakingListResult'
   /staking/stakingDetails:
     post:
       operationId: stakingDetails
       tags:
-        - 验证人接口
-      summary: 验证人详情
+        - Validator interface
+      summary: Validator details
       description: |
-        1. 功能：验证人详情查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中node表并关联staking表
+        1. Function: Verifier details query<br/>
+        2. Implement logic：<br/>
+          Query the node table in mysql and associate the staking table
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/StakingDetailParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/StakingDetailResult'
   /staking/stakingOptRecordList:
     post:
       operationId: stakingOptRecordList
       tags:
-        - 验证人接口
-      summary: 节点操作记录
+        - Validator interface
+      summary: Node operation record
       description: |
-        1. 功能：节点操作记录查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中node_opt表
+        1. Function: Node operation record query<br/>
+        2. Implement logic：<br/>
+          Query the node_opt table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/StakingOptRecordListParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/StakingOptRecordListResult'
   /staking/delegationListByStaking:
     post:
       operationId: delegationListByStaking
       tags:
-        - 验证人接口
-      summary: 验证人的委托列表
+        - Validator interface
+      summary: Validator’s delegation list
       description: |
-        1. 功能：验证人相关的委托列表查询<br/>
-        2. 实现逻辑：<br/>
-         查询mysql中delegation表关联staking，查询 delegation.is_history = false的记录<br/>
-         staking 与 delegation 一对多，delegation的字段需要叠加<br/>
+        1. Function: Validator-related delegation list query<br/>
+        2. Implement logic：<br/>
+         Query the delegation table association staking in mysql and query the records of delegation.is_history = false<br/>
+         Staking and delegation are one-to-many, and delegation fields need to be superimposed<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/DelegationListByStakingParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/DelegationListByStakingListResult'
   /staking/delegationListByAddress:
     post:
       operationId: delegationListByAddress
       tags:
-        - 验证人接口
-      summary: 地址相关的委托列表
+        - Validator interface
+      summary: Address-related commission list
       description: |
-        1. 功能：地址相关的委托列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中delegation表关联staking，查询 delegation.is_history = false的记录
+        1. Function: Address-related commission list query<br/>
+        2. Implement logic：<br/>
+          Query the delegation table association staking in mysql and query the records of delegation.is_history = false
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/DelegationListByAddressParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/DelegationListByAddressListResult'
 
-  #交易相关接口
+  #Transaction related interface
   /transaction/transactionList:
     post:
       operationId: transactionList
       tags:
-        - 交易接口
-      summary: 交易列表
+        - Transaction interface
+      summary: transaction list
       description: |
-        1. 功能：交易列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询redis结构：browser:transactions<br/>
+        1. Function: Transaction list query<br/>
+        2. Implement logic：<br/>
+          Query the redis structure: browser:transactions<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TransactionListParam'
       responses:
         '200':
-          description: 返回交易详情
+          description: Return to transaction details
           schema:
             $ref: '#/definitions/TransactionListResult'
   /transaction/transactionListByBlock:
     post:
       operationId: transactionListByBlock
       tags:
-        - 交易接口
-      summary: 区块的交易列表
+        - Transaction interface
+      summary: Block transaction list
       description: |
-        1. 功能：区块的交易列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中transaction表
+        1. Function: Block transaction list query<br/>
+        2. Implement logic：<br/>
+          Query the transaction table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TransactionListByBlockParam'
       responses:
         '200':
-          description: 返回交易详情
+          description: Return to transaction details
           schema:
             $ref: '#/definitions/TransactionListResult'
   /transaction/transactionListByAddress:
     post:
       operationId: transactionListByAddress
       tags:
-        - 交易接口
-      summary: 地址的交易列表
+        - Transaction interface
+      summary: Address's transaction list
       description: |
-        1. 功能：地址的交易列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中transaction表
+        1. Function: Address transaction list query<br/>
+        2. Implement logic：<br/>
+          Query the transaction table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TransactionListByAddressParam'
       responses:
         '200':
-          description: 返回交易详情
+          description: Return to transaction details
           schema:
             $ref: '#/definitions/TransactionListResult'
   /transaction/addressTransactionDownload:
     get:
       operationId: addressTransactionDownload
       tags:
-        - 交易接口
-      summary: 导出地址交易列表
-      description: 实现逻辑：|
-        1. 功能：导出地址的交易列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中transaction表
+        - Transaction interface
+      summary: Export address transaction list
+      description: Implement logic：|
+        1. Function 
+        Query the transaction list of the exported address<br/>
+        2. Implement logic：<br/>
+        Query the transaction table in mysql
       produces:
         - application/json
       parameters:
         - name: address
-          description: 钱包地址
+          description: wallet address
           in: query
           type: string
           required: false
         - name: date
-          description: 数据结束日期
+          description: Data end date
           in: query
           type: string
           required: true
         - name: local
-          description: 区域：en或者zh-cn
+          description: Region| en or zh-cn
           in: query
           type: string
           required: true
         - name: timeZone
-          description: 时区
+          description: Time zone
           in: query
           type: string
           required: true
         - name: token
-          description: 令牌
+          description: token
           in: query
           type: string
           required: false
       responses:
         '200':
-          description: 返回二进制数据流
+          description: Returns a binary data stream
   /transaction/transactionDetails:
     post:
       operationId: transactionDetails
       tags:
-        - 交易接口
-      summary: 交易详情
+        - Transaction interface
+      summary: Transaction Details
       description: |
-        1. 查询mysql中transaction表<br/>
-          如果txType = 0（转账）：转账信息从基本信息中取<br/>
-          如果txType = 1、2、5（合约创建执行）：合约信息从基本信息中取<br/>
-          如果txType = 1000（创建验证人）： 创建验证人 = nodeId + nodeName + externalId + benefitAddr + programVersion + website + details + value<br/>
-          如果txType = 1001（编辑验证人）：编辑验证人 = nodeId + nodeName + externalId + benefitAddr + programVersion + website + details<br/>
-          如果txType = 1002（增加质押）：增加质押 = nodeId + nodeName + value<br/>
-          如果txType = 1003（退出验证人）：退出验证 = nodeId + nodeName + applyAmount + redeemLocked + redeemStatus + redeemUnLockedBlock<br/>
-          - 1003 需要通过txHash关联staking表查询验证人信息<br/>
-          如果txType = 1004（委托）：验证人 = nodeId + nodeName<br/>
-          如果txType = 1005（委托赎回）：委托赎回 = nodeId + nodeName + applyAmount + redeemLocked + redeemStatus<br/>
-          - 1005 需要通过txHash 关联un_delegation表查询赎回的信息<br/>
-          如果txType = 2000、2001、2002（创建提案）：创建提案 = nodeId + nodeName + txType + proposalUrl + proposalHash + proposalNewVersion<br/>
-          如果txType = 2003（投票提案）：投票提案 = nodeId + nodeName + txType + proposalUrl + proposalHash + proposalNewVersion +  proposalOption<br/>
-          如果txType = 2004（版本声明）：版本声明 = nodeId + nodeName + declareVersion<br/>
-          如果txType = 4000（创建锁仓）：创建锁仓 = RPAccount + value + RPPlan<br/>
+        1. Query the transaction table in mysql<br/>
+          If txType = 0 (transfer): The transfer information is taken from the basic information<br/>
+          If txType = 1, 2, 5 (contract creation and execution): the contract information is taken from the basic information<br/>
+          If txType = 1000 (create validator): create validator = nodeId + nodeName + externalId + benefitAddr + programVersion + website + details + value<br/>
+          If txType = 1001 (edit validator): edit validator = nodeId + nodeName + externalId + benefitAddr + programVersion + website + details<br/>
+          If txType = 1002 (increase pledge): increase pledge = nodeId + nodeName + value<br/>
+          If txType = 1003 (exit validator): Exit verification = nodeId + nodeName + applyAmount + redeemLocked + redeemStatus + redeemUnLockedBlock<br/>
+          - 1003 It is necessary to query the validator information through the txHash associated staking table<br/>
+          If txType = 1004 (delegated): validator = nodeId + nodeName<br/>
+          If txType = 1005 (delegated redemption): delegated redemption = nodeId + nodeName + applyAmount + redeemLocked + redeemStatus<br/>
+          - 1005 It is necessary to query the redemption information by associating the un_delegation table with txHash<br/>
+          If txType = 2000, 2001, 2002 (create proposal): create proposal = nodeId + nodeName + txType + proposalUrl + proposalHash + proposalNewVersion<br/>
+          If txType = 2003 (voting proposal): voting proposal = nodeId + nodeName + txType + proposalUrl + proposalHash + proposalNewVersion + proposalOption<br/>
+          If txType = 2004 (version declaration): version declaration = nodeId + nodeName + declareVersion<br/>
+          If txType = 4000 (create a lock): create a lock = RPAccount + value + RPPlan<br/>
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/TransactionDetailsParam'
       responses:
         '200':
-          description: 返回历史节点详情
+          description: Return to historical node details
           schema:
             $ref: '#/definitions/TransactionDetailsResult'
   /transaction/queryClaimByAddress:
     post:
       operationId: queryClaimByAddress
       tags:
-        - 交易接口
-      summary: 地址的领取奖励列表
+        - Transaction interface
+      summary: List of addresses to receive rewards
       description: |
-        1. 功能：地址的领取奖励列表查询<br/>
-        2. 实现逻辑：<br/>
-         查询es中领取奖励表
+        1. Function: Query the list of rewards received by the address<br/>
+        2. Implement logic：<br/>
+         Query the reward table in es
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/QueryClaimByAddressParam'
       responses:
         '200':
-          description: 返回历史节点详情
+          description: Return to historical node details
           schema:
             $ref: '#/definitions/QueryClaimByAddressListResult'
   /transaction/queryClaimByStaking:
     post:
       operationId: queryClaimByStaking
       tags:
-        - 交易接口
-      summary: 节点相关的领取奖励列表
+        - Transaction interface
+      summary: Node-related rewards list
       description: |
-        1. 功能：节点相关的领取奖励列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询es中delegation_reward
+        1. Function: Node-related reward list query<br/>
+        2. Implement logic：<br/>
+          Query delegation_reward in es
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/QueryClaimByStakingParam'
       responses:
         '200':
-          description: 返回奖励列表
+          description: Return to reward list
           schema:
             $ref: '#/definitions/QueryClaimByStakingListResult'
-  #微节点相关接口
+  #Micronode related interfaces
   /micronode/statistic:
     post:
       operationId: statistic
       tags:
-        - 微节点接口
-      summary: 汇总数据（websocket）
+        - Micronode interface
+      summary: Aggregated data (websocket)
       description: |
-        wesocket调用：/topic/micronode/statistic/new<br/>
-        1. 功能：推送汇总数据<br/>
-        2. 实现逻辑：<br/>
-         查询redis结构：browser:[应用版本]:[应用运行配置名称]:networkstat<br/>
-         5s全量推送一次
+        wesocket call:/topic/micronode/statistic/new<br/>
+        1. Function: push summary data<br/>
+        2. Implement logic：<br/>
+         Query the redis structure: browser:[Application version]:[Application running configuration name]:networkstat<br/>
+         Push the full amount once every 5 seconds
       produces:
         - application/json
       responses:
         '200':
-          description: 返回统计详情
+          description: Return to statistical details
           schema:
             $ref: '#/definitions/MicroNodeStatisticResult'
   /micronode/aliveNodeList:
     post:
       operationId: aliveNodeList
       tags:
-        - 微节点接口
-      summary: 实时微节点列表
+        - Micronode interface
+      summary: Real-time micronode list
       description: |
-        1. 功能：实时微节点列表查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中micro_node表
+        1. Function: Real-time micro-node list query<br/>
+        2. Implement logic：<br/>
+          Query the micro_node table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/AliveMicroNodeListReqParam'
       responses:
         '200':
-          description: 返回推送详情
+          description: Return to push details
           schema:
             $ref: '#/definitions/AliveMicroNodeListResult'
   /micronode/microNodeDetails:
     post:
       operationId: microNodeDetails
       tags:
-        - 微节点接口
-      summary: 微节点详情
+        - Micronode interface
+      summary: Micronode details
       description: |
-        1. 功能：微节点详情查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中micro_node表
+        1. Function: Micro node details query<br/>
+        2. Implement logic：<br/>
+          Query the micro_node table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/MicroNodeDetailsParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/MicroNodeDetailResult'
   /micronode/microNodeOptRecordList:
     post:
       operationId: microNodeOptRecordList
       tags:
-        - 微节点接口
-      summary: 微节点操作记录
+        - Micronode interface
+      summary: Micronode operation records
       description: |
-        1. 功能：微节点操作记录查询<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中micro_node_opt表
+        1. Function: Micro-node operation record query<br/>
+        2. Implement logic：<br/>
+          Query the micro_node_opt table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/MicroNodeOptRecordListParam'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/MicroNodeOptRecordListResult'
-  #游戏相关接口
+  #Game related interfaces
   /addrGame/list:
     post:
       operationId: list
       tags:
-        - 游戏接口
-      summary: 查询地址参与的游戏列表详情
+        - game interface
+      summary: Query the details of the game list that the address participates in
       description: |
-        1. 功能：查询地址参与的游戏列表详情<br/>
-        2. 实现逻辑：<br/>
-          查询mysql中addr_game表
+        1. Function: Query the details of the game list in which the address participates<br/>
+        2. Implement logic：<br/>
+          Query the addr_game table in mysql
       produces:
         - application/json
       parameters:
         - name: body
-          description: 参数对象
+          description: parameter object
           in: body
           schema:
             $ref: '#/definitions/QueryAddrGameListReq'
       responses:
         '200':
-          description: 返回节点详情
+          description: Return node details
           schema:
             $ref: '#/definitions/AddrGameDetailResp'
-
-#实体定义
+  #Sub-chain transaction list related interfaces
+  /subchain/subChainTxRecordList:
+    post:
+      operationId: subChainTxRecordList
+      tags:
+        - subChain interface
+      summary: Query the transaction list of an address
+      description: |
+        1. Function: Query the transaction list of an address<br/>
+        2. Implement logic：<br/>
+          queryes
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: parameter object
+          in: body
+          schema:
+            $ref: '#/definitions/SubChainRecordListReq'
+      responses:
+        '200':
+          description: Return to transaction list
+          schema:
+            $ref: '#/definitions/SubChainTxRecordListResp'
+  /subchain/subChainTxDetails:
+    post:
+      operationId: subChainTxDetails
+      tags:
+        - subChain interface
+      summary: Query transaction details based on transaction hash and bubbleId
+      description: |
+        1. Function: Query transaction details based on transaction hash and bubbleId<br/>
+        2. Implement logic：<br/>
+          queryes
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          description: parameter object
+          in: body
+          schema:
+            $ref: '#/definitions/SubChainTransactionDetailsReq'
+      responses:
+        '200':
+          description: Return to transaction list
+          schema:
+            $ref: '#/definitions/SubChainTxDetailsResp'
+#Entity definition
 definitions:
-  #通用参数对象
+  #Common parameters object
   PagingParam:
     type: object
-    description: 分页参数
+    description: Paging parameters
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
-  #地址相关
+  #Address related
   AddressDetailParam:
     type: object
-    description: 地址详情查询参数对象
+    description: Address details query parameter object
     properties:
       address:
-        description: 账户地址(必填)
+        description: Account address (required)
         type: string
   AddressDetail:
     type: object
-    description: 地址详情对象
+    description: address details object
     properties:
       type:
-        description: 地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+        description: Address type 1-Account 2-Built-in contract 3-EVM contract 4-WASM contract 5-EVM-Token 6-WASM-Token
         type: string
       balance:
-        description: 余额(单位:LAT)
+        description: Balance (unit TURN)
         type: string
       restrictingBalance:
-        description: 锁仓余额(单位:LAT)
+        description: Locked balance(unit TURN)
         type: string
       stakingValue:
-        description: 质押的金额
+        description: Amount pledged
         type: string
       delegateValue:
-        description: 委托的金额
+        description: The amount entrusted
         type: string
       redeemedValue:
-        description: 赎回中的金额
+        description: Amount in redemption
         type: string
       txQty:
-        description: 交易总数
+        description: Total number of transactions
         type: integer
       transferQty:
-        description: 转账交易总数
+        description: Total number of transfer transactions
         type: integer
       delegateQty:
-        description: 委托交易总数
+        description: Total number of entrusted transactions
         type: integer
       stakingQty:
-        description: 验证人交易总数
+        description: Total number of validator transactions
         type: integer
       proposalQty:
-        description: 治理交易总数
+        description: Total number of governance transactions
         type: integer
       hasErc20:
-        description: 是否是erc20
+        description: Is it erc20
         type: boolean
       erc20TxQty:
-        description: erc20交易总数
+        description: Total number of erc20 transactions
         type: integer
       hasErc721:
-        description: 是否是erc721
+        description: Is it erc721
         type: boolean
       erc721TxQty:
-        description: erc20交易总数
+        description: Total number of erc20 transactions
         type: integer
       candidateCount:
-        description: 已委托验证人
+        description: Delegated validator
         type: integer
       delegateHes:
-        description: 未锁定委托（LAT）
+        description: Unlocked delegates (TURN)
         type: string
       delegateLocked:
-        description: 已锁定委托（LAT）
+        description: Delegate Locked（TURN）
         type: string
       delegateUnlock:
-        description: 已解除委托（LAT）
+        description: Delegate Unlock（TURN）
         type: string
       delegateReleased:
-        description: 待赎回委托（LAT）
+        description: Delegate Released（TURN）
         type: string
       delegateClaim:
-        description: 待领取奖励（LAT）
+        description: Delegate Claim（TURN）
         type: string
       haveReward:
-        description: 累计领取委托奖励（LAT）
+        description: Collect commission rewards cumulatively（TURN）
         type: string
       contractName:
-        description: 合约名称
+        description: Contract Name
         type: string
       contractCreate:
-        description: 合约创建者地址
+        description: Contract creator address
         type: string
       contractCreateHash:
-        description: 合约创建哈希
+        description: Contract creation hash
         type: string
       contractBin:
-        description: 合约bin
+        description: Contract Bin
         type: string
       isRestricting:
-        description: 是否有锁仓交易 0-无  1-有
+        description: Whether there is hedging transaction 0-no 1-yes
         type: integer
       isDestroy:
-        description: 是否被销毁 1是自毁，0是正常
+        description: Whether it is destroyed. 1 means self-destruction, 0 means normal.
         type: integer
       destroyHash:
-        description: 销毁hash
+        description: Destroy Hash
         type: string
       tokenSymbol:
-        description: 合约符号
+        description: Token Symbol
         type: string
       tokenName:
-        description: 合约名称
+        description: Token Name
         type: string
   AddressDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/AddressDetail'
   RpplanDetailParam:
     type: object
-    description: 地址锁仓详情参数对象
+    description: Address lock details parameter object
     properties:
       address:
-        description: 账户地址(必填)
+        description: Account address (required)
         type: string
       pageNo:
-        description: 页号
+        description: Page number
         type: integer
       pageSize:
-        description: 页码
+        description: page size
         type: integer
   Rpplan:
     type: object
-    description: 锁仓计划列表
+    description: List of lock-up plans
     properties:
       epoch:
-        description: 锁仓周期
+        description: Lock-up period
         type: integer
       amount:
-        description: 锁定金额
+        description: Locked amount
         type: string
       blockNumber:
-        description: 锁仓周期对应快高  结束周期 * epoch
+        description: The lock-up period corresponds to the fast high end period * epoch
         type: integer
       estimateTime:
-        description: 预计时间
+        description: estimated time
         type: integer
   RpplanDetail:
     type: object
-    description: 锁仓详情
+    description: Lockup details
     properties:
       restrictingBalance:
-        description: 锁仓余额(单位:LAT)
+        description: Locked balance (unit TURN)
         type: string
       stakingValue:
-        description: 锁仓质押/委托(单位:LAT)
+        description: Lock-up pledge/entrustment (unit TURN)
         type: string
       underreleaseValue:
-        description: 欠释放(单位:LAT)
+        description: Under release (unit TURN)
         type: string
       totalValue:
-        description: 锁仓计划总计锁仓(单位:LAT)
+        description: Lockup plan total lockup (unit TURN)
         type: string
       total:
-        description: 计划总数
+        description: Total number of plans
         type: string
       RPPlan:
         $ref: '#/definitions/RpplanDetail'
@@ -1463,75 +1512,75 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/RpplanDetail'
-  #区块相关
+  #Block related
   BlockListParam:
     type: object
-    description: 区块列表查询参数对象
+    description: Block list query parameter object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   BlockDetail1:
     type: object
-    description: 区块列表
+    description: block list
     properties:
       number:
-        description: 区块高度
+        description: block height
         type: integer
       timestamp:
-        description: 出块时间
+        description: Block time
         type: integer
       serverTime:
-        description: 当前服务器的时间
+        description: Current server time
         type: integer
       statTxQty:
-        description: 交易数
+        description: Number of transactions
         type: integer
       size:
-        description: 区块大小
+        description: block size
         type: integer
       nodeId:
-        description: 出块节点id
+        description: Block Node ID
         type: string
       nodeName:
-        description: 出块节点名称
+        description: Block producing node name
         type: string
       gasUsed:
-        description: 燃料用量
+        description: gas Used
         type: integer
       statTxGasLimit:
-        description: 区块所有交易可提供的gas总和
+        description: The total gas available for all transactions in the block
         type: integer
       blockReward:
-        description: 区块奖励(单位:von)
+        description: Block reward (unit AAA)
         type: string
   BlockListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       displayTotalCount:
-        description: 显示总数
+        description: Show total
         type: integer
       totalCount:
-        description: 小于等于500000记录的总数
+        description: The total number of records less than or equal to 500000
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -1539,253 +1588,253 @@ definitions:
           $ref: '#/definitions/BlockDetail1'
   NodeBlockListParam:
     type: object
-    description: 区块查询参数对象
+    description: Block query parameter object
     properties:
       nodeId:
-        description: 节点id(必填)
+        description: Node ID(required)
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   BlockDetailParam:
     type: object
-    description: 区块详情查询参数对象
+    description: Block details query parameter object
     properties:
       number:
-        description: 区块高度(必填)
+        description: block height(required)
         type: integer
   BlockDetail:
     type: object
-    description: 区块详情
+    description: Block details
     properties:
       number:
-        description: 区块高度
+        description: block height
         type: integer
       timestamp:
-        description: 出块时间
+        description: Block time
         type: integer
       txQty:
-        description: 块内交易总数
+        description: Total number of transactions within the block
         type: integer
       hash:
-        description: 区块hash
+        description: block hash
         type: string
       parentHash:
-        description: 父区块hash
+        description: Parent block hash
         type: string
       nodeId:
-        description: 出块节点id
+        description: Block Node ID
         type: string
       nodeName:
-        description: 出块节点名称
+        description: Block producing node name
         type: string
       timeDiff:
-        description: 当前块出块时间距离上一个块出块时间之差（毫秒）
+        description: The difference between the current block time and the previous block time (milliseconds)
         type: integer
       size:
-        description: 区块大小
+        description: block size
         type: integer
       gasLimit:
-        description: 能量消耗限制
+        description: gas Limit
         type: integer
       gasUsed:
-        description: 能量消耗
+        description: gas Used
         type: integer
       statTxGasLimit:
-        description: 区块所有交易可提供的gas总和
+        description: The total gas available for all transactions in the block
         type: integer
       blockReward:
-        description: 区块奖励(单位:von)
+        description: Block reward (unit AAA)
         type: string
       extraData:
-        description: 附加数据
+        description: Additional data
         type: string
       first:
-        description: 是否第一条记录
+        description: Is the first record
         type: boolean
       last:
-        description: 是否最后一条记录
+        description: Whether the last record
         type: boolean
       transferQty:
-        description: 块内转账交易总数
+        description: Total number of intra-block transfer transactions
         type: integer
       delegateQty:
-        description: 块内委托交易总数
+        description: Total number of commissioned transactions within the block
         type: integer
       stakingQty:
-        description: 块内验证人交易总数
+        description: Total number of validator transactions within the block
         type: integer
       proposalQty:
-        description: 块内治理交易总数
+        description: Total number of governance transactions within the block
         type: integer
       serverTime:
-        description: 当前服务器的时间
+        description: Current server time
         type: integer
   BlockDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/BlockDetail'
   BlockDetailNavigateParam:
     type: object
-    description: 区块详情前后跳转浏览参数对象
+    description: Jump forward and backward to browse block detailsparameter object
     properties:
       number:
-        description: 区块高度(必填)
+        description: block height(Required)
         type: integer
       direction:
-        description: 方向：prev-上一个，next-下一个 (必填)
+        description: Direction prev-previous, next-next (Required)
         type: string
-  #合约相关
+  #Contract related
   TokenDetailParam:
     type: object
-    description: 令牌详情查询参数对象
+    description: Token details query parameter object
     properties:
       address:
-        description: 合约地址（必填项）
+        description: Contract address（Required fields）
         type: string
   TokenDetail1:
     type: object
-    description: 令牌详情
+    description: token Detail
     properties:
       type:
-        description: 合约类型 erc20 erc721
+        description: Contract type- erc20 or erc721
         type: string
       address:
-        description: 合约地址
+        description: Contract address
         type: string
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       decimal:
-        description: 合约精度
+        description: Contract decimal
         type: integer
       totalSupply:
-        description: 合约发行总量（精度转换后）
+        description: Total contract issuance (after precision conversion)
         type: string
       icon:
-        description: 合约图标（base64编码）
+        description: Contract icon (base64 encoded)
         type: string
       creator:
-        description: 合约创建者地址
+        description: Contract creator address
         type: string
       txHash:
-        description: 创建合约的交易哈希
+        description: Create the transaction hash of the contract
         type: string
       webSite:
-        description: 合约对应官方站点
+        description: Create the transaction hash of the contract
         type: string
       blockTimestamp:
-        description: 合约创建时间（时间戳）
+        description: Contract creation time (timestamp)
         type: integer
       createTime:
-        description: 合约入库时间（时间戳）
+        description: Contract entry time (timestamp)
         type: integer
       txCount:
-        description: 合约内部转账交易数
+        description: Number of internal transfer transactions within the contract
         type: integer
       abi:
-        description: 合约的ABI描述
+        description: ABI description of the contract
         type: string
       binCode:
-        description: 合约的二进制码
+        description: Contract binary code
         type: string
       isContractDestroy:
-        description: 合约是否已销毁 0-否，1-是
+        description: Whether the contract has been destroyed 0-no, 1-yes
         type: integer
       holder:
-        description: 持有人数
+        description: Number of holders
         type: integer
       sourceCode:
-        description: 合约源代码
+        description: Contract source code
         type: string
   TokenDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/TokenDetail1'
   TokenListParam:
     type: object
-    description: 合约列表查询参数对象
+    description: Contract list query parameter object
     properties:
       type:
-        description: 合约类型 erc20 erc721(必填)
+        description: Contract type erc20 erc721(Required)
         type: string
         enum:
           - erc20
           - erc721
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   TokenDetail2:
     type: object
-    description: 令牌详情
+    description: token Detail
     properties:
       address:
-        description: 合约地址
+        description: Contract address
         type: string
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       decimal:
-        description: 合约精度
+        description: Contract decimal
         type: integer
       totalSupply:
-        description: 合约发行总量（精度转换后）
+        description: Total contract issuance (after precision conversion)
         type: string
       icon:
-        description: 合约图标（base64编码）
+        description: Contract icon (base64 encoded)
         type: string
       webSite:
-        description: 合约对应官方站点
+        description: The contract corresponds to the official website
         type: string
       details:
-        description: 合约描述
+        description: Contract description
         type: string
       holder:
-        description: 持有人数
+        description: Number of holders
         type: integer
   TokenListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总记页数
+        description: total Pages
         type: integer
       displayTotalCount:
-        description: 显示可展示记录数
+        description: Show the number of records that can be displayed
         type: integer
       data:
         type: array
@@ -1795,70 +1844,70 @@ definitions:
     type: object
     properties:
       contract:
-        description: 合约地址（可选）
+        description: Contract address（Optional）
         type: string
       address:
-        description: 用户地址（可选，检索时可能为：from或to）
+        description: User address (Optional, may be from or to when retrieving)
         type: string
       txHash:
-        description: 交易哈希（可选，如果存在则根据该哈希强检索）
+        description: Transaction hash (Optional, strong retrieval based on this hash if present)
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   TokenTransferDetail:
     type: object
     properties:
       txHash:
-        description: 交易hash
+        description: transaction hash
         type: string
       blockNumber:
-        description: 区块高度
+        description: block height
         type: integer
       txFrom:
-        description: from地址
+        description: from address
         type: string
       contract:
-        description: 合约地址（也是交易to地址）
+        description: Contract address（It is also the transaction to address）
         type: string
       transferTo:
-        description: token的接收地址
+        description: token receiving address
         type: string
       transferValue:
         description: token Id
         type: string
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       decimal:
-        description: 合约精度
+        description: Contract decimal
         type: string
       blockTimestamp:
-        description: 区块时间
+        description: block time
         type: integer
       systemTimestamp:
-        description: 区块时间
+        description: system time
         type: integer
   TokenTransferListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -1868,40 +1917,40 @@ definitions:
     type: object
     properties:
       contract:
-        description: 合约地址（可选）
+        description: Contract address（Optional）
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   TokenHolderDetail:
     type: object
     properties:
       address:
-        description: 持有者地址
+        description: holder address
         type: string
       balance:
-        description: 交易对应的balance值
+        description: The balance value corresponding to the transaction
         type: string
       percent:
-        description: 持有百分比
+        description: holding percentage
         type: string
   TokenHolderListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -1911,58 +1960,58 @@ definitions:
     type: object
     properties:
       address:
-        description: 合约地址（可选）
+        description: Contract address（Optional）
         type: string
       type:
-        description: 类型，取值：erc20或erc721（可选）
+        description: value erc20 or erc721 (Optional)
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   HolderTokenDetail:
     type: object
     properties:
       contract:
-        description: 合约地址（也是交易to地址）
+        description: Contract address（It is also the transaction to address）
         type: string
       address:
-        description: 地址
+        description: address
         type: string
       decimal:
-        description: 合约精度
+        description: Contract decimal
         type: integer
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       balance:
-        description: 交易对应的balance值
+        description: The balance value corresponding to the transaction
         type: string
       txCount:
-        description: 交易数
+        description: Number of transactions
         type: integer
       isContractDestroy:
-        description: token所属合约是否已销毁：0-否，1-是
+        description: Whether the contract to which the token belongs has been destroyed; 0-no, 1-yes
         type: integer
   HolderTokenListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -1972,40 +2021,40 @@ definitions:
     type: object
     properties:
       contract:
-        description: 合约地址（可选）
+        description: Contract address（Optional）
         type: string
       address:
-        description: 用户地址（可选，检索时可能为：from或to）
+        description: User address (Optional, may be from or to when retrieving)
         type: string
       tokenId:
-        description: tokenId（可选，检索为：tValue）
+        description: tokenId（Optional，Search for:tValue）
         type: string
       txHash:
-        description: 交易哈希（可选，如果存在则根据该哈希强检索）
+        description: Transaction hash (Optional, strong retrieval based on this hash if present)
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   721TokenTransferListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总记页数
+        description: total Pages
         type: integer
       displayTotalCount:
-        description: 显示可展示记录数
+        description: Show the number of records that can be displayed
         type: integer
       data:
         type: array
@@ -2015,70 +2064,70 @@ definitions:
     type: object
     properties:
       txHash:
-        description: 交易hash
+        description: transaction hash
         type: string
       blockNumber:
-        description: 区块高度
+        description: block height
         type: integer
       txFrom:
-        description: from地址
+        description: from address
         type: string
       contract:
-        description: 合约地址（也是交易to地址）
+        description: Contract address（It is also the transaction to address）
         type: string
       transferTo:
-        description: token的接收地址
+        description: token receiving address
         type: string
       tokenId:
         description: token Id
         type: string
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       blockTimestamp:
-        description: 区块时间
+        description: block time
         type: integer
       systemTimestamp:
-        description: 区块时间
+        description: block time
         type: integer
   721TokenIdListParam:
     type: object
     properties:
       contract:
-        description: 合约地址（可选）
+        description: Contract address（Optional）
         type: string
       address:
-        description: 用户地址（可选）
+        description: User address（Optional）
         type: string
       tokenId:
-        description: tokenId（可选）
+        description: tokenId（Optional）
         type: string
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   721TokenIdDetail:
     type: object
     properties:
       contract:
-        description: 合约地址
+        description: Contract address
         type: string
       address:
-        description: 用户地址
+        description: User address
         type: string
       tokenId:
         description: tokenId
         type: string
       image:
-        description: token 图标url
+        description: token icon url
         type: string
       txCount:
-        description: 合约内部转账交易数
+        description: Number of internal transfer transactions within the contract
         type: integer
 
 
@@ -2086,16 +2135,16 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总记录数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -2105,7 +2154,7 @@ definitions:
     type: object
     properties:
       contract:
-        description: 合约地址
+        description: Contract address
         type: string
       tokenId:
         description: tokenId
@@ -2114,76 +2163,76 @@ definitions:
     type: object
     properties:
       contract:
-        description: 合约地址
+        description: Contract address
         type: string
       tokenId:
         description: tokenId
         type: string
       name:
-        description: 合约名称
+        description: Contract name
         type: string
       symbol:
-        description: 合约符号
+        description: contract symbol
         type: string
       creator:
-        description: 合约创建者地址
+        description: Contract creator address
         type: string
       txHash:
-        description: 创建合约的交易哈希
+        description: Create the transaction hash of the contract
         type: string
       webSite:
-        description: 合约对应官方站点
+        description: The contract corresponds to the official website
         type: string
       txCount:
-        description: 合约内部转账交易数
+        description: Number of internal transfer transactions within the contract
         type: integer
-  #配置相关
+  #Configuration related
   ConfigDetail:
     type: object
-    description: 配置列表
+    description: Configuration list
     properties:
       name:
-        description: 参数名称
+        description: parameter name
         type: string
       initValue:
-        description: 初始值
+        description: initial value
         type: string
       staleValue:
-        description: 旧值
+        description: old value
         type: string
       value:
-        description: 新值
+        description: new value
         type: string
       startValue:
-        description: 开始值
+        description: start value
         type: string
       endValue:
-        description: 结束值
+        description: end value
         type: string
       start:
-        description: 是否包含开始
+        description: Whether to include the start
         type: string
       end:
-        description: 是否包含结束
+        description: Whether to include the end
         type: string
   ModuleConfig:
     type: object
-    description: 模块配置
+    description: Module configuration
     properties:
       module:
-        description: 模块名
+        description: Module name
         type: string
       detail:
-        description: 配置列表
+        description: Configuration list
         type: array
         items:
           $ref: '#/definitions/ConfigDetail'
   ModuleConfigData:
     type: object
-    description: 模块配置
+    description: Module configuration
     properties:
       config:
-        description: 模块配置列表
+        description: Module configuration list
         type: array
         items:
           $ref: '#/definitions/ModuleConfig'
@@ -2191,70 +2240,70 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/ModuleConfigData'
-  #首页接口
+  #Home page interface
   QueryNavigationParam:
     type: object
-    description: 首页搜索参数
+    description: Home page search parameters
     properties:
       parameter:
-        description: 用户输入(必填)
+        description: user input(Required)
         type: string
   QueryNavigationDetail:
     type: object
     properties:
       type:
-        description: block-区块；transaction-交易；address-地址；staking-验证人；contract-合约地址
+        description: block-block; transaction-transaction; address-address; staking-verifier; contract-Contract address
         type: string
       struct:
-        description: 根据type字段,数据结构有变动
+        description: According to the type field, the data structure changes
         type: object
         properties:
           number:
-            description: 区块高度
+            description: block height
             type: integer
           txHash:
-            description: 交易hash
+            description: transaction hash
             type: string
           address:
-            description: 地址
+            description: address
             type: string
           nodeId:
-            description: 节点地址
+            description: Node address
             type: string
   QueryNavigationResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/QueryNavigationDetail'
   BlockTrendPushDetail:
     type: object
-    description: 区块趋势详情
+    description: Block trend details
     properties:
       x:
-        description: 区块高度
+        description: block height
         type: array
         items:
           $ref: integer
       ya:
-        description: 出块的时间
+        description: Block time
         type: array
         items:
           $ref: integer
       yb:
-        description: 交易数量数量
+        description: Transaction quantity
         type: array
         items:
           $ref: integer
@@ -2262,85 +2311,85 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/BlockTrendPushDetail'
   ChainPushBlockDetail:
     type: object
-    description: 推送的区块详情
+    description: Pushed block details
     properties:
       isRefresh:
-        description: 是否更新,false不更新区块，true更新区块
+        description: Whether to update, false does not update the block, true updates the block
         type: boolean
       number:
-        description: 区块高度
+        description: block height
         type: integer
       timestamp:
-        description: 出块时间
+        description: Block time
         type: integer
       serverTime:
-        description: 服务器时间
+        description: server Time
         type: integer
       nodeId:
-        description: 出块节点id
+        description: Block Node ID
         type: string
       nodeName:
-        description: 出块节点名称
+        description: Block producing node name
         type: string
       statTxQty:
-        description: 交易数
+        description: Number of transactions
         type: integer
   ChainPushDetail:
     type: object
     properties:
       currentNumber:
-        description: 当前区块高度
+        description: current block height
         type: integer
       nodeId:
-        description: 出块节点id
+        description: Block Node ID
         type: string
       nodeName:
-        description: 出块节点名称
+        description: Block producing node name
         type: string
       txQty:
-        description: 总的交易数
+        description: total number of transactions
         type: integer
       currentTps:
-        description: 当前的TPS
+        description: current TPS
         type: integer
       maxTps:
-        description: 最大交易TPS
+        description: Maximum transaction TPS
         type: integer
       turnValue:
-        description: 当前流通量
+        description: Current circulation
         type: string
       issueValue:
-        description: 当前发行量
+        description: Current circulation
         type: string
       stakingDelegationValue:
-        description: 当前质押总数=有效的质押+委托
+        description: Current total number of pledges = valid pledges + delegation
         type: string
       addressQty:
-        description: 地址数=有效的质押+委托
+        description: Number of addresses = valid pledges + delegation
         type: integer
       proposalQty:
-        description: 总提案数
+        description: Total number of proposals
         type: integer
       doingProposalQty:
-        description: 进行中提案数
+        description: Number of proposals in progress
         type: integer
       availableStaking:
-        description: 可质押量
+        description: Amount that can be pledged
         type: string
       nodeNum:
-        description: 节点数
+        description: Number of nodes
         type: integer
       blockList:
-        description: 区块列表
+        description: Error message
         type: array
         items:
           $ref: '#/definitions/ChainPushBlockDetail'
@@ -2348,46 +2397,46 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/ChainPushDetail'
   StakingPushDetail:
     type: object
-    description: 推送的验证人详情
+    description: Pushed verifier details
     properties:
       nodeId:
-        description: 出块节点Id
+        description: Block Node ID
         type: string
       nodeName:
-        description: 出块节点名称
+        description: Block producing node name
         type: string
       stakingIcon:
-        description: 验证人图片
+        description: Verifier picture
         type: string
       ranking:
-        description: 节点排行
+        description: Node ranking
         type: integer
       expectedIncome:
-        description: 预计年收化率（从验证人加入时刻开始计算）
+        description: Estimated annual revenue rate (calculated from the time when the validator joins)
         type: number
       isInit:
-        description: 是否为初始化的验证人，如果是expectedIncome不显示数值
+        description: Is it an initialized verifier? If it is expectedIncome, no value will be displayed.
         type: boolean
       totalValue:
-        description: 质押总数=有效的质押+委托
+        description: Total number of pledges = valid pledges + delegation
         type: string
   StakingPushData:
     type: object
     properties:
       isRefresh:
-        description: false不用全量刷新、true全量刷新
+        description: false no need to refresh in full, true refresh in full
         type: boolean
       dataList:
-        description: 节点列表
+        description: node list
         type: array
         items:
           $ref: '#/definitions/StakingPushDetail'
@@ -2395,71 +2444,71 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/StakingPushData'
-  #提案相关
+  #Proposal related
   ProposalDetail1:
     type: object
-    description: 提案详情
+    description: Proposal details
     properties:
       proposalHash:
-        description: 提案内部标识
+        description: Proposal internal identifier
         type: string
       topic:
-        description: 提案标题
+        description: Proposal title
         type: string
       description:
-        description: 提案描述
+        description: Proposal description
         type: string
       url:
-        description: github地址  https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md  PIP编号   eip-100
+        description: github address https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md PIP number eip-100
         type: string
       type:
-        description: 提案类型 1：文本提案 2：升级提案 3参数提案。
+        description: Proposal type 1- text proposal 2- upgrade proposal 3- parameter proposal.
         type: integer
       status:
-        description: 状态  1：投票中  2：通过  3：失败   4：预升级  5：升级完成   6：已取消  已通过=2 或4 或 5
+        description: Status 1-Voting 2-Passed 3-Failed 4-Pre-upgrade 5-Upgrade completed 6-Canceled Passed=2 or 4 or 5
         type: integer
       curBlock:
-        description: 当前块高
+        description: Current block height
         type: integer
       endVotingBlock:
-        description: 投票结算的块高
+        description: Block height for vote settlement
         type: integer
       newVersion:
-        description: 升级提案升级的版本
+        description: Upgrade proposal upgraded version
         type: integer
       paramName:
-        description: 参数名
+        description: parameter name
         type: string
       timestamp:
-        description: 提案时间
+        description: Proposal time
         type: integer
       pipNum:
         description: pip num
         type: integer
       inBlock:
-        description: 所在块高
+        description: The height of the block
         type: integer
   ProposalListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         $ref: '#/definitions/ProposalDetail1'
@@ -2467,113 +2516,113 @@ definitions:
     type: object
     properties:
       proposalHash:
-        description: 提案的内部id(必填)
+        description: The internal id of the proposal (Required)
         type: string
   ProposalDetail2:
     type: object
-    description: 提案详情
+    description: Proposal details
     properties:
       proposalHash:
-        description: 提案内部标识
+        description: Proposal internal identifier
         type: string
       topic:
-        description: 提案标题
+        description: Proposal title
         type: string
       description:
-        description: 提案描述
+        description: Proposal description
         type: string
       url:
-        description: github地址  https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md  PIP编号   eip-100
+        description: github address https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md PIP number eip-100
         type: string
       type:
-        description: 提案类型 1：文本提案 2：升级提案 3参数提案。
+        description: Proposal type 1-text proposal 2-upgrade proposal 3-parameter proposal.
         type: integer
       status:
-        description: 状态  1：投票中  2：通过  3：失败   4：预升级  5：升级完成   6：已取消  已通过=2 或4 或 5
+        description: Status 1-Voting 2-Passed 3-Failed 4-Pre-upgrade 5-Upgrade completed 6-Canceled Passed=2 or 4 or 5
         type: integer
       curBlock:
-        description: 当前块高
+        description: Current block height
         type: integer
       endVotingBlock:
-        description: 投票结算的块高
+        description: Block height for vote settlement
         type: integer
       timestamp:
-        description: 提案时间
+        description: Proposal time
         type: integer
       activeBlock:
-        description: （如果投票通过）生效块高
+        description: (if the vote passes) the effective block is high
         type: integer
       newVersion:
-        description: 升级提案升级的版本
+        description: Upgrade proposal upgraded version
         type: integer
       paramName:
-        description: 参数名
+        description: parameter name
         type: string
       currentValue:
-        description: 参数当前值
+        description: Parameter current value
         type: string
       newValue:
-        description: 参数的新值
+        description: the new value of the parameter
         type: string
       nodeName:
-        description: 发起提案的节点名称
+        description: The name of the node that initiated the proposal
         type: string
       nodeId:
-        description: 发起提案的节点id
+        description: Node ID that initiated the proposal
         type: string
       yeas:
-        description: 同意的人
+        description: person who agrees
         type: integer
       nays:
-        description: 反对的人
+        description: Opponents
         type: integer
       abstentions:
-        description: 弃权的人
+        description: abstainer
         type: integer
       accuVerifiers:
-        description: 总人数
+        description: total people
         type: integer
       activeBlockTime:
-        description: 生效块高预计时间  (activeBlock-curBlock)*period
+        description: Estimated time for effective block height  (activeBlock-curBlock)*period
         type: integer
       endVotingBlockTime:
-        description: 投票块高的时间   (endVotingBlock-curBlock)*period
+        description: time voting block high   (endVotingBlock-curBlock)*period
         type: integer
       supportRateThreshold:
-        description: 通过条件率
+        description: pass condition rate
         type: string
       yesRateThreshold:
-        description: 通过率
+        description: Passing rate
         type: string
       opposeRateThreshold:
-        description: 反对率
+        description: Opposition rate
         type: string
       abstainRateThreshold:
-        description: 弃权率
+        description: abstention rate
         type: string
       pipNum:
         description: pip num
         type: integer
       inBlock:
-        description: 所在块高
+        description: The height of the block
         type: integer
       canceledPipId:
-        description: 被取消提案id
+        description: Canceled proposal id
         type: string
       canceledTopic:
-        description: 被取消提案名称
+        description: Canceled proposal name
         type: string
       participationRate:
-        description: 通过参与率
+        description: Pass participation rate
         type: string
   ProposalDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/ProposalDetail2'
@@ -2581,95 +2630,95 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       proposalHash:
-        description: 提案的内部id(必填)
+        description: The internal id of the proposal (Required)
         type: string
       option:
-        description: 投票选型  1：支持；  2：反对；  3弃权
+        description: Vote selection 1-Support; 2-Oppose; 3-Abstain
         type: integer
   VoteDetail:
     type: object
-    description: 投票详情
+    description: Voting details
     properties:
       nodeName:
-        description: 投票验证人的节点名称
+        description: The node name of the voting validator
         type: string
       nodeId:
-        description: 投票验证人的节点id
+        description: Node ID of the voting validator
         type: string
       option:
-        description: 投票选型  1：支持；  2：反对；  3弃权 11:支持（无效票） 12:反对（无效票） 13：弃权（无效票）
+        description: Voting selection 1-support; 2-oppose; 3 abstain 11-support (invalid vote) 12-oppose (invalid vote) 13-abstain (invalid vote)
         type: integer
       txHash:
-        description: 投票的hash
+        description: vote hash
         type: string
       timestamp:
-        description: 投票的时间
+        description: time to vote
         type: integer
   VoteListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         type: array
         items:
           $ref: '#/definitions/VoteDetail'
 
-  #验证人相关
+  #Validator related
   StakingStatisticDetail:
     type: object
     properties:
       stakingDelegationValue:
-        description: 质押委托总数
+        description: Total number of pledge commissions
         type: string
       stakingValue:
-        description: 质押总数
+        description: Total number of pledges
         type: string
       delegationValue:
-        description: 委托总数
+        description: Total number of orders
         type: string
       issueValue:
-        description: 发行量
+        description: Circulation
         type: string
       blockReward:
-        description: 当前的出块奖励
+        description: Current block reward
         type: string
       stakingReward:
-        description: 当前的质押奖励
+        description: Current staking rewards
         type: string
       currentNumber:
-        description: 当前区块高度
+        description: current block height
         type: integer
       addIssueBegin:
-        description: 当前增发周期的开始快高
+        description: The beginning of the current issuance cycle is fast high
         type: integer
       addIssueEnd:
-        description: 当前增发周期的结束块高
+        description: The end block height of the current issuance cycle
         type: integer
       nextSetting:
-        description: 离下个结算周期倒计时
+        description: Countdown to next billing cycle
         type: integer
       availableStaking:
-        description: 可质押量
+        description: available Staking
         type: string
   StakingStatisticResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/StakingStatisticDetail'
@@ -2678,92 +2727,92 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       key:
-        description: 验证人名称
+        description: Validator name
         type: string
       queryStatus:
-        description: 查询状态|
-          all：全部的<br/>
-          active：活跃中的<br/>
-          candidate：候选中的<br/>
+        description: Query status |
+          all-all<br/>
+          active-active<br/>
+          candidate-candidate<br/>
         type: string
   AliveStakingDetail:
     type: object
-    description: 活跃中的节点详情
+    description: Active node details
     properties:
       ranking:
-        description: 排行
+        description: ranking
         type: integer
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 验证人名称
+        description: Validator name
         type: string
       stakingIcon:
-        description: 验证人图标
+        description: Validator icon
         type: string
       status:
-        description: 状态 1:候选中 2:活跃中 3:出块中
+        description: Status 1-Candidate 2-Active 3-Block produced
         type: integer
       totalValue:
-        description: 质押总数=有效的质押+委托
+        description: Total number of pledges = valid pledges + delegation
         type: string
       delegateValue:
-        description: 委托总金额数=委托交易总金额(犹豫期金额)+委托交易总金额(锁定期金额)
+        description: The total amount of entrusted transactions = the total amount of entrusted transactions (amount during the hesitation period) + the total amount of entrusted transactions (amount during the lock-in period)
         type: string
       delegateQty:
-        description: 委托人数（地址数）
+        description: Number of clients (number of addresses)
         type: integer
       slashLowQty:
-        description: 低出块率举报次数
+        description: Number of low block rate reports
         type: integer
       slashMultiQty:
-        description: 多签举报次数
+        description: Number of multi-sign reports
         type: integer
       blockQty:
-        description: 产生的区块数
+        description: Number of blocks generated
         type: integer
       expectedIncome:
-        description: 预计年收化率（从验证人加入时刻开始计算）
+        description: Estimated annual revenue rate (calculated from the time when the validator joins)
         type: string
       isRecommend:
-        description: 是否官方推荐
+        description: Is it officially recommended?
         type: boolean
       isInit:
-        description: 是否为初始节点
+        description: Is it an initial node?
         type: boolean
       deleAnnualizedRate:
-        description: 预计委托年化率
+        description: Estimated annual commission rate
         type: string
       delegatedRewardRatio:
-        description: 委托奖励比例
+        description: Delegation reward ratio
         type: string
       genBlocksRate:
-        description: 24小时出块率
+        description: 24-hour block production rate
         type: string
       Version:
-        description: 版本
+        description: Version
         type: string
   AliveStakingListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -2774,62 +2823,62 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       key:
-        description: 验证人名称
+        description: Validator name
         type: string
   HistoryStakingDetail:
     type: object
-    description: 历史节点详情
+    description: Historical node details
     properties:
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 验证人名称
+        description: Validator name
         type: string
       stakingIcon:
-        description: 验证人图标
+        description: Validator icon
         type: string
       status:
-        description: 状态 1:候选中 2:活跃中 3:出块中
+        description: Status 1-Candidate 2-Active 3-Block produced
         type: integer
       statDelegateReduction:
-        description: 待提取的委托
+        description: To be extracted entrust
         type: string
       slashLowQty:
-        description: 低出块率举报次数
+        description: Number of low block rate reports
         type: integer
       slashMultiQty:
-        description: 多签举报次数
+        description: Number of multi-sign reports
         type: integer
       blockQty:
-        description: 产生的区块数
+        description: Number of blocks generated
         type: integer
       leaveTime:
-        description: 退出时间
+        description: Exit time
         type: integer
       unlockBlockNum:
-        description: 预估解锁块高
+        description: Estimated unlock block height
         type: integer
   HistoryStakingListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -2840,119 +2889,119 @@ definitions:
     type: object
     properties:
       nodeId:
-        description: 节点地址(必填)
+        description: Node address(Required)
         type: string
   StakingDetail:
     type: object
-    description: 历史节点详情
+    description: Historical node details
     properties:
       nodeName:
-        description: 验证人名称
+        description: Validator name
         type: string
       stakingIcon:
-        description: 验证人图标
+        description: Validator icon
         type: string
       status:
-        description: 状态 1:候选中 2:活跃中 3:出块中
+        description: Status 1-Candidate 2-Active 3-Block produced
         type: integer
       totalValue:
-        description: 质押总数=有效的质押+委托
+        description: Total number of pledges = valid pledges + delegation
         type: string
       delegateValue:
-        description: 委托总数
+        description: Total number of entrust
         type: string
       stakingValue:
-        description: 自有质押（有效的质押数）
+        description: Own pledge (valid number of pledges)
         type: string
       delegateQty:
-        description: 委托人数
+        description: Number of clients
         type: integer
       slashLowQty:
-        description: 低出块率举报次数
+        description: Number of low block rate reports
         type: integer
       slashMultiQty:
-        description: 多签举报次数
+        description: Number of multi-sign reports
         type: integer
       blockQty:
-        description: 产生的区块数
+        description: Number of blocks generated
         type: integer
       expectBlockQty:
-        description: 预计的出块数
+        description: Estimated number of blocks produced
         type: integer
       expectedIncome:
-        description: 预计年收化率（从验证人加入时刻开始计算）
+        description: Estimated annual revenue rate (calculated from the time when the validator joins)
         type: string
       joinTime:
-        description: 加入时间
+        description: Join time
         type: integer
       verifierTime:
-        description: 进入共识验证轮次数
+        description: Enter the number of consensus verification rounds
         type: integer
       rewardValue:
-        description: 累计的收益
+        description: accumulated earnings
         type: string
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       stakingAddr:
-        description: 发起质押的账户地址
+        description: .
         type: string
       denefitAddr:
-        description: 收益地址
+        description: Revenue address
         type: string
       website:
-        description: 节点的第三方主页
+        description: Node’s third-party home page
         type: string
       details:
-        description: 节点的描述
+        description: Node description
         type: string
       externalId:
-        description: 身份证id
+        description: external Id
         type: string
       externalUrl:
-        description: 身份证url
+        description: external Url
         type: string
       stakingBlockNum:
-        description: 最新的质押交易块高
+        description: Latest staking transaction block high
         type: integer
       statDelegateReduction:
-        description: 待赎回委托数
+        description: Number of entrust to be redeemed
         type: string
       isInit:
-        description: 是否为初始节点
+        description: whether is an initial node
         type: boolean
       rewardPer:
-        description: 当前委托奖励比例
+        description: Current commission reward ratio
         type: string
       nextRewardPer:
-        description: 下一结算周期委托奖励比例
+        description: Commission reward ratio in the next settlement cycle
         type: string
       haveDeleReward:
-        description: 已领取委托奖励
+        description: Received commission reward
         type: string
       deleAnnualizedRate:
-        description: 预计委托年化率
+        description: Estimated annual commission rate
         type: string
       totalDeleReward:
-        description: 累积委托奖励
+        description: Cumulative commission rewards
         type: string
       deleRewardRed:
-        description: 待领取委托奖励
+        description: Commission rewards to be collected
         type: string
       genBlocksRate:
-        description: 24小时出块率
+        description: 24-hour block production rate
         type: string
       Version:
-        description: 版本
+        description: Version
         type: string
   StakingDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         type: array
@@ -2963,94 +3012,94 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       nodeId:
-        description: 节点ID(必填)
+        description: Node ID(Required)
         type: string
   StakingOptRecordDetail:
     type: object
-    description: 节点操作日志详情
+    description: Node operation log details
     properties:
       timestamp:
-        description: 创建时间
+        description: creation time
         type: string
       desc:
-        description: 操作描述(code表示)|
-          1 create 创建 <br/>
-          2 modify 修改<br/>
-          3 quit 退出<br/>
-          4 proposals 提案<br/>
-          5 vote 投票<br/>
-          6 signatures 双签<br/>
-          7 lowBlockRate 出块率低<br/>
+        description: Operation description (code representation)|
+          1 create create <br/>
+          2 modify modify<br/>
+          3 quit exit<br/>
+          4 proposals proposals<br/>
+          5 vote vote<br/>
+          6 signatures double signature<br/>
+          7 lowBlockRate The block rate is low<br/>
         type: string
       txHash:
-        description: 所属交易
+        description: belongs transaction
         type: string
       blockNumber:
-        description: 所属区块
+        description: belongs block
         type: integer
       type:
-        description: 操作描述(code表示)|
-          1 create 创建 <br/>
-          2 modify 修改<br/>
-          3 quit 退出<br/>
-          4 proposals 提案<br/>
-          5 vote 投票<br/>
-          6 signatures 双签<br/>
-          7 lowBlockRate 出块率低<br/>
+        description: Operation description (code representation)|
+          1 create create <br/>
+          2 modify modify<br/>
+          3 quit exit<br/>
+          4 proposals proposals<br/>
+          5 vote vote<br/>
+          6 signatures double signature<br/>
+          7 lowBlockRate The block rate is low<br/>
         type: string
       id:
-        description: 提案id
+        description: proposal id
         type: string
       title:
-        description: 提案标题
+        description: Proposal title
         type: string
       option:
-        description: 提案选项
+        description: Proposal options
         type: string
       percent:
-        description: 处罚百分比
+        description: Penalty percentage
         type: string
       amount:
-        description: 处罚金额
+        description: Penalty amount
         type: string
       isFire:
-        description: 是否踢出列表  0-否，1-是
+        description: Whether to kick out the list 0-no, 1-yes
         type: integer
       expectedIncome:
-        description: 预计年收化率（从验证人加入时刻开始计算）
+        description: Estimated annual revenue rate (calculated from the time when the validator joins)
         type: string
       version:
-        description: 版本号
+        description: version
         type: integer
       proposalType:
-        description: 提案类型
+        description: proposal Type
         type: string
       beforeRate:
-        description: 原委托奖励比例
+        description: Original commission reward ratio
         type: string
       afterRate:
-        description: 修改后委托奖励比例
+        description: Delegation reward ratio after modification
         type: string
   StakingOptRecordListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3061,50 +3110,50 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       nodeId:
-        description: 节点ID(必填)
+        description: Node ID(Required)
         type: string
       stakingBlockNum:
-        description: 最新的质押交易块高
+        description: Latest staking transaction block high
         type: integer
   DelegationListByStakingDetail:
     type: object
-    description: 委托详情
+    description: Commission details
     properties:
       delegateAddr:
-        description: 委托人地址 （delegation表）
+        description: Principal address (delegation table)
         type: string
       delegateValue:
-        description: 委托金额 （delegation表 delegate_hes+delegate_locked）
+        description: Delegation amount (delegation table delegate_hes+delegate_locked)
         type: string
       delegateTotalValue:
-        description: 验证人委托的总金额（staking表 delegate_hes+delegate_locked）
+        description: delegate Total Value（staking table delegate_hes+delegate_locked）
         type: string
       delegateLocked:
-        description: 已锁定委托（LAT）如果关联的验证人状态正常则正常显示，如果其他情况则为零（delegation）
+        description: Locked delegation (TURN) is displayed normally if the associated validator status is normal, and zero if otherwise (delegation)
         type: string
       delegateReleased:
-        description: 当前验证人待赎回委托
+        description: The current validator’s delegation to be redeemed
         type: string
   DelegationListByStakingListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3115,56 +3164,56 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       address:
-        description: 委托地址(必填)
+        description: Delegation address (Required)
         type: string
   DelegationListByAddressDetail:
     type: object
-    description: 委托详情
+    description: Commission details
     properties:
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 节点名称
+        description: node Name
         type: string
       delegateValue:
-        description: 委托数量（delegation表 delegateHes+delegateLocked）
+        description: Number of delegates (delegation table delegateHes+delegateLocked)
         type: string
       delegateHas:
-        description: 未锁定委托（LAT） 如果关联的验证人状态正常则正常显示，如果其他情况则为零 （delegation）
+        description: Unlocked delegation (TURN) Displayed normally if the associated validator status is normal, zero if otherwise (delegation)
         type: string
       delegateLocked:
-        description: 已锁定委托（LAT）如果关联的验证人状态正常则正常显示，如果其他情况则为零（delegation）
+        description: Locked delegation (TURN) is displayed normally if the associated validator status is normal, and zero if otherwise (delegation)
         type: string
       delegateUnlock:
-        description: 已解除委托（LAT）  如果关联的验证人状态退出中或已退出则为delegateHas+delegateLocked，如果其他情况则为0（delegation）
+        description: Delegated (TURN) If the associated validator status is exiting or has exited, it is delegateHas+delegateLocked, and if otherwise, it is 0 (delegation)
         type: string
       delegateReleased:
-        description: 待赎回委托（LAT） （delegation表）
+        description: Delegation to be redeemed (TURN) (delegation table)
         type: string
       delegateClaim:
-        description: 待领取委托（LAT）
+        description: Commission to be collected (TURN)
         type: string
   DelegationListByAddressListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3175,164 +3224,164 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       key:
-        description: 验证人名称
+        description: Validator name
         type: string
   LockedStakingDetail:
     type: object
-    description: 锁定节点详情
+    description: Lock node details
     properties:
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 节点名称
+        description: node Name
         type: string
       stakingIcon:
-        description: 验证人图标
+        description: Validator icon
         type: string
       status:
-        description: 状态 6:已锁定
+        description: Status 6-Locked
         type: integer
       statDelegateReduction:
-        description: 待提取的委托
+        description: To be extracted entrust
         type: string
       slashLowQty:
-        description: 低出块率举报次数
+        description: Number of low block rate reports
         type: integer
       slashMultiQty:
-        description: 多签举报次数
+        description: Number of multi-sign reports
         type: integer
       leaveTime:
-        description: 退出时间
+        description: Exit time
         type: integer
       blockQty:
-        description: 产生的区块数
+        description: Number of blocks generated
         type: integer
       unlockBlockNum:
-        description: 预估解锁块高
+        description: Estimated unlock block height
         type: integer
   LockedStakingListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
         items:
           $ref: '#/definitions/LockedStakingDetail'
 
-  #交易相关
+  #Transaction related
   TransactionListParam:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   TransactionDetail:
     type: object
-    description: 交易详情
+    description: Transaction Details
     properties:
       txHash:
-        description: 交易hash
+        description: transaction hash
         type: string
       from:
-        description: 发送方地址（操作地址）
+        description: Sender address (operation address)
         type: string
       to:
-        description: 接收方地址
+        description: Receiver address
         type: string
       value:
-        description: 金额(单位:von)
+        description: Amount(unit:AAA)
         type: string
       actualTxCost:
-        description: 交易费用(单位:von)
+        description: Transaction fees (unit:AAA)
         type: string
       txType:
-        description: 交易类型
+        description: Transaction Type
         type: string
         enum:
-          - 0-转账
-          - 1-合约发布(合约创建)
-          - 2-合约调用(合约执行)
-          - 21-合约销毁
-          - 4-其他
-          - 5-MPC交易
-          - 6-erc20合约创建
-          - 7-erc20合约执行
-          - 8-erc721合约创建
-          - 9-erc721合约执行
-          - 1000-发起质押 (创建验证人)
-          - 1001-修改质押信息(修改验证人)
-          - 1002-增持质押(增持自由质押)
-          - 1003-撤销质押(退出验证人)
-          - 1004-发起委托 (委托)
-          - 1005-减持/撤销委托(赎回委托)
-          - 2000-提交文本提案 (创建提案)
-          - 2001-提交升级提案(提交提案)
-          - 2002-提交参数提案(提交提案-去除暂时不要)
-          - 2003-给提案投票(提案投票)
-          - 2004-版本声明
-          - 2005-取消提案
-          - 3000-举报多签(举报验证人)
-          - 4000-创建锁仓计划(创建锁仓)
-          - 5000-领取奖励
+          - 0-Transfer
+          - 1-Contract release (contract creation)
+          - 2-Contract call (contract execution)
+          - 21-Contract destruction
+          - 4-Others
+          - 5-MPC transaction
+          - 6-erc20 contract creation
+          - 7-erc20 contract execution
+          - 8-erc721 contract creation
+          - 9-erc721 contract execution
+          - 1000-initiate pledge (create validator)
+          - 1001-Modify pledge information (modify validator)
+          - 1002-Pledge of increased holdings (free pledge of increased holdings)
+          - 1003-Revoke pledge (exit validator)
+          - 1004-Initiate delegation (commission)
+          - 1005-Reduction of holdings/cancellation of entrustment (redemption entrustment)
+          - 2000-Submit text proposal (Create proposal)
+          - 2001-Submit upgrade proposal (submit proposal)
+          - 2002-Submit parameter proposal (submit proposal-remove temporarily)
+          - 2003-Vote for proposals (proposal voting)
+          - 2004-Version Statement
+          - 2005-Cancellation of proposal
+          - 3000-Report multi-signature (report verifier)
+          - 4000-Create a lock-up plan (create a lock-up)
+          - 5000- claim the reward
       serverTime:
-        description: 服务器时间
+        description: server Time
         type: integer
       timestamp:
-        description: 出块时间
+        description: Block time
         type: integer
       blockNumber:
-        description: 交易所在区块高度
+        description: transaction belongs block height
         type: integer
       failReason:
-        description: 失败原因
+        description: fail Reason
         type: string
       receiveType:
-        description: 此字段表示的是to字段存储的账户类型，前端页面在点击接收方的地址时，根据此字段来决定是跳转到账户详情还是合约详情
+        description: This field represents the account type stored in the to field. When the front-end page clicks on the recipient's address, it will decide whether to jump to the account details or contract details based on this field.
         type: string
         enum:
-          - account-钱包地址
-          - contract-合约地址
+          - account-wallet address
+          - contract-Contract address
       txReceiptStatus:
-        description: 交易状态 1-成功 0-失败
+        description: Transaction status 1-success 0-failure
         type: string
   TransactionListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       displayTotalCount:
-        description: 显示总数
+        description: Show total
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3343,372 +3392,372 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       blockNumber:
-        description: 区块号(必填)
+        description: block Number(Required)
         type: integer
       txType:
-        description: 交易类型 (可选), 如不不传代表全部。
+        description: Transaction Type (Optional), If not, it means all.
         type: string
         enum:
-          - transfer：交易
-          - delegate：委托相关交易
-          - staking：验证人相关交易
-          - proposal：治理相关交易
+         - transfer: transaction
+         - delegate: delegate related transactions
+         - staking: validator related transactions
+         - proposal: governance related transactions
   TransactionListByAddressParam:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       address:
-        description: 地址(必填)
+        description: address(Required)
         type: string
       txType:
-        description: 交易类型 (可选), 如不不传代表全部。
+        description: Transaction Type (Optional), If not, it means all.
         type: string
         enum:
-          - transfer：交易
-          - delegate：委托相关交易
-          - staking：验证人相关交易
-          - proposal：治理相关交易
+         - transfer: transaction
+         - delegate: delegate related transactions
+         - staking: validator related transactions
+         - proposal: governance related transactions
 
   TransactionDetailsParam:
     type: object
     properties:
       txHash:
-        description: 交易Hash(必填)
+        description: transaction hash(Required)
         type: string
   TransactionDetails:
     type: object
-    description: 交易详情
+    description: Transaction Details
     properties:
       txHash:
-        description: 交易hash
+        description: transaction hash
         type: string
       from:
-        description: 发送方地址（操作地址）
+        description: Sender address (operation address)
         type: string
       to:
-        description: 接收方地址
+        description: Receiver address
         type: string
       timestamp:
-        description: 交易时间
+        description: transaction time
         type: integer
       serverTime:
-        description: 服务器时间
+        description: server Time
         type: integer
       confirmNum:
-        description: 区块确认数
+        description: Number of block confirmations
         type: integer
       blockNumber:
-        description: 交易所在区块高度
+        description: transaction belongs block height
         type: integer
       gasLimit:
-        description: 能量限制
+        description: gas Limit
         type: integer
       gasUsed:
-        description: 能量消耗
+        description: gas Used
         type: integer
       gasPrice:
-        description: 能量价格
+        description: gas Price
         type: string
       value:
-        description: 金额(单位:von)
+        description: Amount(unit:AAA)
         type: string
       actualTxCost:
-        description: 交易费用(单位:von)
+        description: transaction fees (unit:AAA)
         type: string
       txType:
-        description: 交易类型
+        description: Transaction Type
         type: string
         enum:
-          - 0-转账
-          - 1-合约发布(合约创建)
-          - 2-合约调用(合约执行)
-          - 21-合约销毁
-          - 4-其他
-          - 5-MPC交易
-          - 6-erc20合约创建
-          - 7-erc20合约执行
-          - 8-erc721合约创建
-          - 9-erc721合约执行
-          - 1000-发起质押 (创建验证人)
-          - 1001-修改质押信息(修改验证人)
-          - 1002-增持质押(增持自由质押)
-          - 1003-撤销质押(退出验证人)
-          - 1004-发起委托 (委托)
-          - 1005-减持/撤销委托(赎回委托)
-          - 2000-提交文本提案 (创建提案)
-          - 2001-提交升级提案(提交提案)
-          - 2002-提交参数提案(提交提案-去除暂时不要)
-          - 2003-给提案投票(提案投票)
-          - 2004-版本声明
-          - 2005-取消提案
-          - 3000-举报多签(举报验证人)
-          - 4000-创建锁仓计划(创建锁仓)
-          - 5000-领取奖励
+          - 0-Transfer
+          - 1-Contract release (contract creation)
+          - 2-Contract call (contract execution)
+          - 21-Contract destruction
+          - 4-Others
+          - 5-MPC transaction
+          - 6-erc20 contract creation
+          - 7-erc20 contract execution
+          - 8-erc721 contract creation
+          - 9-erc721 contract execution
+          - 1000-initiate pledge (create validator)
+          - 1001-Modify pledge information (modify validator)
+          - 1002-Pledge of increased holdings (free pledge of increased holdings)
+          - 1003-Revoke pledge (exit validator)
+          - 1004-Initiate delegation (commission)
+          - 1005-Reduction of holdings/cancellation of entrustment (redemption entrustment)
+          - 2000-Submit text proposal (Create proposal)
+          - 2001-Submit upgrade proposal (submit proposal)
+          - 2002-Submit parameter proposal (submit proposal-remove temporarily)
+          - 2003-Vote for proposals (proposal voting)
+          - 2004-Version Statement
+          - 2005-Cancellation of proposal
+          - 3000-Report multi-signature (report verifier)
+          - 4000-Create a lock-up plan (create a lock-up)
+          - 5000- claim the reward
       input:
-        description: 附加输入数据
+        description: Additional input data
         type: string
       txInfo:
-        description: 附加输入数据解析后的结构
+        description: Attach the parsed structure of the input data
         type: string
       failReason:
-        description: 失败原因
+        description: fail Reason
         type: string
       first:
-        description: 是否第一条记录
+        description: whether is the first record
         type: boolean
       preHash:
-        description: 前一交易HASH
+        description: pre transaction HASH
         type: string
       last:
-        description: 是否最后一条记录
+        description: whether is the last record
         type: boolean
       nextHash:
-        description: 下一交易HASH
+        description: next transaction HASH
         type: string
       toType:
-        description: 此字段表示的是to字段存储的账户类型, 前端页面在点击接收方的地址时，根据此字段来决定是跳转到账户详情还是合约详情.
+        description: This field represents the account type stored in the to field. When the front-end page clicks on the recipient's address, it will decide whether to jump to the account details or contract details based on this field.
         type: string
         enum:
-          - 1-账号
-          - 2-内置合约
-          - 3-EVM合约
-          - 4-WASM合约
+          - 1-Account
+          - 2-Built-in contract
+          - 3-EVM Contract
+          - 4-WASM Contract
           - 5-EVM-Token
           - 6-WASM-Token
       contractType:
-        description: 合约类型
+        description: Contract type
         type: integer
         enum:
-          - 3-EVM合约
-          - 4-WASM合约
+          - 3-EVM Contract
+          - 4-WASM Contract
           - 5-EVM-Token
           - 6-WASM-Token
       contractName:
-        description: 合约名称
+        description: Contract name
         type: string
       method:
-        description: 合约调用函数
+        description: Contract call function
         type: string
-      # 可选信息开始
+      # Optional message starts
       RPAccount:
-        description: 锁仓计划的地址
+        description: The address of the lock-up plan
         type: string
       RPNum:
-        description: 锁仓数量
+        description: Locked quantity
         type: string
       RPPlan:
-        description: 锁仓计划列表
+        description: List of lock-up plans
         type: array
         items:
           $ref: '#/definitions/Rpplan'
       evidences:
-        description: 举报的证据
+        description: Evidence of reporting
         type: array
         items:
           $ref: '#/definitions/Evidence'
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 节点名称
+        description: node Name
         type: string
       benefitAddr:
-        description: 用于接受出块奖励和质押奖励的收益账户
+        description: Income account used to receive block rewards and staking rewards
         type: string
       externalId:
-        description: 外部Id(有长度限制，给第三方拉取节点描述的Id)
+        description: External ID (with length limit, used to pull the ID of the node description to a third party)
         type: string
       website:
-        description: 节点的第三方主页(有长度限制，表示该节点的主页)
+        description: Node’s third-party home page(There is a length limit, indicating the homepage of the node)
         type: string
       details:
-        description: 节点的描述(有长度限制，表示该节点的描述)
+        description: Node description(There is a length limit, indicating the homepage of the node)
         type: string
       programVersion:
-        description: 程序的真实版本，治理rpc获取
+        description: The real version of the program, obtained by governance rpc
         type: string
       applyAmount:
-        description: 申请赎回的金额
+        description: Amount requested for redemption
         type: string
       redeemLocked:
-        description: 赎回中被锁定的金额  staing staking_reduction
+        description: Amount locked in redemption  staing staking_reduction
         type: string
       redeemStatus:
-        description: 赎回状态， 1： 退回中   2：退回成功
+        description: Redemption status, 1-Returning in progress 2-Returning successfully
         type: integer
       redeemUnLockedBlock:
-        description: 预计赎回到账的区块  staing (staking_reduction_epoch+节点质押退回锁定周期（是否包含当前）)*结算周期区块数(C)
+        description: Blocks expected to be redeemed  staing (staking_reduction_epoch+node pledge reduction locking period (whether including the current one)*number of blocks in the settlement period (C)
         type: integer
       proposalUrl:
-        description: 提案的github地址  https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md  eip-100为提案id
+        description: The github address of the proposal  https://github.com/ethereum/EIPs/blob/master/EIPS/eip-100.md  eip-100为proposal id
         type: string
       proposalHash:
-        description: 提案id
+        description: proposal id
         type: string
       proposalOption:
-        description: 投票  1：文本提案 2：升级提案 3：参数提案
+        description: Voting 1-Text proposal 2-Upgrade proposal 3-Parameter proposal
         type: integer
       proposalNewVersion:
-        description: 升级提案的版本
+        description: Upgrade proposal version
         type: string
       declareVersion:
-        description: 声明的版本
+        description: declared version
         type: string
       txReceiptStatus:
-        description: 交易状态 1:成功 0：失败
+        description: Transaction status 1-Success 0-Failure
         type: integer
       evidence:
-        description: 证据
+        description: evidence
         type: string
       reportType:
-        description: 举报类型:1：prepareBlock，2：prepareVote，3：viewChange
+        description: report Type:1：prepareBlock，2：prepareVote，3：viewChange
         type: integer
       reportRewards:
-        description: 举报奖励
+        description: report Rewards
         type: string
       reportStatus:
-        description: 举报状态 1：失败 2：成功
+        description: reportStatus 2-Success 1-Failure
         type: integer
       pipNum:
-        description: 提案pip编号
+        description: Proposal pip number
         type: string
       proposalStatus:
-        description: 提案状态 1：投票中 2：通过 3：失败 4：预升级 5：升级完成
+        description: Proposal status 1-Voting 2-Passed 3-Failed 4-Pre-upgrade 5-Upgrade completed
         type: integer
       proposalTitle:
-        description: 提案标题
+        description: Proposal title
         type: string
       txAmount:
-        description: 交易金额包括质押数量、提取数量
+        description: The transaction amount includes the pledged quantity and the withdrawal quantity
         type: string
       voteStatus:
-        description: 投票选项 1:支持  2:反对 3:弃权
+        description: Voting options 1-Support 2-Oppose 3-Abstain
         type: integer
       delegationRatio:
-        description: 委托比例
+        description: Commission ratio
         type: string
       erc20Params:
-        description: ERC20参数
+        description: ERC20 parameters
         type: array
         items:
           $ref: '#/definitions/Erc20Params'
       erc721Params:
-        description: ERC20参数
+        description: ERC721 parameters
         type: array
         items:
           $ref: '#/definitions/Erc721Params'
       rewards:
-        description: 领取奖励
+        description: rewards
         type: array
         items:
           $ref: '#/definitions/Reward'
-      # 可选信息结束
+      # End of optional information
   RPPlan:
     type: object
     properties:
       epoch:
-        description: 锁仓周期
+        description: Lock-up period
         type: integer
       amount:
-        description: 锁定金额
+        description: Locked amount
         type: string
       blockNumber:
-        description: 锁仓周期对应快高  结束周期 * epoch
+        description: The lock-up period corresponds to the fast high end period * epoch
         type: integer
   Evidence:
     type: object
     properties:
       verify:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 被举报的节点名称
+        description: Reported node Name
         type: string
   Erc20Params:
     type: object
     properties:
       innerTxFrom:
-        description: 内部交易from
+        description: Insider transactions from
         type: string
       innerTxTo:
-        description: 内部交易to
+        description: Insider transactions to
         type: string
       innerValue:
-        description: 内部交易金额
+        description: Insider transactions amount
         type: string
       innerContractAddr:
-        description: 内部交易对应地址
+        description: Insider transactions contract address
         type: string
       innerContractName:
-        description: 内部交易对应名称
+        description: Insider transactions contract name
         type: string
       innerSymbol:
-        description: 内部交易对应符号
+        description: Insider transactions symbol
         type: string
   Erc721Params:
     type: object
     properties:
       innerTxFrom:
-        description: 内部交易from
+        description: Insider transactions from
         type: string
       innerTxTo:
-        description: 内部交易to
+        description: Insider transactions to
         type: string
       innerValue:
-        description: 内部交易金额
+        description: Insider transactions amount
         type: string
       innerContractAddr:
-        description: 内部交易对应地址
+        description: Insider transactions contract address
         type: string
       innerContractName:
-        description: 内部交易对应名称
+        description: Insider transactions contract name
         type: string
       innerSymbol:
-        description: 内部交易对应符号
+        description: Insider transactions symbol
         type: string
       innerImage:
-        description: 内部交易对应的图片
+        description: Insider transactions image
         type: string
   Reward:
     type: object
     properties:
       verify:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 节点名称
+        description: node Name
         type: string
       reward:
-        description: 领取的奖励
+        description: Rewards received
         type: string
   TransactionDetailsResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       displayTotalCount:
-        description: 显示总数
+        description: Show total
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3719,29 +3768,29 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       address:
-        description: 地址(必填)
+        description: address(Required)
         type: string
   QueryClaimByAddressDetail:
     type: object
-    description: 领取奖励详情
+    description: Get reward details
     properties:
       txHash:
-        description: 交易hash
+        description: transaction hash
         type: string
       allRewards:
-        description: 总奖励
+        description: total reward
         type: string
       timestamp:
-        description: 交易时间
+        description: transaction time
         type: integer
       rewardsDetails:
-        description: 领取奖励
+        description: Receive award
         type: array
         items:
           $ref: '#/definitions/RewardDetail'
@@ -3749,22 +3798,22 @@ definitions:
     type: object
     properties:
       verify:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 节点名称
+        description: node Name
         type: string
       reward:
-        description: 领取的奖励
+        description: Rewards received
         type: string
   QueryClaimByAddressListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         type: array
@@ -3775,115 +3824,115 @@ definitions:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       nodeId:
-        description: 节点id(必填)
+        description: Node ID(Required)
         type: string
   QueryClaimByStakingDetail:
     type: object
     properties:
       verify:
-        description: 节点id
+        description: Node ID
         type: string
       addr:
-        description: 委托者地址
+        description: entrust address
         type: string
       time:
-        description: 领取时间
+        description: received time
         type: integer
       reward:
-        description: 领取奖励
+        description: Receive award
         type: string
   QueryClaimByStakingListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
         items:
           $ref: '#/definitions/QueryClaimByStakingDetail'
-  #内置地址
+  #inner address
   PageReq:
     type: object
-    description: 内置地址列表查询参数对象
+    description: Internal address list query parameter object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
   InternalAddressRespResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/internalAddressBaseResp'
   internalAddressBaseResp:
     type: object
-    description: 内置地址列表响应参数对象
+    description: Internal address list response parameter object
     properties:
       totalBalance:
-        description: 基金会账户总余额
+        description: Total balance of foundation account
         type: number
       totalRestrictingBalance:
-        description: 基金会账户总锁仓余额
+        description: Total locked balance of foundation account
         type: number
       InternalAddressBaseResp:
-        description: 基金会账户列表
+        description: Foundation account list
         type: array
         items:
           $ref: '#/definitions/InternalAddress'
   InternalAddress:
     type: object
-    description: 基金会账户
+    description: Foundation account
     properties:
       address:
-        description: 基金会账户地址
+        description: Foundation account address
         type: string
       type:
-        description: 地址类型 :0-基金会账户  1-锁仓合约地址  2-质押合约  3-激励池合约  6-委托奖励池合约
+        description: Address type 0-Foundation account 1-Lock Contract address 2-Pledge contract 3-Incentive pool contract 6-Delegation reward pool contract
         type: integer
       balance:
-        description: 余额
+        description: balance
         type: number
       restrictingBalance:
-        description: 锁仓余额
+        description: Locked balance
         type: number
       createTime:
-        description: 创建时间
+        description: creation time
         type: string
       updateTime:
-        description: 修改时间
+        description: update time
         type: string
   MicroNodeStatisticResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         $ref: '#/definitions/MicroNodeStatisticDetail'
@@ -3891,25 +3940,25 @@ definitions:
     type: object
     properties:
       stakingValue:
-        description: 质押总数
+        description: Total number of pledges
         type: string
   AliveMicroNodeListReqParam:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       key:
-        description: 验证人名称
+        description: Validator name
         type: string
       queryStatus:
-        description: 查询状态|
-          all：全部的<br/>
-          exited：已退出的<br/>
-          candidate：候选中的<br/>
+        description: Query status |
+          all- all<br/>
+          exited- exited<br/>
+          candidate- candidate<br/>
         type: string
       bubbleId:
         description: bubbleId
@@ -3918,16 +3967,16 @@ definitions:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 总数
+        description: total Count
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -3935,43 +3984,43 @@ definitions:
           $ref: '#/definitions/AliveMicroNodeDetail'
   AliveMicroNodeDetail:
     type: object
-    description: 活跃中的节点详情
+    description: Active node details
     properties:
       ranking:
-        description: 排行
+        description: ranking
         type: integer
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       nodeName:
-        description: 微节点名称
+        description: micro node Name
         type: string
       status:
-        description: 状态 1:候选中 2:已退出
+        description: Status 1-Candidate 2-Exited
         type: integer
       bubbleId:
-        description: 子网络id
+        description: sub chain id
         type: long
       totalValue:
-        description: 质押总数
+        description: Total number of pledges
         type: string
       Version:
-        description: 版本
+        description: Version
         type: string
   MicroNodeDetailsParam:
     type: object
     properties:
       nodeId:
-        description: 节点地址(必填)
+        description: Node address(Required)
         type: string
   MicroNodeDetailResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       data:
         type: array
@@ -3979,55 +4028,55 @@ definitions:
           $ref: '#/definitions/MicroNodeDetail'
   MicroNodeDetail:
     type: object
-    description: 微节点详情
+    description: Micro Node Detail
     properties:
       nodeName:
-        description: 微节点名称
+        description: micro node Name
         type: string
       status:
-        description: 状态 1:候选中 2:已退出
+        description: Status 1-Candidate 2-Exited
         type: integer
       totalValue:
-        description: 质押总数
+        description: Total number of pledges
         type: string
       nodeId:
-        description: 节点id
+        description: Node ID
         type: string
       operationAddr:
-        description: 操作地址
+        description: operation Address
         type: string
       beneficiary:
-        description: 收益地址
+        description: beneficiary
         type: string
       Version:
-        description: 版本
+        description: Version
         type: string
   MicroNodeOptRecordListParam:
     type: object
     properties:
       pageNo:
-        description: 页数(必填)
+        description: Number of pages (required)
         type: integer
       pageSize:
-        description: 页大小(必填)
+        description: Page size (required)
         type: integer
       nodeId:
-        description: 节点ID(必填)
+        description: Node ID(Required)
         type: string
   MicroNodeOptRecordListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -4035,47 +4084,47 @@ definitions:
           $ref: '#/definitions/MicroNodeOptRecordDetail'
   MicroNodeOptRecordDetail:
     type: object
-    description: 节点操作日志详情
+    description: Node operation log details
     properties:
       timestamp:
-        description: 创建时间
+        description: creation time
         type: string
       txHash:
-        description: 所属交易
+        description: belongs transatcion hash
         type: string
       blockNumber:
-        description: 所属区块
+        description: belongs block number
         type: integer
       type:
-        description: 操作描述(code表示)|
-          1 create 创建 <br/>
-          2 edit 修改<br/>
-          3 quit 退出<br/>
+        description: Operation description (code representation)|
+          1 create create <br/>
+          2 edit modify<br/>
+          3 quit exit<br/>
         type: string
-  #游戏
+  #game
   QueryAddrGameListReq:
     type: object
     properties:
       address:
-        description: 地址(必填)
+        description: address(Required)
         type: string
       roundId:
-        description: 回合id
+        description: round id
         type: long
   AddrGameListResult:
     type: object
     properties:
       errMsg:
-        description: 描述信息
+        description: Error message
         type: string
       code:
-        description: 成功（0），失败则有相关失败码
+        description: Success (0), failure will have related failure code
         type: integer
       totalCount:
-        description: 记录总数
+        description: total number of records
         type: integer
       totalPages:
-        description: 总页数
+        description: total pages
         type: integer
       data:
         type: array
@@ -4083,26 +4132,171 @@ definitions:
           $ref: '#/definitions/AddrGameDetailResp'
   AddrGameDetailResp:
     type: object
-    description: 节点操作日志详情
+    description: Node operation log details
     properties:
       address:
-        description: 地址
+        description: address
         type: string
       roundId:
-        description: 回合id
+        description: round id
         type: long
       gameContractAddress:
-        description: 游戏合约地址
+        description: game Contract address
         type: string
       bubbleId:
-        description: 子网络id
+        description: sub chain id
         type: long
       tokenAddress:
-        description: 代币合约地址
+        description: token Contract address
         type: string
       tokenSymbol:
-        description: 代币符号
+        description: token Symbol
         type: string
       tokenDecimal:
-        description: 代币精度
+        description: token Decimal
         type: integer
+  #sub chain
+  SubChainRecordListReq:
+    type: object
+    description: Sub-chain transaction record list request
+    properties:
+      address:
+        description: address
+        type: string
+  SubChainTxRecordListResp:
+    type: object
+    description: Sub-chain transaction record list response
+    properties:
+      txHash:
+        description: transaction hash
+        type: string
+      from:
+        description: Sender address (operation address)
+        type: string
+      to:
+        description: Receiver address
+        type: string
+      seq:
+        description: seq
+        type: long
+      value:
+        description: amount
+        type: string
+      actualTxCost:
+        description: transaction fees
+        type: string
+      txType:
+        description: Transaction Type 2-contract call
+        type: string
+      serverTime:
+        description: server Time
+        type: long
+      timestamp:
+        description: Block time
+        type: long
+      blockNumber:
+        description: transaction belongs block height
+        type: long
+      failReason:
+        description: fail Reason
+        type: string
+      bubbleId:
+        description: sub chain id
+        type: long
+      txReceiptStatus:
+        description: transaction status
+        type: integer
+  SubChainTransactionDetailsReq:
+    type: object
+    description: Sub-chain transaction record details request
+    properties:
+      txHash:
+        description: transaction hash
+        type: string
+      bubbleId:
+        description: sub chain id
+        type: long
+  SubChainTxDetailsResp:
+    type: object
+    description: Sub-chain transaction record details response
+    properties:
+      txHash:
+        description: transaction hash
+        type: string
+      from:
+        description: Sender address (operation address)
+        type: string
+      gasLimit:
+        description: gas Limit
+        type: string
+      gasUsed:
+        description: gas Used
+        type: string
+      gasPrice:
+        description: gas Price
+        type: string
+      input:
+        description: Additional input data
+        type: string
+      txInfo:
+        description: Additional input data parsed structure
+        type: string
+      to:
+        description: Receiver address
+        type: string
+      seq:
+        description: seq
+        type: long
+      value:
+        description: admount
+        type: string
+      actualTxCost:
+        description: transaction fees
+        type: string
+      txType:
+        description: Transaction Type 2-contract call
+        type: string
+      serverTime:
+        description: server Time
+        type: long
+      timestamp:
+        description: Block time
+        type: long
+      blockNumber:
+        description: Transaction belongs block height
+        type: long
+      failReason:
+        description: fail Reason
+        type: string
+      bubbleId:
+        description: sub chain id
+        type: long
+      txReceiptStatus:
+        description: Transaction status
+        type: integer
+      method:
+        description: transaction call function
+        type: string
+      contractName:
+        description: Contract name
+        type: string
+      subChainTopics:
+        type: SubChainTxTopic
+        items:
+          $ref: '#/definitions/SubChainTxTopic'
+  SubChainTxTopic:
+    type: object
+    description: sub chain topic
+    properties:
+      address:
+        description: Contract address
+        type: string
+      topic:
+        description: topic
+        type: string
+      event:
+        description: event
+        type: string
+      data:
+        description: data
+        type: string

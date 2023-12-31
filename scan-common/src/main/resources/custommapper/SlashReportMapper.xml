@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.SlashBusinessMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.SlashBusinessMapper">
     <update id="setException">
-        /*把节点设置为双签异常*/
-        /*2、更新质押*/
         update `staking`
         set `exception_status` = 3
         where `node_id` = #{nodeId}
           and `staking_block_num` = #{stakingBlockNum};
-        /*3、更新节点*/
         update `node`
         set `exception_status` = 3
         where `node_id` = #{nodeId}
           and `staking_block_num` = #{stakingBlockNum};
     </update>
 
-    <select id="getException" resultType="com.platon.browser.dao.entity.Staking">
-        /*查询双签异常节点*/
+    <select id="getException" resultType="com.turn.browser.dao.entity.Staking">
         select `node_id` as nodeId,
         `staking_block_num` as stakingBlockNum
         from staking
@@ -24,8 +20,7 @@
         <foreach open="(" collection="list" item="nodeId" separator="," close=")">#{nodeId}</foreach>
         and `exception_status` = 3;
     </select>
-    <update id="slashNode" parameterType="com.platon.browser.bean.CusSlash">
-        /*1、更新委托*/
+    <update id="slashNode" parameterType="com.turn.browser.bean.CusSlash">
         update `delegation` set
         `delegate_released` = `delegate_released` + `delegate_hes` + `delegate_locked`,
         `delegate_hes` = 0,
@@ -33,7 +28,6 @@
         where `node_id` = #{nodeId}
         and `staking_block_num` = #{stakingBlockNum}
         and `is_history` = 2;
-        /*2、更新节点*/
         update `node` set
         `leave_time` = #{time},
         <if test="leaveNum != null">
@@ -54,7 +48,6 @@
         `is_settle` = 2,
         `exception_status`=5
         where `node_id` = #{nodeId};
-        /*3、更新质押*/
         update `staking` set
         `leave_time` = #{time},
         <if test="leaveNum != null">
@@ -73,7 +66,6 @@
         `exception_status`=5
         where `node_id` = #{nodeId}
         and `staking_block_num` = #{stakingBlockNum};
-        /*4、添加处罚记录*/
         update `slash` set
         `code_slash_value` = #{codeSlashValue},
         `code_reward_value` = #{codeRewardValue},
@@ -82,13 +74,11 @@
         where id = #{id};
     </update>
 
-    <update id="updateUnStakeFreezeDuration" parameterType="com.platon.browser.dao.param.ppos.Report">
-        /*2、更新节点*/
+    <update id="updateUnStakeFreezeDuration" parameterType="com.turn.browser.dao.param.ppos.Report">
         update `node`
         set `un_stake_freeze_duration` = #{unStakeFreezeDuration},
             `un_stake_end_block`       = #{unStakeEndBlock}
         where `node_id` = #{nodeId};
-        /*3、更新质押*/
         update `staking`
         set `un_stake_freeze_duration` = #{unStakeFreezeDuration},
             `un_stake_end_block`       = #{unStakeEndBlock}

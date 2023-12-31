@@ -1,10 +1,10 @@
 [
   {
     "BenefitAddress": "lax1zqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqrzpqayr",
-    "Details": "The PlatON Node",
+    "Details": "The Turn Node",
     "ExternalId": "",
     "NodeId": "75143a7d588c5db985711c7dd5cd322d5b8177a4a4fd4f112873b014a2e660c1b45ce5bbaec5448b5c6654c565d9377a4950922a864c1b6feb0126be968f4b28",
-    "NodeName": "platon.node.1",
+    "NodeName": "turn.node.1",
     "ProgramVersion": 1792,
     "Released": 10000000000000000000000000,
     "ReleasedHes": 0,
@@ -16,7 +16,7 @@
     "StakingEpoch": 0,
     "StakingTxIndex": 0,
     "Status": 0,
-    "Website": "www.platon.network"
+    "Website": "www.turn.network"
   },
   {
     "BenefitAddress": "lax1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqmscn5j",

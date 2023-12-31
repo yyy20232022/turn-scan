@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.EpochBusinessMapper">
-    <update id="settle" parameterType="com.platon.browser.dao.param.epoch.Settle">
+<mapper namespace="com.turn.browser.dao.custommapper.EpochBusinessMapper">
+    <update id="settle" parameterType="com.turn.browser.dao.param.epoch.Settle">
         <foreach collection="stakingList" item="staking">
-            /*2、更新节点*/
             update `node` set
             `staking_locked` = #{staking.stakingLocked},
             `staking_hes` = #{staking.stakingHes},
@@ -19,7 +18,6 @@
             `low_rate_slash_count` = #{staking.lowRateSlashCount},
             `node_apr`=#{staking.nodeApr}
             where `node_id` = #{staking.nodeId};
-            /*1、更新质押*/
             update `staking` set
             `staking_locked` = #{staking.stakingLocked},
             `staking_hes` = #{staking.stakingHes},
@@ -37,31 +35,27 @@
             where `node_id` = #{staking.nodeId}
             and staking_block_num = #{staking.stakingBlockNum};
         </foreach>
-        /*3、更新委托*/
         update `delegation` set
         `delegate_locked` = `delegate_hes` + `delegate_locked`,
         `delegate_hes` = 0
         where `is_history` = 2
         and `delegate_hes` > 0;
-        /*4、更新质押*/
         update `staking` set
         `stat_delegate_locked` = `stat_delegate_hes` + `stat_delegate_locked`,
         `stat_delegate_hes` = 0
         where `stat_delegate_hes` > 0;
 
         <foreach collection="exitNodeList" item="nodeId">
-            /*5、节点委托奖励累加*/
             update `node` set
             `pre_total_dele_reward` = `pre_total_dele_reward`+`total_dele_reward`
             where `node_id` = #{nodeId};
         </foreach>
         update `node` set `total_dele_reward`=0 where `status` = 3;
-        /*当修改委托奖励比例所在结算周期小于当前结算周期时，统一把reward_per替换为next_reward_per的值*/
         update node set reward_per=next_reward_per where next_reward_per_mod_epoch <![CDATA[ < ]]> #{settingEpoch};
         update staking set reward_per=next_reward_per where next_reward_per_mod_epoch <![CDATA[ < ]]> #{settingEpoch};
     </update>
 
-    <select id="findStaking" parameterType="list" resultType="com.platon.browser.dao.entity.Staking">
+    <select id="findStaking" parameterType="list" resultType="com.turn.browser.dao.entity.Staking">
         SELECT
         t1.node_id AS nodeId,
         t1.staking_block_num AS stakingBlockNum,
@@ -76,13 +70,11 @@
         AND t1.staking_block_num = t2.staking_block_num
     </select>
 
-    <update id="settleForStakingValue" parameterType="com.platon.browser.dao.param.epoch.Settle">
+    <update id="settleForStakingValue" parameterType="com.turn.browser.dao.param.epoch.Settle">
         <foreach collection="list" item="staking">
-            /*2、更新节点*/
             update `node` set
             `stat_staking_reward_value` = `stat_staking_reward_value` + #{staking.stakingRewardValue}
             where `node_id` = #{staking.nodeId};
-            /*1、更新质押*/
             update `staking` set
             `staking_reward_value` = `staking_reward_value` + #{staking.stakingRewardValue}
             where `node_id` = #{staking.nodeId}

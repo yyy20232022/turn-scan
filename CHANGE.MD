@@ -80,13 +80,13 @@
 4. 退出节点新增预估解锁块高；    
 5. agent启动时，检测Redis中是否存在ARC20交易，如果没有，则从ES同步ARC20交易至Redis；
 6. token持有者列表只显示余额大于0（持有数量大于0）的记录；  
-7. 错误码中英描述修改，与底层一致： http://192.168.9.66/Juzix-Platon-Doc/Dark/blob/develop/03-系统设计/01-架构设计/PlatON底层/内置合约错误码对照表.xlsx；
+7. 错误码中英描述修改，与底层一致： http://192.168.9.66/Juzix-Turn-Doc/Dark/blob/develop/03-系统设计/01-架构设计/Turn底层/内置合约错误码对照表.xlsx；
 8. 根据特殊节点返回的调账数据，对锁仓相关金额进行调整；
 
 #### 配置变更
 1. Redis命名空间移到最外层配置文件中配置 & 新增调账日志存储文件配置：
    ```
-    platon:
+    turn:
         #Redis命名空间
         redis-namespace: browser:${version}:${profile}
         #调账日志输出文件

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.TxDelegationRewardBakMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.TxDelegationRewardBak">
+<mapper namespace="com.turn.browser.dao.mapper.TxDelegationRewardBakMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.TxDelegationRewardBak">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="hash" jdbcType="VARCHAR" property="hash" />
     <result column="bn" jdbcType="BIGINT" property="bn" />
@@ -10,7 +10,7 @@
     <result column="cre_time" jdbcType="TIMESTAMP" property="creTime" />
     <result column="upd_time" jdbcType="TIMESTAMP" property="updTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.platon.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.turn.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
     <result column="extra" jdbcType="LONGVARCHAR" property="extra" />
     <result column="extra_clean" jdbcType="LONGVARCHAR" property="extraClean" />
   </resultMap>
@@ -78,7 +78,7 @@
   <sql id="Blob_Column_List">
     extra, extra_clean
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -94,7 +94,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -120,13 +120,13 @@
     delete from tx_delegation_reward_bak
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakExample">
     delete from tx_delegation_reward_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
     insert into tx_delegation_reward_bak (id, hash, bn, addr, 
       `time`, cre_time, upd_time, 
       extra, extra_clean)
@@ -134,7 +134,7 @@
       #{time,jdbcType=TIMESTAMP}, #{creTime,jdbcType=TIMESTAMP}, #{updTime,jdbcType=TIMESTAMP}, 
       #{extra,jdbcType=LONGVARCHAR}, #{extraClean,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
     insert into tx_delegation_reward_bak
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -195,7 +195,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakExample" resultType="java.lang.Long">
     select count(*) from tx_delegation_reward_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -264,7 +264,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
     update tx_delegation_reward_bak
     <set>
       <if test="hash != null">
@@ -294,7 +294,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBakWithBLOBs">
     update tx_delegation_reward_bak
     set hash = #{hash,jdbcType=VARCHAR},
       bn = #{bn,jdbcType=BIGINT},
@@ -306,7 +306,7 @@
       extra_clean = #{extraClean,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.TxDelegationRewardBak">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.TxDelegationRewardBak">
     update tx_delegation_reward_bak
     set hash = #{hash,jdbcType=VARCHAR},
       bn = #{bn,jdbcType=BIGINT},

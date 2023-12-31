@@ -1,24 +1,24 @@
 {
   "context":"/browser-server",
   "siteName":"PlatScan",
-  "headerChainName":"PlatON Mainnet",
-  "chainName":"PlatON",
-  "copyRight":"PlatON",
+  "headerChainName":"Turn Mainnet",
+  "chainName":"Turn",
+  "copyRight":"Turn",
   "logo":"/images/logo.svg",
   "links": [
     {
       "order": 0,
-      "name":{"cn":"关于PlatON","en":"About PlatON"},
+      "name":{"cn":"关于Turn","en":"About Turn"},
       "logo": "",
-      "url":{"cn":"https://www.platon.network","en": "https://www.platon.network/en"}
+      "url":{"cn":"https://www.turn.network","en": "https://www.turn.network/en"}
     },
     {
       "order": 1,
       "name": {"cn":"白皮书1.0","en":"White Paper1.0"},
       "logo": "",
       "url": {
-        "cn": "https://www.platon.network/pdf/zh/PlatON_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_ZH.pdf",
-        "en": "https://www.platon.network/pdf/en/PlatON_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_EN.pdf"
+        "cn": "https://www.turn.network/pdf/zh/Turn_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_ZH.pdf",
+        "en": "https://www.turn.network/pdf/en/Turn_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_EN.pdf"
       }
     },
     {
@@ -26,21 +26,21 @@
       "name": {"cn":"白皮书2.0","en":"White Paper2.0"},
       "logo": "",
       "url": {
-        "cn": "https://www.platon.network/pdf/zh/PlatON_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_ZH_2.pdf",
-        "en": "https://www.platon.network/pdf/en/PlatON_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_EN_2.pdf"
+        "cn": "https://www.turn.network/pdf/zh/Turn_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_ZH_2.pdf",
+        "en": "https://www.turn.network/pdf/en/Turn_A_High-Efficiency_Trustless_Computing_Network_Whitepaper_EN_2.pdf"
       }
     },
     {
       "order": 3,
       "name": {"cn":"ATON钱包下载","en":"ATON Download"},
       "logo": "",
-      "url": {"cn":"https://www.platon.network/developer#aton","en": "https://www.platon.network/en/developer#aton"}
+      "url": {"cn":"https://www.turn.network/developer#aton","en": "https://www.turn.network/en/developer#aton"}
     },
     {
       "order": 4,
       "name": {"cn":"开发者帮助","en":"Developer"},
       "logo": "",
-      "url": {"cn":"https://devdocs.platon.network/docs/zh-CN/","en": "https://devdocs.platon.network/docs/en/"}
+      "url": {"cn":"https://devdocs.turn.network/docs/zh-CN/","en": "https://devdocs.turn.network/docs/en/"}
     }
   ],
   "social":[
@@ -48,7 +48,7 @@
       "order": 0,
       "name": "telegram",
       "logo": "",
-      "url": {"cn": "https://t.me/PlatONNetworkCN","en": "https://t.me/PlatONNetwork"}
+      "url": {"cn": "https://t.me/TurnNetworkCN","en": "https://t.me/TurnNetwork"}
     },
     {
       "order": 1,
@@ -61,37 +61,37 @@
       "order": 2,
       "name": "twitter",
       "logo": "",
-      "url": {"cn": "https://twitter.com/PlatON_Network","en": "https://twitter.com/PlatON_Network"}
+      "url": {"cn": "https://twitter.com/Turn_Network","en": "https://twitter.com/Turn_Network"}
     },
     {
       "order": 3,
       "name": "reddit",
       "logo": "",
-      "url": {"cn": "https://www.reddit.com/user/PlatON_Network","en": "https://www.reddit.com/user/PlatON_Network"}
+      "url": {"cn": "https://www.reddit.com/user/Turn_Network","en": "https://www.reddit.com/user/Turn_Network"}
     },
     {
       "order": 4,
       "name": "medium",
       "logo": "",
-      "url": {"cn": "https://platon-network.medium.com","en": "https://platon-network.medium.com"}
+      "url": {"cn": "https://turn-network.medium.com","en": "https://turn-network.medium.com"}
     },
     {
       "order": 5,
       "name": "github",
       "logo": "",
-      "url": {"cn": "https://github.com/PlatONnetwork","en": "https://github.com/PlatONnetwork"}
+      "url": {"cn": "https://github.com/Turnnetwork","en": "https://github.com/Turnnetwork"}
     },
     {
       "order": 6,
       "name": "linkedin",
       "logo": "",
-      "url": {"cn": "https://www.linkedin.com/company/platonnetwork/","en": "https://www.linkedin.com/company/platonnetwork/"}
+      "url": {"cn": "https://www.linkedin.com/company/turnnetwork/","en": "https://www.linkedin.com/company/turnnetwork/"}
     },
     {
       "order": 7,
       "name": "facebook",
       "logo": "",
-      "url": {"cn": "https://www.facebook.com/PlatONNetwork/","en": "https://www.facebook.com/PlatONNetwork/"}
+      "url": {"cn": "https://www.facebook.com/TurnNetwork/","en": "https://www.facebook.com/TurnNetwork/"}
     },
     {
       "order": 8,

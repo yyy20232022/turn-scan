@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.StakingMapper">
-    <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Staking">
+<mapper namespace="com.turn.browser.dao.mapper.StakingMapper">
+    <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Staking">
         <id column="node_id" jdbcType="VARCHAR" property="nodeId"/>
         <id column="staking_block_num" jdbcType="BIGINT" property="stakingBlockNum"/>
         <result column="staking_tx_index" jdbcType="INTEGER" property="stakingTxIndex"/>
@@ -129,7 +129,7 @@
     <sql id="Blob_Column_List">
         annualized_rate_info, node_settle_statis_info, node_apr
     </sql>
-    <select id="selectByExampleWithBLOBs" parameterType="com.platon.browser.dao.entity.StakingExample" resultMap="BaseResultMap">
+    <select id="selectByExampleWithBLOBs" parameterType="com.turn.browser.dao.entity.StakingExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -145,7 +145,7 @@
             order by ${orderByClause}
         </if>
     </select>
-    <select id="selectByExample" parameterType="com.platon.browser.dao.entity.StakingExample" resultMap="BaseResultMap">
+    <select id="selectByExample" parameterType="com.turn.browser.dao.entity.StakingExample" resultMap="BaseResultMap">
         select
         <if test="distinct">
             distinct
@@ -159,7 +159,7 @@
             order by ${orderByClause}
         </if>
     </select>
-    <select id="selectByPrimaryKey" parameterType="com.platon.browser.dao.entity.StakingKey" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="com.turn.browser.dao.entity.StakingKey" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         ,
@@ -168,19 +168,19 @@
         where node_id = #{nodeId,jdbcType=VARCHAR}
         and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="com.platon.browser.dao.entity.StakingKey">
+    <delete id="deleteByPrimaryKey" parameterType="com.turn.browser.dao.entity.StakingKey">
         delete
         from staking
         where node_id = #{nodeId,jdbcType=VARCHAR}
           and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
     </delete>
-    <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.StakingExample">
+    <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.StakingExample">
         delete from staking
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
-    <insert id="insert" parameterType="com.platon.browser.dao.entity.Staking">
+    <insert id="insert" parameterType="com.turn.browser.dao.entity.Staking">
         insert into staking (node_id, staking_block_num, staking_tx_index,
                              staking_hes, staking_locked, staking_reduction,
                              staking_reduction_epoch, node_name, node_icon,
@@ -222,7 +222,7 @@
                 #{annualizedRateInfo,jdbcType=LONGVARCHAR}, #{nodeSettleStatisInfo,jdbcType=LONGVARCHAR},
                 #{nodeApr,jdbcType=LONGVARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Staking">
+    <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.Staking">
         insert into staking
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="nodeId != null">
@@ -541,7 +541,7 @@
             </if>
         </trim>
     </insert>
-    <select id="countByExample" parameterType="com.platon.browser.dao.entity.StakingExample" resultType="java.lang.Long">
+    <select id="countByExample" parameterType="com.turn.browser.dao.entity.StakingExample" resultType="java.lang.Long">
         select count(*) from staking
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
@@ -824,7 +824,7 @@
             <include refid="Update_By_Example_Where_Clause"/>
         </if>
     </update>
-    <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.Staking">
+    <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.Staking">
         update staking
         <set>
             <if test="stakingTxIndex != null">
@@ -981,7 +981,7 @@
         where node_id = #{nodeId,jdbcType=VARCHAR}
         and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.platon.browser.dao.entity.Staking">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.turn.browser.dao.entity.Staking">
         update staking
         set staking_tx_index             = #{stakingTxIndex,jdbcType=INTEGER},
             staking_hes                  = #{stakingHes,jdbcType=DECIMAL},
@@ -1036,7 +1036,7 @@
         where node_id = #{nodeId,jdbcType=VARCHAR}
           and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.Staking">
+    <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.Staking">
         update staking
         set staking_tx_index             = #{stakingTxIndex,jdbcType=INTEGER},
             staking_hes                  = #{stakingHes,jdbcType=DECIMAL},

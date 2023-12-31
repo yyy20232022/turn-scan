@@ -33,23 +33,23 @@ Use ApolloPortalDB;
 DROP TABLE IF EXISTS `App`;
 
 CREATE TABLE `App` (
-                       `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                       `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
                        `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-                       `Name` varchar(500) NOT NULL DEFAULT 'default' COMMENT '应用名',
-                       `OrgId` varchar(32) NOT NULL DEFAULT 'default' COMMENT '部门Id',
-                       `OrgName` varchar(64) NOT NULL DEFAULT 'default' COMMENT '部门名字',
+                       `Name` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'Application name',
+                       `OrgId` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'DepartmentId',
+                       `OrgName` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Department name',
                        `OwnerName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerName',
                        `OwnerEmail` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerEmail',
                        `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                       `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                       `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                       `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                       `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                       `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                       `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                       `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                       `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                        PRIMARY KEY (`Id`),
                        KEY `AppId` (`AppId`(191)),
                        KEY `DataChange_LastTime` (`DataChange_LastTime`),
                        KEY `IX_Name` (`Name`(191))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Application Table';
 
 
 
@@ -59,22 +59,22 @@ CREATE TABLE `App` (
 DROP TABLE IF EXISTS `AppNamespace`;
 
 CREATE TABLE `AppNamespace` (
-                                `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-                                `Name` varchar(32) NOT NULL DEFAULT '' COMMENT 'namespace名字，注意，需要全局唯一',
+                                `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment primary key',
+                                `Name` varchar(32) NOT NULL DEFAULT '' COMMENT 'namespace name, note that it needs to be globally unique',
                                 `AppId` varchar(64) NOT NULL DEFAULT '' COMMENT 'app id',
-                                `Format` varchar(32) NOT NULL DEFAULT 'properties' COMMENT 'namespace的format类型',
-                                `IsPublic` bit(1) NOT NULL DEFAULT b'0' COMMENT 'namespace是否为公共',
-                                `Comment` varchar(64) NOT NULL DEFAULT '' COMMENT '注释',
+                                `Format` varchar(32) NOT NULL DEFAULT 'properties' COMMENT 'format type of namespace',
+                                `IsPublic` bit(1) NOT NULL DEFAULT b'0' COMMENT 'Is namespace public',
+                                `Comment` varchar(64) NOT NULL DEFAULT '' COMMENT 'comment',
                                 `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                 PRIMARY KEY (`Id`),
                                 KEY `IX_AppId` (`AppId`),
                                 KEY `Name_AppId` (`Name`,`AppId`),
                                 KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='应用namespace定义';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Apply namespace definition';
 
 
 
@@ -84,22 +84,22 @@ CREATE TABLE `AppNamespace` (
 DROP TABLE IF EXISTS `Consumer`;
 
 CREATE TABLE `Consumer` (
-                            `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                            `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                             `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-                            `Name` varchar(500) NOT NULL DEFAULT 'default' COMMENT '应用名',
-                            `OrgId` varchar(32) NOT NULL DEFAULT 'default' COMMENT '部门Id',
-                            `OrgName` varchar(64) NOT NULL DEFAULT 'default' COMMENT '部门名字',
+                            `Name` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'Application name',
+                            `OrgId` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'DepartmentId',
+                            `OrgName` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Department name',
                             `OwnerName` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerName',
                             `OwnerEmail` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'ownerEmail',
                             `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                             PRIMARY KEY (`Id`),
                             KEY `AppId` (`AppId`(191)),
                             KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='开放API消费者';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Open API Consumer';
 
 
 
@@ -109,17 +109,16 @@ CREATE TABLE `Consumer` (
 DROP TABLE IF EXISTS `ConsumerAudit`;
 
 CREATE TABLE `ConsumerAudit` (
-                                 `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                                 `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                                  `ConsumerId` int(11) unsigned DEFAULT NULL COMMENT 'Consumer Id',
-                                 `Uri` varchar(1024) NOT NULL DEFAULT '' COMMENT '访问的Uri',
-                                 `Method` varchar(16) NOT NULL DEFAULT '' COMMENT '访问的Method',
-                                 `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                 `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                 `Uri` varchar(1024) NOT NULL DEFAULT '' COMMENT 'Accessed Uri',
+                                 `Method` varchar(16) NOT NULL DEFAULT '' COMMENT 'Accessed Method',
+                                 `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                 `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                  PRIMARY KEY (`Id`),
                                  KEY `IX_DataChange_LastTime` (`DataChange_LastTime`),
                                  KEY `IX_ConsumerId` (`ConsumerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='consumer审计表';
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='consumer audit table';
 
 
 # Dump of table consumerrole
@@ -128,20 +127,19 @@ CREATE TABLE `ConsumerAudit` (
 DROP TABLE IF EXISTS `ConsumerRole`;
 
 CREATE TABLE `ConsumerRole` (
-                                `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                                `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                                 `ConsumerId` int(11) unsigned DEFAULT NULL COMMENT 'Consumer Id',
                                 `RoleId` int(10) unsigned DEFAULT NULL COMMENT 'Role Id',
                                 `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                 PRIMARY KEY (`Id`),
                                 KEY `IX_DataChange_LastTime` (`DataChange_LastTime`),
                                 KEY `IX_RoleId` (`RoleId`),
                                 KEY `IX_ConsumerId_RoleId` (`ConsumerId`,`RoleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='consumer和role的绑定表';
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Consumer and role binding table';
 
 
 # Dump of table consumertoken
@@ -150,19 +148,19 @@ CREATE TABLE `ConsumerRole` (
 DROP TABLE IF EXISTS `ConsumerToken`;
 
 CREATE TABLE `ConsumerToken` (
-                                 `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                                 `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                                  `ConsumerId` int(11) unsigned DEFAULT NULL COMMENT 'ConsumerId',
                                  `Token` varchar(128) NOT NULL DEFAULT '' COMMENT 'token',
-                                 `Expires` datetime NOT NULL DEFAULT '2099-01-01 00:00:00' COMMENT 'token失效时间',
+                                 `Expires` datetime NOT NULL DEFAULT '2099-01-01 00:00:00' COMMENT 'token expiration time',
                                  `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                                 `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                                 `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                 `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                                 `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                 `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                                 `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                 `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                                 `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                  PRIMARY KEY (`Id`),
                                  UNIQUE KEY `IX_Token` (`Token`),
                                  KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='consumer token表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='consumer token table';
 
 # Dump of table favorite
 # ------------------------------------------------------------
@@ -170,20 +168,20 @@ CREATE TABLE `ConsumerToken` (
 DROP TABLE IF EXISTS `Favorite`;
 
 CREATE TABLE `Favorite` (
-                            `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-                            `UserId` varchar(32) NOT NULL DEFAULT 'default' COMMENT '收藏的用户',
+                            `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
+                            `UserId` varchar(32) NOT NULL DEFAULT 'default' COMMENT 'Favorite user',
                             `AppId` varchar(500) NOT NULL DEFAULT 'default' COMMENT 'AppID',
-                            `Position` int(32) NOT NULL DEFAULT '10000' COMMENT '收藏顺序',
+                            `Position` int(32) NOT NULL DEFAULT '10000' COMMENT 'Collection order',
                             `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                             PRIMARY KEY (`Id`),
                             KEY `AppId` (`AppId`(191)),
                             KEY `IX_UserId` (`UserId`),
                             KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COMMENT='应用收藏表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Application Collection Table';
 
 # Dump of table permission
 # ------------------------------------------------------------
@@ -191,19 +189,18 @@ CREATE TABLE `Favorite` (
 DROP TABLE IF EXISTS `Permission`;
 
 CREATE TABLE `Permission` (
-                              `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-                              `PermissionType` varchar(32) NOT NULL DEFAULT '' COMMENT '权限类型',
-                              `TargetId` varchar(256) NOT NULL DEFAULT '' COMMENT '权限对象类型',
+                              `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
+                              `PermissionType` varchar(32) NOT NULL DEFAULT '' COMMENT 'Permission type',
+                              `TargetId` varchar(256) NOT NULL DEFAULT '' COMMENT 'Permission object type',
                               `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                              `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                              `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                              `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                              `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                              `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                              `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                              `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                              `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                               PRIMARY KEY (`Id`),
                               KEY `IX_TargetId_PermissionType` (`TargetId`(191),`PermissionType`),
                               KEY `IX_DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='permission表';
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='permission table';
 
 
 # Dump of table role
@@ -212,17 +209,17 @@ CREATE TABLE `Permission` (
 DROP TABLE IF EXISTS `Role`;
 
 CREATE TABLE `Role` (
-                        `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                        `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                         `RoleName` varchar(256) NOT NULL DEFAULT '' COMMENT 'Role name',
                         `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                        `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                        `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                        `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                        `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                        `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                        `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                        `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                        `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                         PRIMARY KEY (`Id`),
                         KEY `IX_RoleName` (`RoleName`(191)),
                         KEY `IX_DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='role table';
 
 
 
@@ -232,19 +229,19 @@ CREATE TABLE `Role` (
 DROP TABLE IF EXISTS `RolePermission`;
 
 CREATE TABLE `RolePermission` (
-                                  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                                  `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                                   `RoleId` int(10) unsigned DEFAULT NULL COMMENT 'Role Id',
                                   `PermissionId` int(10) unsigned DEFAULT NULL COMMENT 'Permission Id',
                                   `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                                  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                                  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                                  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                  `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                                  `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                  `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                                  `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                   PRIMARY KEY (`Id`),
                                   KEY `IX_DataChange_LastTime` (`DataChange_LastTime`),
                                   KEY `IX_RoleId` (`RoleId`),
                                   KEY `IX_PermissionId` (`PermissionId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和权限的绑定表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Binding table of roles and permissions';
 
 
 
@@ -254,19 +251,19 @@ CREATE TABLE `RolePermission` (
 DROP TABLE IF EXISTS `ServerConfig`;
 
 CREATE TABLE `ServerConfig` (
-                                `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-                                `Key` varchar(64) NOT NULL DEFAULT 'default' COMMENT '配置项Key',
-                                `Value` varchar(2048) NOT NULL DEFAULT 'default' COMMENT '配置项值',
-                                `Comment` varchar(1024) DEFAULT '' COMMENT '注释',
+                                `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
+                                `Key` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Configuration item Key',
+                                `Value` varchar(2048) NOT NULL DEFAULT 'default' COMMENT 'Configuration item value',
+                                `Comment` varchar(1024) DEFAULT '' COMMENT 'comment',
                                 `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                                `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                                `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                                `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                                `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                                 PRIMARY KEY (`Id`),
                                 KEY `IX_Key` (`Key`),
                                 KEY `DataChange_LastTime` (`DataChange_LastTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='配置服务自身配置';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Configuration service self-configuration';
 
 
 
@@ -276,19 +273,19 @@ CREATE TABLE `ServerConfig` (
 DROP TABLE IF EXISTS `UserRole`;
 
 CREATE TABLE `UserRole` (
-                            `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-                            `UserId` varchar(128) DEFAULT '' COMMENT '用户身份标识',
+                            `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
+                            `UserId` varchar(128) DEFAULT '' COMMENT 'User identity',
                             `RoleId` int(10) unsigned DEFAULT NULL COMMENT 'Role Id',
                             `IsDeleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '1: deleted, 0: normal',
-                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT '创建人邮箱前缀',
-                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT '最后修改人邮箱前缀',
-                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后修改时间',
+                            `DataChange_CreatedBy` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Creator's email prefix',
+                            `DataChange_CreatedTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+                            `DataChange_LastModifiedBy` varchar(64) DEFAULT '' COMMENT 'Last modified person's email prefix',
+                            `DataChange_LastTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last modification time',
                             PRIMARY KEY (`Id`),
                             KEY `IX_DataChange_LastTime` (`DataChange_LastTime`),
                             KEY `IX_RoleId` (`RoleId`),
                             KEY `IX_UserId_RoleId` (`UserId`,`RoleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户和role的绑定表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Binding table of users and roles';
 
 # Dump of table Users
 # ------------------------------------------------------------
@@ -296,14 +293,14 @@ CREATE TABLE `UserRole` (
 DROP TABLE IF EXISTS `Users`;
 
 CREATE TABLE `Users` (
-                         `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
-                         `Username` varchar(64) NOT NULL DEFAULT 'default' COMMENT '用户登录账户',
-                         `Password` varchar(512) NOT NULL DEFAULT 'default' COMMENT '密码',
-                         `UserDisplayName` varchar(512) NOT NULL DEFAULT 'default' COMMENT '用户名称',
-                         `Email` varchar(64) NOT NULL DEFAULT 'default' COMMENT '邮箱地址',
-                         `Enabled` tinyint(4) DEFAULT NULL COMMENT '是否有效',
+                         `Id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
+                         `Username` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'User login account',
+                         `Password` varchar(512) NOT NULL DEFAULT 'default' COMMENT 'Password',
+                         `UserDisplayName` varchar(512) NOT NULL DEFAULT 'default' COMMENT 'User Name',
+                         `Email` varchar(64) NOT NULL DEFAULT 'default' COMMENT 'Email address',
+                         `Enabled` tinyint(4) DEFAULT NULL COMMENT 'Is it valid',
                          PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='User table';
 
 
 # Dump of table Authorities
@@ -312,7 +309,7 @@ CREATE TABLE `Users` (
 DROP TABLE IF EXISTS `Authorities`;
 
 CREATE TABLE `Authorities` (
-                               `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增Id',
+                               `Id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Auto-increment Id',
                                `Username` varchar(64) NOT NULL,
                                `Authority` varchar(50) NOT NULL,
                                PRIMARY KEY (`Id`)
@@ -323,19 +320,19 @@ CREATE TABLE `Authorities` (
 # ------------------------------------------------------------
 INSERT INTO `ServerConfig` (`Key`, `Value`, `Comment`)
 VALUES
-    ('apollo.portal.envs', 'dev', '可支持的环境列表'),
-    ('organizations', '[{\"orgId\":\"TEST1\",\"orgName\":\"样例部门1\"},{\"orgId\":\"TEST2\",\"orgName\":\"样例部门2\"}]', '部门列表'),
-    ('superAdmin', 'apollo', 'Portal超级管理员'),
-    ('api.readTimeout', '10000', 'http接口read timeout'),
+    ('apollo.portal.envs', 'dev', 'Supported environment list'),
+    ('organizations', '[{\"orgId\":\"TEST1\",\"orgName\":\"Sample Department 1\"},{\"orgId\":\"TEST2\",\ "orgName\":\"Sample Department 2\"}]', 'Department List'),
+    ('superAdmin', 'apollo', 'Portal super administrator'),
+    ('api.readTimeout', '10000', 'http interface read timeout'),
     ('consumer.token.salt', 'someSalt', 'consumer token salt'),
-    ('admin.createPrivateNamespace.switch', 'true', '是否允许项目管理员创建私有namespace'),
-    ('configView.memberOnly.envs', 'pro', '只对项目成员显示配置信息的环境列表，多个env以英文逗号分隔'),
-    ('apollo.portal.meta.servers', '{}', '各环境Meta Service列表');
+    ('admin.createPrivateNamespace.switch', 'true', 'Whether project administrators are allowed to create private namespaces'),
+    ('configView.memberOnly.envs', 'pro', 'Only display the environment list of configuration information to project members, multiple envs separated by English commas'),
+    ('apollo.portal.meta.servers', '{}', 'Meta Service list of each environment');
 
 
 INSERT INTO `Users` (`Username`, `Password`, `UserDisplayName`, `Email`, `Enabled`)
 VALUES
-('apollo', '$2a$10$7r20uS.BQ9uBpf3Baj3uQOZvMVvB1RN3PYoKE94gtz2.WAOuiiwXS', 'apollo', 'apollo@acme.com', 1);
+    ('apollo', '$2a$10$7r20uS.BQ9uBpf3Baj3uQOZvMVvB1RN3PYoKE94gtz2.WAOuiiwXS', 'apollo', 'apollo@acme.com', 1);
 
 INSERT INTO `Authorities` (`Username`, `Authority`) VALUES ('apollo', 'ROLE_user');
 
@@ -367,7 +364,7 @@ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
 # ------------------------------------------------------------
 INSERT INTO `App` (`AppId`, `Name`, `OrgId`, `OrgName`, `OwnerName`, `OwnerEmail`)
 VALUES
-  ('SampleApp', 'Sample App', 'TEST1', '样例部门1', 'apollo', 'apollo@acme.com');
+  ('SampleApp', 'Sample App', 'TEST1', 'Sample Department 1', 'apollo', 'apollo@acme.com');
 
 INSERT INTO `AppNamespace` (`Name`, `AppId`, `Format`, `IsPublic`, `Comment`)
 VALUES

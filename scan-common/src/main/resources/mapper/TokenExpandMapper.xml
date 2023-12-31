@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.TokenExpandMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.TokenExpand">
+<mapper namespace="com.turn.browser.dao.mapper.TokenExpandMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.TokenExpand">
     <id column="address" jdbcType="VARCHAR" property="address" />
     <result column="web_site" jdbcType="VARCHAR" property="webSite" />
     <result column="details" jdbcType="VARCHAR" property="details" />
@@ -15,7 +15,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.platon.browser.dao.entity.TokenExpand">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.turn.browser.dao.entity.TokenExpand">
     <result column="icon" jdbcType="LONGVARCHAR" property="icon" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -83,7 +83,7 @@
   <sql id="Blob_Column_List">
     icon
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.platon.browser.dao.entity.TokenExpandExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.turn.browser.dao.entity.TokenExpandExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -99,7 +99,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.TokenExpandExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.TokenExpandExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -125,13 +125,13 @@
     delete from token_expand
     where address = #{address,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.TokenExpandExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.TokenExpandExample">
     delete from token_expand
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.TokenExpand">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.TokenExpand">
     insert into token_expand (address, web_site, details, 
       is_show_in_aton, is_show_in_scan, is_can_transfer, 
       create_id, create_name, create_time, 
@@ -143,7 +143,7 @@
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{icon,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.TokenExpand">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.TokenExpand">
     insert into token_expand
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="address != null">
@@ -228,7 +228,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.TokenExpandExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.TokenExpandExample" resultType="java.lang.Long">
     select count(*) from token_expand
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -318,7 +318,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.TokenExpand">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.TokenExpand">
     update token_expand
     <set>
       <if test="webSite != null">
@@ -360,7 +360,7 @@
     </set>
     where address = #{address,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.platon.browser.dao.entity.TokenExpand">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.turn.browser.dao.entity.TokenExpand">
     update token_expand
     set web_site = #{webSite,jdbcType=VARCHAR},
       details = #{details,jdbcType=VARCHAR},
@@ -376,7 +376,7 @@
       icon = #{icon,jdbcType=LONGVARCHAR}
     where address = #{address,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.TokenExpand">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.TokenExpand">
     update token_expand
     set web_site = #{webSite,jdbcType=VARCHAR},
       details = #{details,jdbcType=VARCHAR},

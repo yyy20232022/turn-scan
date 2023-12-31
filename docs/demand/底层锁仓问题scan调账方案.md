@@ -1,96 +1,96 @@
-### 1. 总体方案。
-1. 特殊节点负责采集、保存底层调整的异常数据，并对agent提供查询接口。数据为委托、质押扣减明细。
-2. agent在升级提案生效块高，查询特殊节点异常数据接口，并调整委托、质押、统计数据。
-	
-### 2. 异常流程
-> 因为现网的数据复杂程度远远高于测试的,如果agent在调账过程中出现数据异常，需要人工介入
-	
-### 3. 详细设计
+### 1. Overall plan.
+1. The special node is responsible for collecting and saving abnormal data of underlying adjustments, and providing a query interface to the agent. The data is commission and pledge deduction details.
+2. When the upgrade proposal takes effect, the agent queries the special node exception data interface and adjusts delegation, pledge, and statistical data.
 
-#### 3.1 特殊节点调账接口
+### 2. Exception process
+> Because the data complexity of the live network is much higher than that of the test, if the agent encounters data anomalies during the account adjustment process, manual intervention is required.
+
+### 3. Detailed design
+
+#### 3.1 Special node account adjustment interface
 
 ```
-入参：blockNumber                  -- 块高
-出参：[
-	{
-		"optType":"",             -- 操作类型 staking、delegate
-		"nodeId":"",              -- 节点id
-		"stakingBlockNum":"",     -- 验证人块高
-		"addr":"",                -- 质押或委托地址
-		"lock":"",                -- 需要减少的锁定金额
-		"has":""                  -- 需要减少的犹豫金额
-	}
+Input parameters: blockNumber -- block height
+Output parameters: [
+{
+"optType":"", -- operation type staking, delegate
+"nodeId":"", -- node id
+"stakingBlockNum":"", -- Validator block height
+"addr":"", -- pledge or delegation address
+"lock":"", -- the lock amount to be reduced
+"has":"" -- The hesitation amount to be reduced
+}
 ]
 
 ```
 
-#### 3.2 特殊节点设计	
-	
-1. 新增数据库，用保存调整信息
-2. 在底层兼容逻辑执行完成后，将调整信息入库
-3. 提供合约查询接口
+#### 3.2 Special node design
 
-#### 3.3 agent设计
+1. Add a new database and save the adjustment information with
+2. After the execution of the underlying compatibility logic is completed, the adjustment information will be stored in the database
+3. Provide contract query interface
 
-##### 3.3.1 执行时机
-> 在升级提案ActiveBlock块高处执行，交易执行前。 并且调整接口存在数据。
+#### 3.3 agent design
 
-##### 3.3.2 委托信息调账
+##### 3.3.1 Execution timing
+> Executed high in the upgrade proposal ActiveBlock block, before the transaction is executed. And there is data in the adjustment interface.
 
-##### 3.3.2.1 调账准备
+##### 3.3.2 Commission information adjustment
 
-- List<DiffItem> adjustParamList: 委托调账明细
-- List<Delegation> delegationList： 待调整委托信息列表
-- List<Staking> stakingList： 委托关联的质押信息
-- List<Node> nodeList: 委托关联的节点信息
-- List<Address> addressList: 地址信息，目前机制已经加载到进程内存中
+##### 3.3.2.1 Adjustment preparation
 
-##### 3.3.2.2 调账逻辑
+- List<DiffItem> adjustParamList: Commissioned adjustment details
+- List<Delegation> delegationList: List of delegation information to be adjusted
+- List<Staking> stakingList: pledge information associated with the delegation
+- List<Node> nodeList: node information associated with the delegate
+- List<Address> addressList: address information, the current mechanism has been loaded into the process memory
 
-1. 金额校验，如果失败则改明细调账失败。delegation.delegate_hes >= diffItem.has 并且 delegation.delegate_locked >= diffItem.locked
-2. 委托信息调整（同委托赎回逻辑）
+##### 3.3.2.2 Account adjustment logic
 
-##### 3.3.2.3 调账结果
-> 结果输出到指定日志中. diff.log
+1. Amount verification. If it fails, the detailed adjustment will fail. delegation.delegate_hes >= diffItem.has and delegation.delegate_locked >= diffItem.locked
+2. Commission information adjustment (same as commission redemption logic)
 
-```
-blockNumber=number | srcData=JSON.string(diffItem) | result = (success|error)
-
-```
-
-##### 3.3.3 质押信息调账
-
-##### 3.3.3.1 调账准备
-
-- List<DiffItem> adjustParamList: 待调账质押明细
-- List<Staking> stakingList： 待调整质押信息
-- List<Node> nodeList: 委托关联的节点信息
-- List<Address> addressList: 地址信息，目前机制已经加载到进程内存中
-
-##### 3.3.3.2 调账逻辑
-
-1. 金额校验，如果失败则改明细调账失败。staking.staking_hes >= diffItem.has 并且 staking.staking_locked >= diffItem.locked
-2. 质押信息调整（金额扣减同委托解除质押逻辑，如果扣减小于最小质押阀值，质押退出）
-
-##### 3.3.3.3 调账结果
-> 结果输出到指定日志中. diff.log
+##### 3.3.2.3 Account adjustment results
+> The results are output to the specified log. diff.log
 
 ```
 blockNumber=number | srcData=JSON.string(diffItem) | result = (success|error)
 
 ```
 
-##### 3.3.4 调账完成。
+##### 3.3.3 Pledge information adjustment
 
-- 无错误： 退出调账逻辑后正常执行。
-- 有错误： 打印错误日志后退出。 （reconciliation failed）
+##### 3.3.3.1 Adjustment preparation
+
+- List<DiffItem> adjustParamList: Pledge details to be adjusted
+- List<Staking> stakingList: Staking information to be adjusted
+- List<Node> nodeList: node information associated with the delegate
+- List<Address> addressList: address information, the current mechanism has been loaded into the process memory
+
+##### 3.3.3.2 Account adjustment logic
+
+1. Amount verification. If it fails, the detailed adjustment will fail. staking.staking_hes >= diffItem.has and staking.staking_locked >= diffItem.locked
+2. Adjustment of pledge information (amount deduction follows the same logic as entrustment release of pledge, if the deduction is less than the minimum pledge threshold, the pledge will be withdrawn)
+
+##### 3.3.3.3 Account adjustment results
+> The results are output to the specified log. diff.log
+
+```
+blockNumber=number | srcData=JSON.string(diffItem) | result = (success|error)
+
+```
+
+##### 3.3.4 Account adjustment completed.
+
+- No error: Execute normally after exiting the adjustment logic.
+- With errors: Exit after printing error log. (reconciliation failed)
 
 
-#### 3.4 失败明细补偿
-1. 根据agent吐出的数据，人工分析原因后，生成sql脚本。
-2. 执行sql脚本。
-3. 非补偿模式启动agent。
-		
-### 4. 对用户影响
-1. 如果调账过程解除委托关系，并委托存在奖励，aton和scan看不到奖励领取记录。
-2. 如果调账过程解除委托关系，我的委托记录会消失，不会存在交易记录。
+#### 3.4 Detailed compensation for failure
+1. Based on the data spit out by the agent, manually analyze the reasons and generate a sql script.
+2. Execute the sql script.
+3. Start the agent in non-compensation mode.
+
+### 4. Impact on users
+1. If the entrustment relationship is canceled during the account adjustment process and there are rewards in the entrustment, aton and scan will not be able to see the reward collection record.
+2. If the entrustment relationship is canceled during the account adjustment process, my entrustment record will disappear and there will be no transaction record.

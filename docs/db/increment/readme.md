@@ -1,10 +1,10 @@
-### 每个版本递增SQL
+### Increment SQL for each version
 
-文件命名格式：
+File naming format:
 ```text
 scan-v{previousVersion}-to-v{nextVersion}-{cleanData}.sql
 
-$previousVersion:前一个版本号
-$nextVersion:下一个版本号
-$cleanData:是否需要清库，如果为true，则需要把库下的所有表数据清除，再导入初始化数据；如果为false，则导入脚本即可
+$previousVersion: the previous version number
+$nextVersion: next version number
+$cleanData: Whether it is necessary to clear the database. If it is true, all table data under the database need to be cleared and then the initialization data is imported. If it is false, the script can be imported.
 ```

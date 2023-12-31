@@ -3,7 +3,7 @@ dependencies {
     compile("com.github.pagehelper:pagehelper-spring-boot-starter:$pagehelperSpringbootStarterVersion")
     implementation("org.springframework.boot:spring-boot-starter:$springbootVersion")
     implementation("org.springframework.boot:spring-boot-starter-jdbc:$springbootVersion")
-//    compile "com.platon.sdk:core:$alayaClientVersion"
+//    compile "com.turn.sdk:core:$alayaClientVersion"
     compile fileTree(dir: 'lib', includes: ['*.jar'])
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.8'
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.NOptBakMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.NOptBak">
+<mapper namespace="com.turn.browser.dao.mapper.NOptBakMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.NOptBak">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -73,7 +73,7 @@
   <sql id="Base_Column_List">
     id, node_id, `type`, tx_hash, b_num, `time`, `desc`, cre_time, upd_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.NOptBakExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.NOptBakExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -97,13 +97,13 @@
     delete from n_opt_bak
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.NOptBakExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.NOptBakExample">
     delete from n_opt_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.NOptBak">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.NOptBak">
     insert into n_opt_bak (id, node_id, `type`, 
       tx_hash, b_num, `time`, 
       `desc`, cre_time, upd_time
@@ -113,7 +113,7 @@
       #{desc,jdbcType=VARCHAR}, #{creTime,jdbcType=TIMESTAMP}, #{updTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.NOptBak">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.NOptBak">
     insert into n_opt_bak
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -174,7 +174,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.NOptBakExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.NOptBakExample" resultType="java.lang.Long">
     select count(*) from n_opt_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -230,7 +230,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.NOptBak">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.NOptBak">
     update n_opt_bak
     <set>
       <if test="nodeId != null">
@@ -260,7 +260,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.NOptBak">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.NOptBak">
     update n_opt_bak
     set node_id = #{nodeId,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=INTEGER},

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.StakeBusinessMapper">
-    <update id="create" parameterType="com.platon.browser.dao.param.ppos.StakeCreate">
-    /*1、staking新增*/
+<mapper namespace="com.turn.browser.dao.custommapper.StakeBusinessMapper">
+    <update id="create" parameterType="com.turn.browser.dao.param.ppos.StakeCreate">
     replace into `staking` (
         `node_id`,
         `staking_block_num`,
@@ -50,7 +49,6 @@
         #{unStakeEndBlock},
         0
     );
-    /*2、node新增或更新*/
     insert into `node` (`node_id`,
         `staking_block_num`,
         `staking_tx_index`,

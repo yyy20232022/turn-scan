@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.SlashMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Slash">
+<mapper namespace="com.turn.browser.dao.mapper.SlashMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Slash">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
     <result column="tx_hash" jdbcType="VARCHAR" property="txHash" />
@@ -24,7 +24,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.platon.browser.dao.entity.Slash">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.turn.browser.dao.entity.Slash">
     <result column="slash_data" jdbcType="LONGVARCHAR" property="slashData" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -94,7 +94,7 @@
   <sql id="Blob_Column_List">
     slash_data
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.platon.browser.dao.entity.SlashExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.turn.browser.dao.entity.SlashExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -110,7 +110,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.SlashExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.SlashExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -136,13 +136,13 @@
     delete from slash
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.SlashExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.SlashExample">
     delete from slash
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.Slash">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.Slash">
     insert into slash (id, node_id, tx_hash, 
       `time`, setting_epoch, staking_block_num, 
       slash_rate, slash_report_rate, benefit_address, 
@@ -162,7 +162,7 @@
       #{isHandle,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{slashData,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Slash">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.Slash">
     insert into slash
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -301,7 +301,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.SlashExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.SlashExample" resultType="java.lang.Long">
     select count(*) from slash
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -436,7 +436,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.Slash">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.Slash">
     update slash
     <set>
       <if test="nodeId != null">
@@ -505,7 +505,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.platon.browser.dao.entity.Slash">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.turn.browser.dao.entity.Slash">
     update slash
     set node_id = #{nodeId,jdbcType=VARCHAR},
       tx_hash = #{txHash,jdbcType=VARCHAR},
@@ -530,7 +530,7 @@
       slash_data = #{slashData,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.Slash">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.Slash">
     update slash
     set node_id = #{nodeId,jdbcType=VARCHAR},
       tx_hash = #{txHash,jdbcType=VARCHAR},

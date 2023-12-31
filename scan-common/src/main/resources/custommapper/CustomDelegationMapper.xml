@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomDelegationMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomDelegationMapper">
 
-    <resultMap id="BaseResultMap" type="com.platon.browser.bean.CustomDelegation"
-               extends="com.platon.browser.dao.mapper.DelegationMapper.BaseResultMap"/>
+    <resultMap id="BaseResultMap" type="com.turn.browser.bean.CustomDelegation"
+               extends="com.turn.browser.dao.mapper.DelegationMapper.BaseResultMap"/>
 
-    <resultMap id="StakingListResultMap" type="com.platon.browser.bean.DelegationStaking">
+    <resultMap id="StakingListResultMap" type="com.turn.browser.bean.DelegationStaking">
         <id column="delegate_addr" jdbcType="VARCHAR" property="delegateAddr"/>
         <id column="delegate_addr_type" jdbcType="INTEGER" property="delegateAddrType"/>
         <result column="delegate_hes" jdbcType="DECIMAL" property="delegateHes"/>
@@ -13,7 +13,7 @@
         <result column="delegate_released" jdbcType="DECIMAL" property="delegateReleased"/>
     </resultMap>
 
-    <resultMap id="AddressListResultMap" type="com.platon.browser.bean.DelegationAddress">
+    <resultMap id="AddressListResultMap" type="com.turn.browser.bean.DelegationAddress">
         <result column="node_id" jdbcType="VARCHAR" property="nodeId"/>
         <result column="node_name" jdbcType="VARCHAR" property="nodeName"/>
         <result column="delegate_hes" jdbcType="DECIMAL" property="delegateHes"/>
@@ -23,13 +23,13 @@
 
     <select id="selectByNodeId" resultMap="BaseResultMap">
         select
-        <include refid="com.platon.browser.dao.mapper.DelegationMapper.Base_Column_List"/>
+        <include refid="com.turn.browser.dao.mapper.DelegationMapper.Base_Column_List"/>
         from delegation where node_id = #{nodeId}
     </select>
 
     <select id="selectByNodeIdList" resultMap="BaseResultMap">
         select
-        <include refid="com.platon.browser.dao.mapper.DelegationMapper.Base_Column_List"/>
+        <include refid="com.turn.browser.dao.mapper.DelegationMapper.Base_Column_List"/>
         from delegation where node_id IN (<foreach collection="nodeIds" item="item" separator=",">#{item,jdbcType=VARCHAR}</foreach>)
     </select>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.VoteMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Vote">
+<mapper namespace="com.turn.browser.dao.mapper.VoteMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Vote">
     <id column="hash" jdbcType="VARCHAR" property="hash" />
     <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
     <result column="node_name" jdbcType="VARCHAR" property="nodeName" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List">
     hash, node_id, node_name, `option`, proposal_hash, `timestamp`, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.VoteExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.VoteExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -96,13 +96,13 @@
     delete from vote
     where hash = #{hash,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.VoteExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.VoteExample">
     delete from vote
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.Vote">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.Vote">
     insert into vote (hash, node_id, node_name, 
       `option`, proposal_hash, `timestamp`, 
       create_time, update_time)
@@ -110,7 +110,7 @@
       #{option,jdbcType=INTEGER}, #{proposalHash,jdbcType=VARCHAR}, #{timestamp,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Vote">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.Vote">
     insert into vote
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="hash != null">
@@ -165,7 +165,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.VoteExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.VoteExample" resultType="java.lang.Long">
     select count(*) from vote
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -217,7 +217,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.Vote">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.Vote">
     update vote
     <set>
       <if test="nodeId != null">
@@ -244,7 +244,7 @@
     </set>
     where hash = #{hash,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.Vote">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.Vote">
     update vote
     set node_id = #{nodeId,jdbcType=VARCHAR},
       node_name = #{nodeName,jdbcType=VARCHAR},

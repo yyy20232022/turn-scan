@@ -9,7 +9,7 @@ configurations {
 }
 
 bootJar {
-    // 排除指定文件
+    // Exclude specified files
     exclude("application-*.yml")
 }
 

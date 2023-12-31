@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.v0150.dao.StakingDelegateBalanceAdjustmentMapper">
-    <!--委托相关表调账-->
+<mapper namespace="com.turn.browser.v0150.dao.StakingDelegateBalanceAdjustmentMapper">
     <update id="adjustDelegateData">
         update `delegation` set
             `delegate_hes`=#{adjustParam.delegateHes},
@@ -28,7 +27,6 @@
           and `staking_block_num` = #{adjustParam.stakingBlockNum};
     </update>
 
-    <!--质押相关表调账-->
     <update id="adjustStakingData">
         update `node` set
             `total_value`=#{adjustParam.nodeTotalValue},

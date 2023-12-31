@@ -1,10 +1,10 @@
-# Platon 区块链浏览器服务端
-> 提供对Platon链的浏览功能，包括区块、交易、验证节点、治理参数、令牌等功能
+# Turn 区块链浏览器服务端
+> 提供对Turn链的浏览功能，包括区块、交易、验证节点、治理参数、令牌等功能
 
 ## 软件架构
 
 - [架构文档](docs/arch_doc/overall_structure.md)
-- [接口文档](https://platonnetwork.github.io/browser-server/)
+- [接口文档](https://turnnetwork.github.io/browser-server/)
 
 ## 使用技术
 
@@ -65,7 +65,7 @@ xxljob 2.3.0
 ```bash
 scan-agent,scan-api,scan-job
 1-apollo方式:application-apollo.yml
-2-非apollo方式:application-platon.yml
+2-非apollo方式:application-turn.yml
 以上两种配置方式选择一个即可
 ```
 
@@ -74,7 +74,7 @@ scan-agent,scan-api,scan-job
 1.  仓库管理员为社区开发团队创建一个基于 develop 分支的功能分支 feature-xxx .
 2.  社区开发团队fork feature-xxx 分支到本地仓库,开发并自测完成后.
 3.  社区开发团队提交pull requests 到官方的 feature-xxx(注意:提交前需要merge官方develop分支的修改).
-4.  仓库管理员将 feature-xxx 合并到某个提测版本分支(如:feature-platon-1.1.5).
-5.  测试对提测分支 feature-platon-1.1.5 功能验证,如存在问题提issue.
+4.  仓库管理员将 feature-xxx 合并到某个提测版本分支(如:feature-turn-1.1.5).
+5.  测试对提测分支 feature-turn-1.1.5 功能验证,如存在问题提issue.
 6.  测试完成后合并到 develop 分支.
 ```

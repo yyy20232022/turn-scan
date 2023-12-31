@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomRpPlanMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomRpPlanMapper">
 
-  <resultMap id="BaseResultMap" type="com.platon.browser.bean.CustomRpPlan" extends="com.platon.browser.dao.mapper.RpPlanMapper.BaseResultMap"/>
+  <resultMap id="BaseResultMap" type="com.turn.browser.bean.CustomRpPlan" extends="com.turn.browser.dao.mapper.RpPlanMapper.BaseResultMap"/>
 
-  <!--查询所有节点-->
   <select id="selectAll" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="com.platon.browser.dao.mapper.RpPlanMapper.Base_Column_List" />
+    <include refid="com.turn.browser.dao.mapper.RpPlanMapper.Base_Column_List" />
     from rp_plan
   </select>
 
-  <!--批量选择性插入或更新-->
   <insert id="batchInsertOrUpdateSelective" parameterType="map">
     replace into rp_plan (
     <foreach collection="selective" item="column" separator=",">

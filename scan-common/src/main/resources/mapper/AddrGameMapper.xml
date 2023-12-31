@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.AddrGameMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.AddrGame">
+<mapper namespace="com.turn.browser.dao.mapper.AddrGameMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.AddrGame">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="round_id" jdbcType="BIGINT" property="roundId" />
@@ -74,7 +74,7 @@
     id, address, round_id, game_id, game_contract_address, bubble_id, `status`, create_time, 
     update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.AddrGameExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.AddrGameExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -98,13 +98,13 @@
     delete from addr_game
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.AddrGameExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.AddrGameExample">
     delete from addr_game
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.AddrGame">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.AddrGame">
     insert into addr_game (id, address, round_id, 
       game_id, game_contract_address, bubble_id, 
       `status`, create_time, update_time
@@ -114,7 +114,7 @@
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.AddrGame">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.AddrGame">
     insert into addr_game
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -175,7 +175,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.AddrGameExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.AddrGameExample" resultType="java.lang.Long">
     select count(*) from addr_game
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -231,7 +231,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.AddrGame">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.AddrGame">
     update addr_game
     <set>
       <if test="address != null">
@@ -261,7 +261,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.AddrGame">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.AddrGame">
     update addr_game
     set address = #{address,jdbcType=VARCHAR},
       round_id = #{roundId,jdbcType=BIGINT},

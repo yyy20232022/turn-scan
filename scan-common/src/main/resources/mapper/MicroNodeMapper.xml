@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.MicroNodeMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.MicroNode">
+<mapper namespace="com.turn.browser.dao.mapper.MicroNodeMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.MicroNode">
     <id column="node_id" jdbcType="VARCHAR" property="nodeId" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="operation_addr" jdbcType="VARCHAR" property="operationAddr" />
@@ -81,7 +81,7 @@
     rpc_uri, version, is_operator, node_status, bubble_id,  create_time, 
     update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -105,13 +105,13 @@
     delete from micro_node
     where node_id = #{nodeId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.MicroNodeExample">
     delete from micro_node
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.MicroNode">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.MicroNode">
     insert into micro_node (node_id, amount, operation_addr, 
       beneficiary, `name`, details, 
       electron_uri, p2p_uri, rpc_uri, 
@@ -124,7 +124,7 @@
       #{version,jdbcType=VARCHAR}, #{isOperator,jdbcType=INTEGER}, #{nodeStatus,jdbcType=INTEGER}, 
       #{bubbleId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.MicroNode">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.MicroNode">
     insert into micro_node
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="nodeId != null">
@@ -221,7 +221,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.MicroNodeExample" resultType="java.lang.Long">
     select count(*) from micro_node
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -301,7 +301,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.MicroNode">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.MicroNode">
     update micro_node
     <set>
       <if test="amount != null">
@@ -349,7 +349,7 @@
     </set>
     where node_id = #{nodeId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.MicroNode">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.MicroNode">
     update micro_node
     set amount = #{amount,jdbcType=DECIMAL},
       operation_addr = #{operationAddr,jdbcType=VARCHAR},
@@ -454,7 +454,7 @@
   <select id="countStakingAmount" resultType="java.math.BigInteger">
     select sum(amount) from micro_node where node_status=1;
   </select>
-  <select id="selectListByExample" parameterType="com.platon.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
+  <select id="selectListByExample" parameterType="com.turn.browser.dao.entity.MicroNodeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct

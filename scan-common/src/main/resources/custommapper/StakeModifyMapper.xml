@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.StakeBusinessMapper">
-<update id="modify" parameterType="com.platon.browser.dao.param.ppos.StakeModify">
-	/*1. staking 更新*/
+<mapper namespace="com.turn.browser.dao.custommapper.StakeBusinessMapper">
+<update id="modify" parameterType="com.turn.browser.dao.param.ppos.StakeModify">
 	update `staking`
 	<set>
 		<if test="nodeName != null">
@@ -31,7 +30,6 @@
 		</if>
 	</set>
 	 where `node_id` = #{nodeId} and `staking_block_num` = #{stakingBlockNum};
-	/*2、node 更新*/
 	update `node`
 	<set>
 		<if test="nodeName != null">

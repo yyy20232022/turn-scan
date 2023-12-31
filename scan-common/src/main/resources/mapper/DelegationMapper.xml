@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.DelegationMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Delegation">
+<mapper namespace="com.turn.browser.dao.mapper.DelegationMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Delegation">
     <id column="delegate_addr" jdbcType="VARCHAR" property="delegateAddr" />
     <id column="staking_block_num" jdbcType="BIGINT" property="stakingBlockNum" />
     <id column="node_id" jdbcType="VARCHAR" property="nodeId" />
@@ -76,7 +76,7 @@
     delegate_addr, staking_block_num, node_id, delegate_hes, delegate_locked, delegate_released, 
     is_history, `sequence`, cur_delegation_block_num, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.DelegationExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.DelegationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -90,7 +90,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="com.platon.browser.dao.entity.DelegationKey" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="com.turn.browser.dao.entity.DelegationKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from delegation
@@ -98,19 +98,19 @@
       and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
       and node_id = #{nodeId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.platon.browser.dao.entity.DelegationKey">
+  <delete id="deleteByPrimaryKey" parameterType="com.turn.browser.dao.entity.DelegationKey">
     delete from delegation
     where delegate_addr = #{delegateAddr,jdbcType=VARCHAR}
       and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
       and node_id = #{nodeId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.DelegationExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.DelegationExample">
     delete from delegation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.Delegation">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.Delegation">
     insert into delegation (delegate_addr, staking_block_num, node_id, 
       delegate_hes, delegate_locked, delegate_released, 
       is_history, `sequence`, cur_delegation_block_num, 
@@ -120,7 +120,7 @@
       #{isHistory,jdbcType=INTEGER}, #{sequence,jdbcType=BIGINT}, #{curDelegationBlockNum,jdbcType=BIGINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Delegation">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.Delegation">
     insert into delegation
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="delegateAddr != null">
@@ -193,7 +193,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.DelegationExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.DelegationExample" resultType="java.lang.Long">
     select count(*) from delegation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -257,7 +257,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.Delegation">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.Delegation">
     update delegation
     <set>
       <if test="delegateHes != null">
@@ -289,7 +289,7 @@
       and staking_block_num = #{stakingBlockNum,jdbcType=BIGINT}
       and node_id = #{nodeId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.Delegation">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.Delegation">
     update delegation
     set delegate_hes = #{delegateHes,jdbcType=DECIMAL},
       delegate_locked = #{delegateLocked,jdbcType=DECIMAL},

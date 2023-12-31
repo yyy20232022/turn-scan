@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomToken1155HolderMapper">
-    <select id="selectByUK" resultType="com.platon.browser.dao.entity.Token1155Holder">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomToken1155HolderMapper">
+    <select id="selectByUK" resultType="com.turn.browser.dao.entity.Token1155Holder">
         select id,
                token_address      as tokenAddress,
                token_id           as tokenId,
@@ -61,7 +61,7 @@
         </foreach>
     </update>
 
-    <select id="findDestroyContract" parameterType="integer" resultType="com.platon.browser.bean.Erc1155ContractDestroyBean">
+    <select id="findDestroyContract" parameterType="integer" resultType="com.turn.browser.bean.Erc1155ContractDestroyBean">
         select
         t1.address as tokenAddress ,
         t1.contract_destroy_block as contractDestroyBlock ,
@@ -80,7 +80,7 @@
         </if>
     </select>
 
-    <select id="findToken1155HolderList" resultType="com.platon.browser.bean.Token1155HolderListBean">
+    <select id="findToken1155HolderList" resultType="com.turn.browser.bean.Token1155HolderListBean">
         SELECT t1.token_address                                 AS contract,
                t1.address,
                t1.count                                         AS balance,
@@ -101,7 +101,7 @@
                  LEFT JOIN (SELECT token_address, count(1) AS allCount FROM token_1155_holder WHERE balance != 0 AND token_address = #{contract}) t2 ON t1.token_address = t2.token_address
     </select>
 
-    <select id="findTokenIdList" resultType="com.platon.browser.bean.TokenIdListBean">
+    <select id="findTokenIdList" resultType="com.turn.browser.bean.TokenIdListBean">
         SELECT
         t1.token_address AS contract,
         t1.token_id AS tokenId,
@@ -128,7 +128,7 @@
     </select>
 
     <select id="selectListByERC1155" parameterType="java.lang.String"
-            resultType="com.platon.browser.bean.CustomTokenHolder">
+            resultType="com.turn.browser.bean.CustomTokenHolder">
         SELECT
         th.token_address AS tokenAddress,
         th.address,
@@ -159,7 +159,7 @@
     </select>
 
     <select id="findErc1155TokenHolder" parameterType="java.lang.String"
-            resultType="com.platon.browser.bean.CustomTokenHolder">
+            resultType="com.turn.browser.bean.CustomTokenHolder">
         SELECT
         th.token_address AS tokenAddress,
         th.address,
@@ -184,7 +184,7 @@
         th.balance + 0
     </select>
 
-    <select id="findToken1155Holder" resultType="com.platon.browser.bean.TokenHolderCount">
+    <select id="findToken1155Holder" resultType="com.turn.browser.bean.TokenHolderCount">
         SELECT
             token_address AS tokenAddress,
             count( 1 ) AS tokenHolderCount

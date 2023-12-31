@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.Token1155HolderMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.Token1155Holder">
+<mapper namespace="com.turn.browser.dao.mapper.Token1155HolderMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.Token1155Holder">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="token_address" jdbcType="VARCHAR" property="tokenAddress" />
     <result column="token_id" jdbcType="VARCHAR" property="tokenId" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List">
     id, token_address, token_id, address, balance, token_owner_tx_qty, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.Token1155HolderExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.Token1155HolderExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -96,13 +96,13 @@
     delete from token_1155_holder
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.Token1155HolderExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.Token1155HolderExample">
     delete from token_1155_holder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.Token1155Holder">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.Token1155Holder">
     insert into token_1155_holder (id, token_address, token_id, 
       address, balance, token_owner_tx_qty, 
       create_time, update_time)
@@ -110,7 +110,7 @@
       #{address,jdbcType=VARCHAR}, #{balance,jdbcType=VARCHAR}, #{tokenOwnerTxQty,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.Token1155Holder">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.Token1155Holder">
     insert into token_1155_holder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -165,7 +165,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.Token1155HolderExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.Token1155HolderExample" resultType="java.lang.Long">
     select count(*) from token_1155_holder
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -217,7 +217,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.Token1155Holder">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.Token1155Holder">
     update token_1155_holder
     <set>
       <if test="tokenAddress != null">
@@ -244,7 +244,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.Token1155Holder">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.Token1155Holder">
     update token_1155_holder
     set token_address = #{tokenAddress,jdbcType=VARCHAR},
       token_id = #{tokenId,jdbcType=VARCHAR},

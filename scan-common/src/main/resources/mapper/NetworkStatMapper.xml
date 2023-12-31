@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.NetworkStatMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.NetworkStat">
+<mapper namespace="com.turn.browser.dao.mapper.NetworkStatMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.NetworkStat">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="cur_number" jdbcType="BIGINT" property="curNumber" />
     <result column="cur_block_hash" jdbcType="VARCHAR" property="curBlockHash" />
@@ -33,7 +33,7 @@
     <result column="erc20_tx_qty" jdbcType="INTEGER" property="erc20TxQty" />
     <result column="year_num" jdbcType="INTEGER" property="yearNum" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.platon.browser.dao.entity.NetworkStat">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.turn.browser.dao.entity.NetworkStat">
     <result column="issue_rates" jdbcType="LONGVARCHAR" property="issueRates" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -104,7 +104,7 @@
   <sql id="Blob_Column_List">
     issue_rates
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.platon.browser.dao.entity.NetworkStatExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.turn.browser.dao.entity.NetworkStatExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -120,7 +120,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.NetworkStatExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.NetworkStatExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -146,13 +146,13 @@
     delete from network_stat
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.NetworkStatExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.NetworkStatExample">
     delete from network_stat
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.NetworkStat">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.NetworkStat">
       insert into network_stat (id, cur_number, cur_block_hash,
                                 node_id, node_name, tx_qty,
                                 cur_tps, max_tps, issue_value,
@@ -174,7 +174,7 @@
               #{erc1155TxQty,jdbcType=INTEGER}, #{erc721TxQty,jdbcType=INTEGER},
               #{erc20TxQty,jdbcType=INTEGER}, #{yearNum,jdbcType=INTEGER}, #{issueRates,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.NetworkStat">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.NetworkStat">
     insert into network_stat
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -367,7 +367,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.NetworkStatExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.NetworkStatExample" resultType="java.lang.Long">
     select count(*) from network_stat
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -547,7 +547,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.NetworkStat">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.NetworkStat">
     update network_stat
     <set>
       <if test="curNumber != null">
@@ -643,7 +643,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.platon.browser.dao.entity.NetworkStat">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.turn.browser.dao.entity.NetworkStat">
     update network_stat
     set cur_number = #{curNumber,jdbcType=BIGINT},
       cur_block_hash = #{curBlockHash,jdbcType=VARCHAR},
@@ -677,7 +677,7 @@
       issue_rates = #{issueRates,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.NetworkStat">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.NetworkStat">
     update network_stat
     set cur_number = #{curNumber,jdbcType=BIGINT},
       cur_block_hash = #{curBlockHash,jdbcType=VARCHAR},

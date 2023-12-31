@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.PointLogMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.PointLog">
+<mapper namespace="com.turn.browser.dao.mapper.PointLogMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.PointLog">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, `type`, `name`, `desc`, `position`, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.PointLogExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.PointLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -95,13 +95,13 @@
     delete from point_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.PointLogExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.PointLogExample">
     delete from point_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.PointLog">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.PointLog">
     insert into point_log (id, `type`, `name`, 
       `desc`, `position`, create_time, 
       update_time)
@@ -109,7 +109,7 @@
       #{desc,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.PointLog">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.PointLog">
     insert into point_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.PointLogExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.PointLogExample" resultType="java.lang.Long">
     select count(*) from point_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.PointLog">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.PointLog">
     update point_log
     <set>
       <if test="type != null">
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.PointLog">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.PointLog">
     update point_log
     set `type` = #{type,jdbcType=INTEGER},
       `name` = #{name,jdbcType=VARCHAR},

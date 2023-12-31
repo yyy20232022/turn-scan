@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.mapper.MicroNodeOptBakMapper">
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.MicroNodeOptBak">
+<mapper namespace="com.turn.browser.dao.mapper.MicroNodeOptBakMapper">
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.MicroNodeOptBak">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
     <result column="type" jdbcType="INTEGER" property="type" />
@@ -72,7 +72,7 @@
   <sql id="Base_Column_List">
     id, node_id, `type`, tx_hash, b_num, `time`, cre_time, upd_time
   </sql>
-  <select id="selectByExample" parameterType="com.platon.browser.dao.entity.MicroNodeOptBakExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.turn.browser.dao.entity.MicroNodeOptBakExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -96,13 +96,13 @@
     delete from micro_node_opt_bak
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.platon.browser.dao.entity.MicroNodeOptBakExample">
+  <delete id="deleteByExample" parameterType="com.turn.browser.dao.entity.MicroNodeOptBakExample">
     delete from micro_node_opt_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.platon.browser.dao.entity.MicroNodeOptBak" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.turn.browser.dao.entity.MicroNodeOptBak" useGeneratedKeys="true" keyProperty="id">
     insert into micro_node_opt_bak (id, node_id, `type`, 
       tx_hash, b_num, `time`, 
       cre_time, upd_time)
@@ -110,7 +110,7 @@
       #{txHash,jdbcType=VARCHAR}, #{bNum,jdbcType=BIGINT}, #{time,jdbcType=TIMESTAMP}, 
       #{creTime,jdbcType=TIMESTAMP}, #{updTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.platon.browser.dao.entity.MicroNodeOptBak">
+  <insert id="insertSelective" parameterType="com.turn.browser.dao.entity.MicroNodeOptBak">
     insert into micro_node_opt_bak
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -165,7 +165,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.platon.browser.dao.entity.MicroNodeOptBakExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.turn.browser.dao.entity.MicroNodeOptBakExample" resultType="java.lang.Long">
     select count(*) from micro_node_opt_bak
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -217,7 +217,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.platon.browser.dao.entity.MicroNodeOptBak">
+  <update id="updateByPrimaryKeySelective" parameterType="com.turn.browser.dao.entity.MicroNodeOptBak">
     update micro_node_opt_bak
     <set>
       <if test="nodeId != null">
@@ -244,7 +244,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.platon.browser.dao.entity.MicroNodeOptBak">
+  <update id="updateByPrimaryKey" parameterType="com.turn.browser.dao.entity.MicroNodeOptBak">
     update micro_node_opt_bak
     set node_id = #{nodeId,jdbcType=VARCHAR},
       `type` = #{type,jdbcType=INTEGER},

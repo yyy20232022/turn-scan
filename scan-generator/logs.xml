@@ -24,11 +24,11 @@
     </commentGenerator>
 
     <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://192.168.9.191:3306/platon_browser_0.7.0_cdm?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
-                    userId="platon"
-                    password="platon"/>
+                    connectionURL="jdbc:mysql://192.168.9.191:3306/turn_browser_0.7.0_cdm?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
+                    userId="turn"
+                    password="turn"/>
 
-    <javaModelGenerator targetPackage="com.platon.browser.dao.entity"
+    <javaModelGenerator targetPackage="com.turn.browser.dao.entity"
                         targetProject="../logs">
         <property name="enableSubPackages" value="true"/>
         <property name="trimStrings" value="true"/>
@@ -39,7 +39,7 @@
         <property name="enableSubPackages" value="true"/>
     </sqlMapGenerator>
 
-    <javaClientGenerator targetPackage="com.platon.browser.dao.mapper"
+    <javaClientGenerator targetPackage="com.turn.browser.dao.mapper"
                          targetProject="../logs" type="XMLMAPPER">
         <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>

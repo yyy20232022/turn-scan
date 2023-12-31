@@ -1,10 +1,10 @@
-#### 1 协议设计
+#### 1 Protocol Design
 
-##### 1.1 ERC165（必须）
+##### 1.1 ERC165 (required)
 
 - function supportsInterface(bytes4 _interfaceID) external view returns (bool)
 
-##### 1.2 ERC721（必须，并继承ERC165） 
+##### 1.2 ERC721 (required, and inherits ERC165)
 
 - event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId)  转账、 tokenId创建（0地址到owner地址）、tokenId销毁（owner地址到0地址）时需要触发事件
 - event Approval(address indexed _owner, address indexed _approved, uint256 indexed _tokenId)
@@ -20,7 +20,7 @@
 - function isApprovedForAll(address _owner, address _operator)  external view returns (bool)
 
 
-##### 1.3 ERC721 metadata (可选，需继承ERC721)
+##### 1.3 ERC721 metadata (optional, needs to inherit ERC721)
 
 - function name() external view returns (string memory _name)
 - function symbol() external view returns (string memory _symbol)
@@ -49,14 +49,13 @@ ERC721 Metadata JSON Schema
 }
 
 ```
-
-##### 1.4 ERC721 enumeration (可选，需继承ERC721)
+##### 1.4 ERC721 enumeration (optional, needs to inherit ERC721)
 
 - function totalSupply() external view returns (uint256)
 - function tokenByIndex(uint256 _index) external view returns (uint256)
 - function tokenOfOwnerByIndex(address _owner, uint256 _index) external view returns (uint256)
 
-##### 1.5 ERC721 tokenreceiver (可选，需继承ERC721) 
+##### 1.5 ERC721 token receiver (optional, needs to inherit ERC721)
 
 - function onERC721Received(address _operator, address _from, uint256 _tokenId, bytes calldata _data) external returns(bytes4)
 
@@ -75,9 +74,9 @@ ERC721 Metadata JSON Schema
 - function decimals() public view returns (uint8)
 - function totalSupply() public view returns (uint256)
 
-#### 2 合约识别
+#### 2 Contract identification
 
-##### 2.1 ERC-165 识别
+##### 2.1 ERC-165 identification
 
 1. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a701ffc9a700000000000000000000000000000000000000000000000000000000 and gas 30,000. This corresponds to contract.supportsInterface(0x01ffc9a7).
 2. If the call fails or return false, the destination contract does not implement ERC-165.
@@ -88,21 +87,21 @@ ERC721 Metadata JSON Schema
 ```
 public boolean isSupportErc165(String contractAddress) throws Exception {
 	Transaction transaction = Transaction.createEthCallTransaction(Credentials.create(Keys.createEcKeyPair()).getAddress(), contractAddress,"0x01ffc9a701ffc9a700000000000000000000000000000000000000000000000000000000");
-	PlatonCall platonCall = web3j.platonCall(transaction, DefaultBlockParameterName.LATEST).send();
-	if(!"0x0000000000000000000000000000000000000000000000000000000000000001".equals(platonCall.getResult())){
+	TurnCall turnCall = web3j.turnCall(transaction, DefaultBlockParameterName.LATEST).send();
+	if(!"0x0000000000000000000000000000000000000000000000000000000000000001".equals(turnCall.getResult())){
 		return false;
 	}
 
 	transaction = Transaction.createEthCallTransaction(Credentials.create(Keys.createEcKeyPair()).getAddress(), contractAddress,"0x01ffc9a7ffffffff00000000000000000000000000000000000000000000000000000000");
-	platonCall = web3j.platonCall(transaction, DefaultBlockParameterName.LATEST).send();
-	if("0x0000000000000000000000000000000000000000000000000000000000000000".equals(platonCall.getResult())){
+	turnCall = web3j.turnCall(transaction, DefaultBlockParameterName.LATEST).send();
+	if("0x0000000000000000000000000000000000000000000000000000000000000000".equals(turnCall.getResult())){
 		return true;
 	}
 	return false;
 }
 ```
 
-##### 2.2 ERC-721 识别
+##### 2.2 ERC-721 identify
 
 1. check support ERC-165.
 2. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a780ac58cd00000000000000000000000000000000000000000000000000000000 . This corresponds to contract.supportsInterface(0x80ac58cd).
@@ -110,166 +109,165 @@ public boolean isSupportErc165(String contractAddress) throws Exception {
 ```
 public boolean isSupportErc721(String contractAddress) throws Exception {
 	Transaction transaction = Transaction.createEthCallTransaction(Credentials.create(Keys.createEcKeyPair()).getAddress(), contractAddress,"0x01ffc9a780ac58cd00000000000000000000000000000000000000000000000000000000");
-	PlatonCall platonCall = web3j.platonCall(transaction, DefaultBlockParameterName.LATEST).send();
-	if("0x0000000000000000000000000000000000000000000000000000000000000001".equals(platonCall.getResult())){
+	TurnCall turnCall = web3j.turnCall(transaction, DefaultBlockParameterName.LATEST).send();
+	if("0x0000000000000000000000000000000000000000000000000000000000000001".equals(turnCall.getResult())){
 		return true;
 	}
 	return false;
 }
 ```
 
-##### 2.3 ERC-721 metadata 识别
+##### 2.3 ERC-721 metadata identification
 
 1. check support ERC-165.
-2. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a75b5e139f00000000000000000000000000000000000000000000000000000000 . This corresponds to contract.supportsInterface(0x5b5e139f).
+2. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a75b5e139f000000000000000000000000000000000000000000000000000000 . This corresponds to contract.supportsInterface(0x5b5e139f).
 
 
-##### 2.4 ERC-721 enumerable 识别
+##### 2.4 ERC-721 enumerable identification
 
 1. check support ERC-165.
-2. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a7780e9d6300000000000000000000000000000000000000000000000000000000 . This corresponds to contract.supportsInterface(0x780e9d63).
+2. The source contract makes a STATICCALL to the destination address with input data: 0x01ffc9a7780e9d63000000000000000000000000000000000000000000000000000000 . This corresponds to contract.supportsInterface(0x780e9d63).
 
-##### 2.5 ERC-20 识别
-1. 如果非erc721
+##### 2.5 ERC-20 identification
+1. If it is not erc721
 2. check function name()
 3. check function symbol()
 4. check function decimals()
 5. check function totalSupply()
 
-#### 3 架构设计
+#### 3 Architecture design
 
-##### 3.1 数据库设计
+##### 3.1 Database design
 
 ![Image text](image/detail_token-db.png)
 
-###### 3.1.1 新增token表
+###### 3.1.1 Add new token table
 
 ```
 DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
-  `address` VARCHAR(64) NOT NULL COMMENT '合约地址',
-  `type` VARCHAR(64) NOT NULL COMMENT '合约类型 erc20 erc721',
-  `name` VARCHAR(64) COMMENT '合约名称',
-  `symbol` VARCHAR(64) COMMENT '合约符号',
-  `total_supply` bigint(80) COMMENT '供应总量',
-  `decimal` bigint(80) COMMENT '合约精度',
-  `is_support_erc165` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否支持erc165接口： 0-不支持 1-支持',
-  `is_support_erc20` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否支持erc20接口： 0-不支持 1-支持',
-  `is_support_erc721` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否支持erc721接口： 0-不支持 1-支持',
-  `is_support_erc721_enumeration` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否支持erc721 enumeration接口： 0-不支持 1-支持',
-  `is_support_erc721_metadata` tinyint(1) NOT NULL COMMENT '是否支持metadata接口： 0-不支持 1-支持',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `address` VARCHAR(64) NOT NULL COMMENT 'Contract address',
+  `type` VARCHAR(64) NOT NULL COMMENT 'Contract type erc20 erc721',
+  `name` VARCHAR(64) COMMENT 'Contract name',
+  `symbol` VARCHAR(64) COMMENT 'Contract symbol',
+  `total_supply` bigint(80) COMMENT 'Total supply',
+  `decimal` bigint(80) COMMENT 'Contract precision',
+  `is_support_erc165` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Whether the erc165 interface is supported: 0-not supported 1-supported',
+  `is_support_erc20` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Whether the erc20 interface is supported: 0-not supported 1-supported',
+  `is_support_erc721` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Whether the erc721 interface is supported: 0-not supported 1-supported',
+  `is_support_erc721_enumeration` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'Whether the erc721 enumeration interface is supported: 0-not supported 1-supported',
+  `is_support_erc721_metadata` tinyint(1) NOT NULL COMMENT 'Whether the metadata interface is supported: 0-not supported 1-supported',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   PRIMARY KEY (`address`),
   UNIQUE KEY `token_address` (`address`)
 )
 ```
-
-###### 3.1.2 新增token_expand表
+###### 3.1.2 Add token_expand table
 
 ```
 DROP TABLE IF EXISTS `token_expand`;
 CREATE TABLE `token_expand` (
-  `address` varchar(64) NOT NULL COMMENT '合约地址',
-  `icon` text COMMENT '合约图标',
-  `web_site` varchar(256) COMMENT '合约官网',
-  `details` varchar(256) COMMENT '合约详情',
-  `is_show_in_aton` tinyint(1) DEFAULT '0' COMMENT 'aton中是否显示，0-隐藏 1-展示',
-  `is_show_in_scan` tinyint(1) DEFAULT '0' COMMENT 'scan中是否显示，0-隐藏 1-展示',
-  `is_can_transfer` tinyint(1) DEFAULT '0' COMMENT '是否可转账 0-不可转账 1-可转账',
-  `create_id` bigint(20) NOT NULL COMMENT '创建者',
-  `create_name` varchar(50) NOT NULL COMMENT '创建者名称',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_id` bigint(20) NOT NULL COMMENT '更新者',
-  `update_name` varchar(50) NOT NULL COMMENT '更新者名称',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `address` varchar(64) NOT NULL COMMENT 'Contract address',
+  `icon` text COMMENT 'Contract icon',
+  `web_site` varchar(256) COMMENT 'Contract official website',
+  `details` varchar(256) COMMENT 'Contract details',
+  `is_show_in_aton` tinyint(1) DEFAULT '0' COMMENT 'Whether to display in aton, 0-hide 1-show',
+  `is_show_in_scan` tinyint(1) DEFAULT '0' COMMENT 'Whether to display in scan, 0-hide 1-show',
+  `is_can_transfer` tinyint(1) DEFAULT '0' COMMENT 'Whether it can be transferred 0-cannot be transferred 1-can be transferred',
+  `create_id` bigint(20) NOT NULL COMMENT 'Creator',
+  `create_name` varchar(50) NOT NULL COMMENT 'creator name',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation time',
+  `update_id` bigint(20) NOT NULL COMMENT 'Updater',
+  `update_name` varchar(50) NOT NULL COMMENT 'Updater name',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   PRIMARY KEY (`address`)
 )
 ```
 
-###### 3.1.3 新增token_holder表
+###### 3.1.3 Add token_holder table
 
 ```
 DROP TABLE IF EXISTS `token_holder`;
 CREATE TABLE `token_holder` (
-  `token_address` varchar(64) NOT NULL COMMENT '合约地址',
-  `address` varchar(64) NOT NULL COMMENT '用户地址',
-  `balance` bigint(80) COMMENT '地址代币余额, ERC20为金额，ERC721为tokenId数',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `token_address` varchar(64) NOT NULL COMMENT 'Contract address',
+  `address` varchar(64) NOT NULL COMMENT 'User address',
+  `balance` bigint(80) COMMENT 'Address token balance, ERC20 is the amount, ERC721 is the tokenId number',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   PRIMARY KEY (`token_address`,`address`)
 )
 ```
 
-###### 3.1.4 新增token_inventory表
+###### 3.1.4 Added token_inventory table
 
 ```
 DROP TABLE IF EXISTS `token_inventory`;
 CREATE TABLE `token_inventory` (
-  `token_address` varchar(64) NOT NULL COMMENT '合约地址',
+  `token_address` varchar(64) NOT NULL COMMENT 'Contract address',
   `token_id` bigint(80) NOT NULL COMMENT 'token id',
-  `owner` varchar(64) NOT NULL COMMENT 'token id 对应持有者地址',
+  `owner` varchar(64) NOT NULL COMMENT 'token id corresponds to the holder address',
   `name` varchar(256) COMMENT 'Identifies the asset to which this NFT represents',
   `description` varchar(256) COMMENT 'Describes the asset to which this NFT represents',
   `image` varchar(256) COMMENT 'A URI pointing to a resource with mime type image/* representing the asset to which this NFT represents. Consider making any images at a width between 320 and 1080 pixels and aspect ratio between 1.91:1 and 4:5 inclusive.',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   PRIMARY KEY (`token_address`,`token_id`)
 )
 ```
 
-###### 3.1.5 网络维度统计
+###### 3.1.5 Network dimension statistics
 
 ```
--- 整个网络下erc721交易数
-ALTER TABLE `network_stat` ADD COLUMN `erc721_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'erc721 token对应的交易数';
+--The number of erc721 transactions on the entire network
+ALTER TABLE `network_stat` ADD COLUMN `erc721_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to erc721 token';
 
--- 整个网络下erc20交易数
-ALTER TABLE `network_stat` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'erc20 token对应的交易数';
-
-```
-
-###### 3.1.6 token维度统计
-
-```
--- 该token合约产生的erc20或erc721交易数
-ALTER TABLE `token` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'token对应的交易数';
-
--- 该token合约holder统计
-ALTER TABLE `token` ADD COLUMN `holder` INT(11) DEFAULT 0  NOT NULL COMMENT 'token对应的持有人';
+-- Number of erc20 transactions on the entire network
+ALTER TABLE `network_stat` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to erc20 token';
 
 ```
 
-###### 3.1.7 token下inventory维度统计
+###### 3.1.6 Token dimension statistics
 
 ```
--- 该token合约tokenId关联的erc721交易数
-ALTER TABLE `token_inventory` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'token对应的交易数';
+--The number of erc20 or erc721 transactions generated by the token contract
+ALTER TABLE `token` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to token';
 
-```
-
-###### 3.1.8 token下holder维度统计
-
-```
--- token下address关联的erc20或erc721交易数
-ALTER TABLE `token_holder` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'erc721 token对应的交易数'; 
+-- Statistics of the token contract holder
+ALTER TABLE `token` ADD COLUMN `holder` INT(11) DEFAULT 0 NOT NULL COMMENT 'the holder corresponding to the token';
 
 ```
 
-###### 3.1.9 address维度统计
+###### 3.1.7 Inventory dimension statistics under token
 
 ```
--- 该地址关联的erc721交易数
-ALTER TABLE `address` ADD COLUMN `erc721_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'erc721 token对应的交易数';
-
--- 该地址关联的erc20交易数
-ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMMENT 'erc20 token对应的交易数';
+--The number of erc721 transactions associated with the token contract tokenId
+ALTER TABLE `token_inventory` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to the token';
 
 ```
 
-##### 3.2 Elasticsearch设计
+###### 3.1.8 Statistics of holder dimensions under token
 
-##### 3.2.1 *_erc721_tx 模板
+```
+--The number of erc20 or erc721 transactions associated with the address under the token
+ALTER TABLE `token_holder` ADD COLUMN `token_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to erc721 token';
+
+```
+
+###### 3.1.9 address dimension statistics
+
+```
+--The number of erc721 transactions associated with this address
+ALTER TABLE `address` ADD COLUMN `erc721_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to erc721 token';
+
+--The number of erc20 transactions associated with this address
+ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0 NOT NULL COMMENT 'Number of transactions corresponding to erc20 token';
+
+```
+
+##### 3.2 Elasticsearch design
+
+##### 3.2.1 *_erc721_tx template
 
 ```
 {
@@ -285,53 +283,53 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
   },
   "mappings": {
     "properties": {
-      "seq": {                          //顺序号  交易所在块号*100000+本区块内部交易索引号
+      "seq": { //Sequence number The block number of the exchange * 100000 + the internal transaction index number of this block
         "type": "long"
       },
-      "name": {                         //名称
+      "name": { //name
         "type": "text"
       },
-      "symbol": {                       //币种符号
+      "symbol": { //Currency symbol
         "type": "keyword"
       },
-      "decimal": {                      //币种精度
+      "decimal": { //Currency precision
         "type": "integer"
       },
-      "contract": {                     //合约地址
+      "contract": { //Contract address
         "type": "keyword"
       },
-      "hash": {                         //交易hash
+      "hash": { //Transaction hash
         "type": "keyword"
       },
-      "from": {                         //代币扣除方
-        "type": "keyword"
-      }, 
-      "to": {                          //代币接收方
+      "from": { //Token deduction method
         "type": "keyword"
       },
-      "value": {                       //代币数量或tokenId
+      "to": { //Token receiver
         "type": "keyword"
       },
-      "bn": {                           //交易所在块高
+      "value": { //Token quantity or tokenId
+        "type": "keyword"
+      },
+      "bn": { //The transaction is at block height
         "type": "long"
       },
-      "bTime": {                        //交易时间
+      "bTime": { //Transaction time
         "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
         "type": "date"
       },
-      "toType": {                      //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "toType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "fromType": {                    //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "fromType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "remark": {                      //交易备注信息， aton使用
+      "remark": { //Transaction remark information, used by aton
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
       },
-      "txFee": {                       //交易手续费    
+      "txFee": { //Transaction fee
         "type": "keyword"
       }
     }
@@ -339,10 +337,10 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
 }
 ```
 
-##### 3.2.2 *_erc20_tx 模板(同 *_erc721_tx)
+##### 3.2.2 *_erc20_tx template (same as *_erc721_tx)
 
-##### 3.2.3 *_transfer_tx 模板
-> 合约内部转账交易
+##### 3.2.3 *_transfer_tx template
+>Intra-contract transfer transactions
 
 ```
 {
@@ -358,38 +356,38 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
   },
   "mappings": {
     "properties": {
-      "seq": {                          //顺序号  交易所在块号*100000+本区块内部交易索引号
+      "seq": { //Sequence number The block number of the exchange * 100000 + the internal transaction index number of this block
         "type": "long"
       },
-      "contract": {                     //合约地址
+      "contract": { //Contract address
         "type": "keyword"
       },
-      "hash": {                         //交易hash
+      "hash": { //Transaction hash
         "type": "keyword"
       },
-      "from": {                         //主币扣除方
-        "type": "keyword"
-      }, 
-      "to": {                          //主币接收方
+      "from": { //Main currency deduction method
         "type": "keyword"
       },
-      "value": {                       //主币数量
+      "to": { //Main currency recipient
         "type": "keyword"
       },
-      "bn": {                           //交易所在块高
+      "value": { //Amount of main currency
+        "type": "keyword"
+      },
+      "bn": { //The transaction is at block height
         "type": "long"
       },
-      "bTime": {                        //交易时间
+      "bTime": { //Transaction time
         "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
         "type": "date"
       },
-      "toType": {                      //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "toType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "fromType": {                    //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "fromType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "txFee": {                       //交易手续费    
+      "txFee": { //Transaction fee
         "type": "keyword"
       }
     }
@@ -397,7 +395,7 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
 }
 ```
 
-##### 3.2.4 *_transaction 模板
+##### 3.2.4 *_transaction template
 
 ```
 {
@@ -413,39 +411,39 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
   },
   "mappings": {
     "properties": {
-      "type": {                   //交易类型 (定义见下文)
+     "type": { //Transaction type (see definition below)
         "type": "short"
-      },  
-      "seq": {                     //顺序号  交易所在块号*100000+本区块内部交易索引号
+      },
+      "seq": { //Sequence number The block number of the exchange * 100000 + the internal transaction index number of this block
         "type": "long"
       },
-      "bHash": {                   //区块hash
+      "bHash": { //Block hash
         "type": "keyword"
       },
-      "num": {                     //区块高度
+      "num": { //Block height
         "type": "long"
       },
-      "index": {                   //交易所在区块index
+      "index": { //The transaction is in the block index
         "type": "short"
-      },  
-      "hash": {                    //交易hash
+      },
+      "hash": { //Transaction hash
         "type": "keyword"
       },
-      "from": {                    //交易发送地址
+      "from": { //Transaction sending address
         "type": "keyword"
       },
-      "to": {                      //交易接收地址
+      "to": { //Transaction receiving address
         "type": "keyword"
       },
-      "fromType": {                //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "fromType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "toType": {                 //地址类型 1：账号 2：内置合约 3：EVM合约 4:WASM合约 5:EVM-Token 6:WASM-Token
+      "toType": { //Address type 1: Account 2: Built-in contract 3: EVM contract 4: WASM contract 5: EVM-Token 6: WASM-Token
         "type": "integer"
       },
-      "nonce": {                   //交易nonce
+      "nonce": { //Transaction nonce
         "type": "long"
-      },  
+      },
       "gasLimit": {               //gasLimit
         "norms": false,
         "index": false,
@@ -464,73 +462,73 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
         "type": "text",
         "doc_values": false
       },
-      "cost": {                   //手续费 gasPrice * gasUsed
+      "cost": { //Handling fee gasPrice * gasUsed
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
       },
-      "value": {                  //金额
+      "value": { //amount
         "type": "text"
       },
-      "status": {                 //交易状态 1-成功  2-失败
+      "status": { //Transaction status 1-success 2-failure
         "type": "integer"
       }
-      "time": {                   //链上交易时间
+      "time": { //On-chain transaction time
         "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
         "type": "date"
       },
-      "input": {                  //交易input
+      "input": { //Transaction input
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
       },
-      "info": {                   //ppos相关交易解析后json字符串定义(定义见下文)
+      "info": { //json string definition after parsing ppos related transactions (see definition below)
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
       },
-      "erc721TxInfo": {             //合约中erc721内部交易定义，json数组。（对象定义参考  *_erc721_tx 模板）
+      "erc721TxInfo": { // erc721 internal transaction definition in the contract, json array. (Object definition reference *_erc721_tx template)
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
-      },      
-      "erc20TxInfo": {             //合约中erc721内部交易定义，json数组。（对象定义参考  *_erc20_tx 模板）
+      },
+      "erc20TxInfo": { // erc721 internal transaction definition in the contract, json array. (Refer to *_erc20_tx template for object definition)
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
-      },   
-      "transferTxInfo": {          //合约中内部交易定义，json数组。（对象定义参考 *_transfer_tx 模板）
+      },
+     "transferTxInfo": { //Internal transaction definition in the contract, json array. (Refer to *_transfer_tx template for object definition)
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
-      },  
-      "pposTxInfo": {             //合约中erc721内部交易定义，json数组。（对象定义参考 type及info定义）
+      },
+      "pposTxInfo": { // erc721 internal transaction definition in the contract, json array. (Object definition refers to type and info definition)
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
-      },   
-      "failReason": {            //交易失败原因
+      },
+      "failReason": { //Reason for transaction failure
         "norms": false,
         "index": false,
         "type": "text",
         "doc_values": false
-      },      
-      "creTime": {               //本地创建时间
+      },
+      "creTime": { //Local creation time
         "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
         "type": "date"
       },
-      "updTime": {               //本地更新时间
+      "updTime": { //Local update time
         "format": "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis",
         "type": "date"
       },
-      "remark": {                //交易备注信息， aton使用
+      "remark": { //Transaction remark information, used by aton
         "norms": false,
         "index": false,
         "type": "text",
@@ -542,218 +540,218 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
 
 ```
 
-##### type及info定义
+##### type and info definition
 
-###### type=0:转账
-###### type=1:EVM合约发布(合约创建)
-###### type=2:合约调用(合约执行)
-###### type=3:WASM合约发布(合约创建)
-###### type=4:其他
-###### type=5:MPC交易
-###### type=6:ERC20合约发布(合约创建)
-###### type=7:ERC20合约调用(合约执行)
-###### type=8:ERC721合约发布(合约创建)
-###### type=9:ERC721合约调用(合约执行)
-###### type=1000:发起质押(创建验证人)
+###### type=0: transfer
+###### type=1:EVM contract release (contract creation)
+###### type=2: Contract call (contract execution)
+###### type=3:WASM contract release (contract creation)
+###### type=4:Other
+###### type=5:MPC transaction
+###### type=6:ERC20 contract release (contract creation)
+###### type=7:ERC20 contract call (contract execution)
+###### type=8:ERC721 contract release (contract creation)
+###### type=9:ERC721 contract call (contract execution)
+###### type=1000: initiate pledge (create validator)
 
 ```
 {
-    "type":0,                   //表示使用账户自由金额还是账户的锁仓金额做质押，0: 自由金额； 1: 锁仓金额，2: 混合模式
-    "benefitAddress":"",        //用于接受出块奖励和质押奖励的收益账户
-    "nodeId":"",                //被质押的节点Id(也叫候选人的节点Id)
-    "externalId":"",            //外部Id(有长度限制，给第三方拉取节点描述的Id)
-    "nodeName":"",              //被质押节点的名称(有长度限制，表示该节点的名称)
-    "website":"",               //节点的第三方主页(有长度限制，表示该节点的主页)
-    "details":"",               //节点的描述(有长度限制，表示该节点的描述)
-    "amount":"",                //质押的von
-    "programVersion":"",        //程序的真实版本，治理rpc获取
-    "rewardPer":""              //委托所得到的奖励分成比例
+    "type":0, //Indicates whether to use the free amount of the account or the locked amount of the account for pledge, 0: free amount; 1: locked amount, 2: mixed mode
+    "benefitAddress":"", //Benefit account used to receive block rewards and staking rewards
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "externalId":"", //External Id (with length limit, pull the ID of the node description for the third party)
+    "nodeName":"", //The name of the pledged node (with a length limit, indicating the name of the node)
+    "website":"", //The third-party homepage of the node (there is a length limit, indicating the homepage of the node)
+    "details":"", //Description of the node (with a length limit, indicating the description of the node)
+    "amount":"", //Pledged AAA
+    "programVersion":"", //The real version of the program, obtained through rpc
+    "rewardPer":"" //The proportion of rewards received from delegation
 }
 
 ```
 
-###### type=1001: 修改质押信息(编辑验证人)
+###### type=1001: Modify pledge information (edit validator)
 
 ```
 {
-    "benefitAddress":"",    //用于接受出块奖励和质押奖励的收益账户
-    "nodeId":"",            //被质押的节点Id(也叫候选人的节点Id)
-    "externalId":"",        //外部Id(有长度限制，给第三方拉取节点描述的Id)
-    "nodeName":"",          //被质押节点的名称(有长度限制，表示该节点的名称)
-    "website":"",           //节点的第三方主页(有长度限制，表示该节点的主页)
-    "details":"",           //节点的描述(有长度限制，表示该节点的描述)
-    "rewardPer":""          //委托所得到的奖励分成比例
+    "benefitAddress":"", //Benefit account used to receive block rewards and staking rewards
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "externalId":"", //External Id (with length limit, pull the ID of the node description for the third party)
+    "nodeName":"", //The name of the pledged node (with a length limit, indicating the name of the node)
+    "website":"", //The third-party homepage of the node (there is a length limit, indicating the homepage of the node)
+    "details":"", //Description of the node (with a length limit, indicating the description of the node)
+    "rewardPer":"" //The proportion of rewards received from delegation
 }
 
 ```
 
-###### type=1002: 增持质押(增加自有质押)
+###### type=1002: Increase pledge (increase own pledge)
 
 ```
 {
-    "type":0,               //表示使用账户自由金额还是账户的锁仓金额做质押，0: 自由金额； 1: 锁仓金额，2: 混合模式
-    "nodeId":"",            //被质押的节点Id(也叫候选人的节点Id)
-    "amount":"",            //质押的von
-    "nodeName":"",          //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    “stakingBlockNum”:""    //<需要冗余> 质押交易快高
+    "type":0, //Indicates whether to use the free amount of the account or the locked amount of the account for pledge, 0: free amount; 1: locked amount, 2: mixed mode
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "amount":"", //Pledged AAA
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "stakingBlockNum":"" //<Redundancy required> Staking transactions are fast and high
 }
 
 ```
 
-###### type=1003: 撤销质押(退出验证人)
+###### type=1003: Cancel pledge (exit validator)
 
 ```
 {
-    "nodeId":"",              //被质押的节点Id(也叫候选人的节点Id)
-    "nodeName":"",            //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    "stakingBlockNum":"",     //<需要冗余> 质押交易快高
-    "amount":""               //<需要冗余> 质押的von
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "stakingBlockNum":"", //<redundancy required> staking transaction speed
+    "amount":"" //<redundancy required> pledged AAA
 }
 
 ```
 
-###### type=1004: 发起委托(委托)
+###### type=1004: Initiate delegation (delegation)
 
 ```
 {
-    "type":0,                //表示使用账户自由金额还是账户的锁仓金额做质押，0: 自由金额； 1: 锁仓金额
-    "nodeId":"",             //被质押的节点Id(也叫候选人的节点Id)
-    "amount":"",             //委托的金额(按照最小单位算，1LAT = 10**18 von)
-    "nodeName":"",           //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    “stakingBlockNum”:""     //<需要冗余> 质押交易快高
+    "type":0, //Indicates whether to use the free amount of the account or the locked amount of the account for pledge, 0: free amount; 1: locked amount
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "amount":"", //Amount of commission (calculated according to the smallest unit, 1LAT = 10**18 AAA)
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "stakingBlockNum":"" //<Redundancy required> Staking transactions are fast and high
 }
 
 ```
 
-###### type=1005: 减持/撤销委托(赎回委托)
+###### type=1005: reduction/cancellation of commission (redemption commission)
 
 ```
 {
-    "stakingBlockNum":111,      //代表着某个node的某次质押的唯一标示
-    "nodeId":"",                //被质押的节点Id(也叫候选人的节点Id)
-    "amount":"",                //减持委托的金额(按照最小单位算，1LAT = 10**18 von)
-    "nodeName":"",              //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    "realAmount":"",            //<需要冗余>真正减持的金额
-    "delegateIncome":""         //委托的收益
+    "stakingBlockNum":111, //Represents the unique identifier of a certain pledge of a certain node
+    "nodeId":"", //The pledged node ID (also called the candidate's node ID)
+    "amount":"", //Amount of holding reduction entrustment (based on the smallest unit, 1LAT = 10**18 AAA)
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "realAmount":"", //<requires redundancy>the real amount of reduction
+    "delegateIncome":"" //Delegated income
 }
 
 ```
 
-###### type=2000: 提交文本提案(创建提案)
+###### type=2000: Submit text proposal (Create proposal)
 
 ```
 {
-    "verifier":111,             //提交提案的验证人
-    "pIDID":"",                 //PIPID
-    "nodeName":""               //<需要冗余>提交提案的验证人名称(有长度限制，表示该节点的名称)
+    "verifier":111, //The verifier who submitted the proposal
+    "pIDID":"", //PIPID
+    "nodeName":"" //<Redundancy required> The name of the verifier who submitted the proposal (with a length limit, indicating the name of the node)
 }
 
 ```
 
-###### type=2001: 提交升级提案(创建提案)
+###### type=2001: Submit upgrade proposal (create proposal)
 
 ```
 {
-    "verifier":111,          //提交提案的验证人
-    "pIDID":"",              //pIDID
-    "newVersion":111,        //升级版本
-    "endVotingRounds":11,    //投票共识轮数量
-    "nodeName":""            //<需要冗余>提交提案的验证人名称(有长度限制，表示该节点的名称)
+    "verifier":111, //The verifier who submitted the proposal
+    "pIDID":"", //pIDID
+    "newVersion":111, //upgrade version
+    "endVotingRounds":11, //Number of voting consensus rounds
+    "nodeName":"" //<Redundancy required> The name of the verifier who submitted the proposal (with a length limit, indicating the name of the node)
 }
 
 ```
 
-###### type=2002: 提交参数提案(创建提案)
+###### type=2002: Submit parameter proposal (create proposal)
 ```
 {
-    "verifier":111,          //提交提案的验证人
-    "pIDID":"",              //pIDID
-    "nodeName":""            //<需要冗余>提交提案的验证人名称(有长度限制，表示该节点的名称)
-    "module":"",             //参数模块
-    "name":"",               //参数名称
-    "newValue":""            //参数新值
+    "verifier":111, //The verifier who submitted the proposal
+    "pIDID":"", //pIDID
+    "nodeName":"" //<Redundancy required> The name of the verifier who submitted the proposal (with a length limit, indicating the name of the node)
+    "module":"", //Parameter module
+    "name":"", //Parameter name
+    "newValue":"" //Parameter new value
 }
 
 ```
 
-###### type=2003: 给提案投票(提案投票)
+###### type=2003: Vote for proposal (vote for proposal)
 ```
 {
-    "verifier":111,          //投票的验证人
-    "nodeName":""            //<需要冗余>投票的验证人的名称(有长度限制，表示该节点的名称)
-    "proposalID":"",         //提案ID
-    "option":"",             //投票选项 0x01：支持  0x02：反对 0x03：弃权 
-    "programVersion":"",     //节点代码版本，
-    "versionSign":"",        //代码版本签名
-    "pIDID":"",              //<需要冗余>提案的pIDID
-    "proposalType":""        //<需要冗余>提案类型 1:文本提案 2:升级提案 4:取消提案
+    "verifier":111, //Verifier of voting
+    "nodeName":"" //<Redundancy required> The name of the validator who voted (with a length limit, indicating the name of the node)
+    "proposalID":"", //Proposal ID
+    "option":"", //Voting options 0x01: Support 0x02: Oppose 0x03: Abstain
+    "programVersion":"", //Node code version,
+    "versionSign":"", //Code version signature
+    "pIDID":"", //<redundancy required> pIDID of the proposal
+    "proposalType":"" //<Redundancy required> Proposal type 1: Text proposal 2: Upgrade proposal 4: Cancel proposal
 }
 
 ```
 
-###### type=2004: 版本声明
+###### type=2004: version statement
 
 ```
 {
-    "activeNode":111,        //声明的节点，只能是验证人/候选人
-    "nodeName":"",           //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    "version":111,           //声明的版本
-    "versionSign":''         //声明的版本签名
+    "activeNode":111, //The declared node can only be a validator/candidate
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "version":111, //Declared version
+    "versionSign":'' //Declared version signature
 }
 
 ```
 
-###### type=2005: 提交取消提案
+###### type=2005: Submit cancellation proposal
 
 ```
 {
-    "verifier":111,                 //提交提案的验证人
-    "pIDID":"",                     //pIDID
-    "endVotingRounds":111,          //投票共识轮数量
-    "tobeCanceledProposalID":"",    //待取消的升级提案ID
-    "nodeName":""                   //<需要冗余>提交提案的验证人名称(有长度限制，表示该节点的名称)
+    "verifier":111, //The verifier who submitted the proposal
+    "pIDID":"", //pIDID
+    "endVotingRounds":111, //Number of voting consensus rounds
+    "tobeCanceledProposalID":"", //Upgrade proposal ID to be canceled
+    "nodeName":"" //<Redundancy required> The name of the verifier who submitted the proposal (with a length limit, indicating the name of the node)
 }
 
 ```
 
-###### type=3000: 举报多签(举报验证人)
+###### type=3000: Report multi-signature (report verifier)
 
 ```
 {
-    "data":"{jsonObj}",              //证据的json值，格式为RPC接口Evidences的返回值
-    "type":"",                       //双签类型:1: prepareBlock 2: prepareVote 3: viewChange
-    "verify":"",                     //举报的节点id
-    "nodeName":"",                   //<需要冗余>被质押节点的名称(有长度限制，表示该节点的名称)
-    "stakingBlockNum":""             //<需要冗余> 质押交易快高
-    "reward":""                      //惩罚奖励 
+    "data":"{jsonObj}", //The json value of the evidence, the format is the return value of the RPC interface Evidences
+    "type":"", //Double signature type: 1: prepareBlock 2: prepareVote 3: viewChange
+    "verify":"", //Reported node id
+    "nodeName":"", //<Redundancy required> The name of the pledged node (with a length limit, indicating the name of the node)
+    "stakingBlockNum":"" //<Redundancy required> Staking transactions are fast and high
+    "reward":"" //Punishment reward
 }
 
 ```
 
-###### type=4000: 创建锁仓计划(创建锁仓)
+###### type=4000: Create a lock-up plan (create a lock-up)
 
 ```
 {
-    "account":""            //锁仓释放到账账户
+    "account":"" //Lock up and release the credited account
     "plan":[
         {
-         "epoch":11,        //表示结算周期的倍数。与每个结算周期出块数的乘积表示在目标区块高度上释放锁定的资金。Epoch * 每周期的区块数至少要大于最高不可逆区块高度
-         "amount":111       //表示目标区块上待释放的金额
+         "epoch":11, //Indicates the multiple of the settlement period. The product of the number of blocks produced in each settlement cycle represents the release of locked funds at the target block height. Epoch * The number of blocks per cycle must be at least greater than the maximum irreversible block height
+         "amount":111 //Indicates the amount to be released on the target block
         }
     ]
 }
 
 ```
 
-###### type=5000: 领取奖励
+###### type=5000: Receive rewards
 ```
 {
     "rewardItem":[
         {
-            "nodeId":"",             //节点ID
-            "stakingBlockNum":"",    //节点的质押块高
-            "reward":"",             //领取到的收益
-            "nodeName":""            //<需要冗余>投票的验证人的名称(有长度限制，表示该节点的名称)
+            "nodeId":"", //Node ID
+            "stakingBlockNum":"", //The node's pledge block is high
+            "reward":"", //receipt received
+            "nodeName":"" //<Redundancy required> The name of the validator who voted (with a length limit, indicating the name of the node)
         }
     ]
 }
@@ -761,5 +759,5 @@ ALTER TABLE `address` ADD COLUMN `erc20_tx_qty` INT(11) DEFAULT 0  NOT NULL COMM
 ```
 
 
-##### 3.3 特殊节点设计
-1. 批量交易回执接口 交易hash -> 合约地址列表
+##### 3.3 Special node design
+1. Batch transaction receipt interface Transaction hash -> Contract address list

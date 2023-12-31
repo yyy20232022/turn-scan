@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomInternalAddressMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomInternalAddressMapper">
 
-  <resultMap id="BaseResultMap" type="com.platon.browser.dao.entity.InternalAddress" extends="com.platon.browser.dao.mapper.InternalAddressMapper.BaseResultMap"/>
+  <resultMap id="BaseResultMap" type="com.turn.browser.dao.entity.InternalAddress" extends="com.turn.browser.dao.mapper.InternalAddressMapper.BaseResultMap"/>
 
   <insert id="batchInsertOrUpdateSelective" parameterType="map">
     replace into internal_address (
@@ -37,7 +37,7 @@
     </foreach>
   </insert>
 
-  <select id="countBalance" resultType="com.platon.browser.bean.CountBalance">
+  <select id="countBalance" resultType="com.turn.browser.bean.CountBalance">
     select
       `type`,
       SUM(`balance`) as free,
@@ -87,7 +87,7 @@
     create_name, create_time, update_id, update_name, update_time
   </sql>
 
-  <select id="selectListByExample" parameterType="com.platon.browser.dao.entity.InternalAddressExample" resultMap="BaseResultMap">
+  <select id="selectListByExample" parameterType="com.turn.browser.dao.entity.InternalAddressExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct

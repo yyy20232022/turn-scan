@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.platon.browser.dao.custommapper.CustomTokenHolderMapper">
+<mapper namespace="com.turn.browser.dao.custommapper.CustomTokenHolderMapper">
     <select id="selectListByParams" parameterType="java.lang.String"
-            resultType="com.platon.browser.bean.CustomTokenHolder">
+            resultType="com.turn.browser.bean.CustomTokenHolder">
         select
         th.token_address as tokenAddress,
         th.address,
@@ -28,7 +28,7 @@
         order by balance desc
     </select>
     <select id="selectERC721Holder" parameterType="java.lang.String"
-            resultType="com.platon.browser.bean.CustomTokenHolder">
+            resultType="com.turn.browser.bean.CustomTokenHolder">
         select th.token_address as tokenAddress,
                th.address,
                t.type,
@@ -45,7 +45,7 @@
         order by balance desc
     </select>
 
-    <select id="findErc721TokenHolder" parameterType="java.lang.String" resultType="com.platon.browser.bean.CustomTokenHolder">
+    <select id="findErc721TokenHolder" parameterType="java.lang.String" resultType="com.turn.browser.bean.CustomTokenHolder">
         SELECT
         th.token_address AS tokenAddress,
         th.address,
@@ -111,7 +111,7 @@
         </foreach>
     </update>
 
-    <select id="findTokenHolderCount" resultType="com.platon.browser.bean.TokenHolderCount">
+    <select id="findTokenHolderCount" resultType="com.turn.browser.bean.TokenHolderCount">
         select t.token_address as tokenAddress, count(1) as tokenHolderCount
         from token_holder t
         where t.balance != '0'
@@ -119,7 +119,7 @@
     </select>
 
     <select id="selectListByERC721" parameterType="java.lang.String"
-            resultType="com.platon.browser.bean.CustomTokenHolder">
+            resultType="com.turn.browser.bean.CustomTokenHolder">
         SELECT
         th.token_address AS tokenAddress,
         th.address,
@@ -150,7 +150,7 @@
         balance DESC
     </select>
 
-    <select id="getZeroBalanceTokenHolderList" resultType="com.platon.browser.dao.entity.TokenHolder">
+    <select id="getZeroBalanceTokenHolderList" resultType="com.turn.browser.dao.entity.TokenHolder">
         SELECT th.token_address AS tokenAddress,
                th.address
         FROM token_holder th
